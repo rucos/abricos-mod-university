@@ -181,7 +181,16 @@ class Section {
 			$menuid = Section::AppendSysMenu($menu, $name, $parentmenuid);
 
 			Section::AppendSysPage($menuid, $idcontent);
+			
+			Section::AppendUniverSection($menuid);
 		}
+	}
+	
+	public function AppendUniverSection($menuid){
+		$this->db->query_write("
+			INSERT INTO ".$this->pfx."un_section (menuid) 
+			VALUES (".$menuid.")
+		");
 	}
 }
 ?>
