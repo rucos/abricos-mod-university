@@ -124,12 +124,14 @@ if ($updateManager->isInstall('0.1.0')){
 		require_once('modules/university/includes/classes/section.php');
 		
 		$sect = new Section();
-		$sveden = 'Сведения об образовательной организации';
 		
-		$sectionid = $sect->AppendSysMenu('sveden', $sveden, 0);
-		$contentId = $sect->AppendContent($sveden);
-		
+		$sectionid = $sect->AppendSysMenu('sveden', $sect::SVEDEN);
+		$contentId = $sect->AppendContent($sect::SVEDEN);
 		$sect->AppendSysPage($sectionid, $contentId);
-		$sect->AppendSectionMenu($sectionid);
+		
+		$i = 0;
+			foreach($sect->menu as $menu => $name){
+				$sect->AppendSectionMenu($sectionid, $menu, $name, ++$i);
+			}
 }
 ?>
