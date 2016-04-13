@@ -8,7 +8,18 @@
  */
 
 class UniversityQuery {
-
+	
+	public static function SectionList(Ab_Database $db){
+		$sql = "
+			SELECT
+					s.sectionid as id,
+					m.title
+			FROM ".$db->prefix."un_section s
+			INNER JOIN ".$db->prefix."sys_menu m ON s.menuid = m.menuid
+		";
+		return $db->query_read($sql);
+	}
+	
 }
 
 ?>

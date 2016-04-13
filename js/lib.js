@@ -16,20 +16,20 @@ Component.entryPoint = function(NS){
 
     SYS.Application.build(COMPONENT, {}, {
         initializer: function(){
-            this.cacheClear();
             NS.roles.load(function(){
                 this.initCallbackFire();
             }, this);
-        },
-        cacheClear: function(){
-        	
         }
     }, [], {
         REQS: {
-        	
+        	sectionList: {
+    			attribute: false,
+    			type: 'modelList:SectionList'
+    		}
         },
         ATTRS: {
-        	isLoadAppStructure: {value: true}
+        	isLoadAppStructure: {value: true},
+        	SectionList: {value: NS.SectionList}
         },
         URLS: {
         	ws: "#app={C#MODNAMEURI}/wspace/ws/",

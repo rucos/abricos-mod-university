@@ -7,4 +7,12 @@
  * @author Kirill Kosaev <kosaev-kira@mail.ru>
  */
 
+class SectionItem extends AbricosModel {
+	protected $_structModule = 'university';
+	protected $_structName = 'SectionItem';
+}
+
+class SectionList extends AbricosModelList {
+
+}
 ?>

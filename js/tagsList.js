@@ -13,9 +13,9 @@ Component.entryPoint = function(NS){
  
     NS.TagsListWidget = Y.Base.create('tagsListWidget', SYS.AppWidget, [], {
         onInitAppWidget: function(err, appInstance){
-        	this.reloadList();
+        	
         },
-        reloadList: function(){
+        reloadList: function(id){
         	
         },
         renderList: function(){
@@ -24,7 +24,7 @@ Component.entryPoint = function(NS){
     }, {
         ATTRS: {
         	component: {value: COMPONENT},
-            templateBlockName: {value: 'widget'}
+            templateBlockName: {value: 'widget,table,row'}
         },
         CLICKS: {
         	

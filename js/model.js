@@ -10,5 +10,11 @@ Component.entryPoint = function(NS){
         SYS = Brick.mod.sys;
     
     
-    
+    NS.SectionItem = Y.Base.create('sectionItem', SYS.AppModel, [], {
+        structureName: 'SectionItem'
+    });
+
+    NS.SectionList = Y.Base.create('sectionList', SYS.AppModelList, [], {
+        appItem: NS.SectionItem
+    });
 };

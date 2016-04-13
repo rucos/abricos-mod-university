@@ -1,0 +1,14 @@
+{
+  "version": "0.1.0",
+  "type": "model",
+  "rolefn": "IsAdminRole",
+  "fields": {
+    "id": {
+      "type": "int"
+    },
+    "title": {
+      "type": "string",
+      "json": "ttl"
+    }
+  }
+}
