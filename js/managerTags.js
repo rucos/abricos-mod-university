@@ -38,10 +38,17 @@ Component.entryPoint = function(NS){
         CLICKS: {
         	pickSection:{
         		event: function(e){
-        			var id = e.target.getData('id');
+        			var targ = e.target,
+        				a = targ.getDOMNode(),
+        				sectionid = targ.getData('id');
         			
-        			this.sectionListWidget.setPrimarySection(id);
-        			this.tagsListWidget.reloadList(id);
+        			if(!a.href){
+        				return;
+        			}
+        			
+        			this.sectionListWidget.setPrimarySection(sectionid);
+        			this.tagsListWidget.set('sectionid', sectionid);
+        			this.tagsListWidget.reloadList();
         		}
         	}
         }

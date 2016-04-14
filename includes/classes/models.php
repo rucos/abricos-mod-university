@@ -15,4 +15,13 @@ class SectionItem extends AbricosModel {
 class SectionList extends AbricosModelList {
 
 }
+
+class AttributeItem extends AbricosModel {
+	protected $_structModule = 'university';
+	protected $_structName = 'AttributeItem';
+}
+
+class AttributeList extends AbricosModelList {
+
+}
 ?>

@@ -12,13 +12,15 @@ class University extends AbricosApplication {
 	protected function GetClasses(){
 		return array(
 				'SectionItem' => 'SectionItem',
-				'SectionList' => 'SectionList'
+				'SectionList' => 'SectionList',
+				'AttributeList' => 'AttributeList',
+				'AttributeItem' => 'AttributeItem'
 		);
 	}
 	
 	
 	protected function GetStructures(){
-		return 'SectionItem';
+		return 'SectionItem, AttributeItem';
 	}
 
 	public function ResponseToJSON($d){
@@ -29,6 +31,8 @@ class University extends AbricosApplication {
 		switch ($d->do){
 			case 'sectionList': 
 				return $this->SectionListToJSON();
+			case 'attributeList':
+				return $this->AttributeListToJSON($d->sectionid);
         }
         return null;
     }
@@ -48,6 +52,25 @@ class University extends AbricosApplication {
     	}
     	return $list;
     }
+    
+    public function AttributeListToJSON($sectionid){
+    	$res = $this->AttributeList($sectionid);
+    	return $this->ResultToJSON('attributeList', $res);
+    }
+    
+    public function AttributeList($sectionid){
+    	$sectionid = intval($sectionid);
+    	
+        $list = $this->models->InstanceClass('AttributeList');
+        
+    	$rows = UniversityQuery::AttributeList($this->db, $sectionid);
+	    	while (($d = $this->db->fetch_array($rows))){
+	    		$list->Add($this->models->InstanceClass('AttributeItem', $d));
+	    	}
+	    	
+	    	return $list;
+    }
+    
 }
 
 ?>

@@ -20,6 +20,23 @@ class UniversityQuery {
 		return $db->query_read($sql);
 	}
 	
+	public static function AttributeList(Ab_Database $db, $sectionid){
+		$sql = "
+			SELECT
+					attributeid as id,
+					complexid,
+					typeattribute,
+					nameattribute,
+					applyattribute,
+					locate,
+					remove
+			FROM ".$db->prefix."un_attribute
+			WHERE sectionid=".bkint($sectionid)."
+			
+		";
+		return $db->query_read($sql);
+	}
+	
 }
 
 ?>

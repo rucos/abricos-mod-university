@@ -25,11 +25,17 @@ Component.entryPoint = function(NS){
         	sectionList: {
     			attribute: false,
     			type: 'modelList:SectionList'
+    		},
+    		attributeList: {
+    			args: ['sectionid'],
+    			attribute: false,
+    			type: 'modelList:AttributeList'
     		}
         },
         ATTRS: {
         	isLoadAppStructure: {value: true},
-        	SectionList: {value: NS.SectionList}
+        	SectionList: {value: NS.SectionList},
+        	AttributeList: {value: NS.AttributeList}
         },
         URLS: {
         	ws: "#app={C#MODNAMEURI}/wspace/ws/",

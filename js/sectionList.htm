@@ -1,15 +1,11 @@
 <!--{widget}-->
-<div class="panel panel-primary">
-  <div class="panel-heading">Разделы</div>
-  <div class="panel-body">
-    <div id="{i#section}"></div>
-  </div>
-</div>
+<div id="{i#section}"></div>
+<hr>
 
 <!--{ulSection}-->
-<ul class="nav nav-pills nav-stacked" id="{i#sections}">
+<ul class="nav nav-pills" id="{i#sections}" data-click="pickSection">
 {v#li}
 </ul>
 
 <!--{liSection}-->
-<li role="presentation" id="{v#id}"><a href="#" data-id="{v#id}" data-click="pickSection">{v#title}</a></li>
+<li role="presentation" id="{v#id}"><a href="#" data-id="{v#id}">{v#title}</a></li>

@@ -17,4 +17,12 @@ Component.entryPoint = function(NS){
     NS.SectionList = Y.Base.create('sectionList', SYS.AppModelList, [], {
         appItem: NS.SectionItem
     });
+    
+    NS.AttributeItem = Y.Base.create('attributeItem', SYS.AppModel, [], {
+        structureName: 'AttributeItem'
+    });
+    
+    NS.AttributeList = Y.Base.create('attributeList', SYS.AppModelList, [], {
+        appItem: NS.AttributeItem
+    });
 };

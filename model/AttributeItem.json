@@ -1,0 +1,34 @@
+{
+  "version": "0.1.0",
+  "type": "model",
+  "rolefn": "IsAdminRole",
+  "fields": {
+    "id": {
+      "type": "int"
+    },
+    "complexid": {
+      "type": "int",
+      "json": "cid"
+    },
+    "typeattribute": {
+      "type": "string",
+      "json": "tp"
+    },
+    "nameattribute": {
+      "type": "string",
+      "json": "nma"
+    },
+    "applyattribute": {
+      "type": "string",
+      "json": "apl"
+    },
+    "locate": {
+      "type": "int",
+      "json": "lc"
+    },
+    "remove": {
+      "type": "int",
+      "json": "rm"
+    }
+  }
+}
