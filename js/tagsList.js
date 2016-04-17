@@ -130,14 +130,7 @@ Component.entryPoint = function(NS){
         },
         appendAttribute: function(type, complexid){
         	var tp = this.template,
-        		data = {
-        			sectionid: this.get('sectionid'),
-        			complexid: complexid ? complexid : 0,
-        			type: type,
-        			nameattribute: '',
-        			applyattribute: '',
-        			locate: ''
-        		};
+        		data = this.constructDataAttribute(type, complexid);
         	
         	switch(type){
         		case 'simple':
@@ -205,11 +198,13 @@ Component.entryPoint = function(NS){
 	        		cid: complexid,
 	        		remove: 'Удалить'
         		};
-        	
+
         	if(edit){
         		replaceObj.nameattribute = nameText.value;
         		replaceObj.applyattribute = applyText.value;
         		replaceObj.locate = locate.checked ? 'Да' : 'Нет';
+        		
+        			
         	}
         	parent.innerHTML = tp.replace('row', replaceObj);
         },
@@ -222,6 +217,16 @@ Component.entryPoint = function(NS){
         	} else {
         		parent.remove();	
         	}
+        },
+        constructDataAttribute: function(type, complexid){
+        	return {
+    			sectionid: this.get('sectionid'),
+    			complexid: complexid ? complexid : 0,
+    			type: type,
+    			nameattribute: '',
+    			applyattribute: '',
+    			locate: ''
+        	};
         }
     }, {
         ATTRS: {
