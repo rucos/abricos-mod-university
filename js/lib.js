@@ -31,7 +31,7 @@ Component.entryPoint = function(NS){
     			attribute: false,
     			type: 'modelList:AttributeList'
     		},
-    		appendAttribute: {
+    		actAttribute: {
     			args: ['data']
     		}
         },

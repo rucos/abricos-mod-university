@@ -130,7 +130,7 @@ Component.entryPoint = function(NS){
         },
         appendAttribute: function(type, complexid){
         	var tp = this.template,
-        		data = this.constructDataAttribute(type, complexid);
+        		data = this.constructDataAttribute(type, complexid, 0);
         	
         	switch(type){
         		case 'simple':
@@ -146,18 +146,19 @@ Component.entryPoint = function(NS){
             			break;
         	}
         	
-        		this.reqAppendAttribute(data);
+        		this.reqActAttribute(data);
         },
-        reqAppendAttribute: function(data){
+        reqActAttribute: function(data){
         	this.set('waiting', true);
-	        	this.get('appInstance').appendAttribute(data, function(err, result){
+	        	this.get('appInstance').actAttribute(data, function(err, result){
 	        		this.set('waiting', false);
-	        		
-	        			this.showFormAddAtr(false, '');
+	        			if(!data.compositeid){
+		        			this.showFormAddAtr(false, '');
 	        				this.reloadList(this.get('sectionid'));
+	        			}
 	        	}, this);
         },
-        showAtributeRow: function(complexid, compositid, parent){
+        showAtributeRow: function(complexid, compositid, type, parent){
         	var tp = this.template,
         		table = tp.one('table.tbl-'+complexid).getDOMNode(),
         		tbody =  table.tBodies[0].innerHTML,
@@ -169,6 +170,7 @@ Component.entryPoint = function(NS){
 	        		id: compositid,
 	        		сid: complexid,
 	        		click: "appendAtr",
+	        		type: type,
 	        		key: parent ? compositid : complexid
         		};
         	
@@ -185,7 +187,7 @@ Component.entryPoint = function(NS){
 				table.tBodies[0].innerHTML = this.replaceAtributeRow(replaceObj) + tbody;
 			}
         },
-        renderEditAtributeRow: function(complexid, compositid, parent, edit){
+        renderEditAtributeRow: function(complexid, compositid, type, parent, edit){
         	var tp = this.template,
         		nameText = tp.one('composite.nameattribute-'+compositid).getDOMNode(),
         		applyText = tp.one('composite.applyattribute-'+compositid).getDOMNode(),
@@ -196,32 +198,40 @@ Component.entryPoint = function(NS){
 	        		locate: locate.getAttribute('checked') === null ? 'Нет' : 'Да',
 	        		id: compositid,
 	        		cid: complexid,
+	        		typeattribute: type,
 	        		remove: 'Удалить'
         		};
 
         	if(edit){
+        		var data = this.constructDataAttribute(type, complexid, compositid);
+        		
+        		data.nameattribute = nameText.value;
+        		data.applyattribute = applyText.value;
+        		data.locate = locate.checked ? 'Да' : 'Нет';
+        		
+        		this.reqActAttribute(data);
+        		
         		replaceObj.nameattribute = nameText.value;
         		replaceObj.applyattribute = applyText.value;
         		replaceObj.locate = locate.checked ? 'Да' : 'Нет';
-        		
-        			
         	}
         	parent.innerHTML = tp.replace('row', replaceObj);
         },
         replaceAtributeRow: function(obj){
         	return this.template.replace('composite', obj);
         },
-        cancelAtributeRow: function(complexid, compositid, parent){
+        cancelAtributeRow: function(complexid, compositid, type, parent){
         	if(compositid > 0){
-        		this.renderEditAtributeRow(complexid, compositid, parent, false);
+        		this.renderEditAtributeRow(complexid, compositid, type, parent, false);
         	} else {
         		parent.remove();	
         	}
         },
-        constructDataAttribute: function(type, complexid){
+        constructDataAttribute: function(type, complexid, compositeid){
         	return {
     			sectionid: this.get('sectionid'),
     			complexid: complexid ? complexid : 0,
+    			compositeid: compositeid,
     			type: type,
     			nameattribute: '',
     			applyattribute: '',
@@ -260,20 +270,21 @@ Component.entryPoint = function(NS){
         				complexid = targ.getData('id'),
         				compositid = targ.getData('aid'),
         				act = targ.getData('act'),
+        				type = targ.getData('type'),
         				parent = e.target.getDOMNode().parentNode.parentNode;
         			
                 	switch(act){
 	    	    		case 'addShow':
-	    	    			this.showAtributeRow(complexid, compositid, "");
+	    	    			this.showAtributeRow(complexid, compositid, type, "");
 	    	    				break;
 	    	    		case 'editShow': 
-	    	    			this.showAtributeRow(complexid, compositid, parent);
+	    	    			this.showAtributeRow(complexid, compositid, type, parent);
 	    	    				break;
 	    	    		case 'edit': 
-	    	    			this.renderEditAtributeRow(complexid, compositid, parent, true);
+	    	    			this.renderEditAtributeRow(complexid, compositid, type, parent, true);
 	    	    				break;
 	    	    		case 'cancel': 
-	    	    			this.cancelAtributeRow(complexid, compositid, parent);
+	    	    			this.cancelAtributeRow(complexid, compositid, type, parent);
     	    					break;
 	    	    	}
         		}

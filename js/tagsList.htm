@@ -31,7 +31,7 @@
           <h4>{v#nameattribute}</h4>
 	  </div>
 	 <div class="col-md-3">
-	  	 	<button data-click="actCompositAtr" data-id="{v#id}" data-act="addShow" class="btn btn-default btn-xs" data-wait="disable">
+	  	 	<button data-click="actCompositAtr" data-id="{v#id}" data-act="addShow" data-type="composite" class="btn btn-default btn-xs" data-wait="disable">
            		 Добавить составной атрибут
         	</button>
 	  </div>
@@ -78,7 +78,7 @@
     <td>{v#applyattribute}</td>
     <td>{v#locate}</td>
     <td>
-        <button data-click="actCompositAtr" data-id="{v#cid}" data-aid="{v#id}" data-act="editShow" class="btn btn-default btn-xs" data-wait="disable">
+        <button data-click="actCompositAtr" data-id="{v#cid}" data-aid="{v#id}" data-act="editShow" data-type="{v#typeattribute}" class="btn btn-default btn-xs" data-wait="disable">
             Править
         </button>
     </td>
@@ -174,12 +174,12 @@
   	  	</div>
   	</td>
     <td>
-        <button data-aid="{v#id}" data-id="{v#сid}" data-click="{v#click}" data-type="composite" data-act="edit" class="btn btn-default btn-xs" data-wait="disable">
+        <button data-aid="{v#id}" data-id="{v#сid}" data-click="{v#click}" data-type="{v#type}" data-act="edit" class="btn btn-default btn-xs" data-wait="disable">
             {v#edit}
         </button>
     </td>
     <td>
-         <button data-aid="{v#id}" data-id="{v#сid}" data-click="actCompositAtr" data-act="cancel" type="button" class="btn btn-default btn-xs" data-wait="disable">
+         <button data-aid="{v#id}" data-id="{v#сid}" data-click="actCompositAtr" data-type="{v#type}" data-act="cancel" type="button" class="btn btn-default btn-xs" data-wait="disable">
             Отмена
         </button>
     </td>

@@ -53,6 +53,23 @@ class UniversityQuery {
 		$db->query_write($sql);
 	}
 	
+	public static function EditAttribute(Ab_Database $db, $d){
+		$sql = "
+			UPDATE ".$db->prefix."un_attribute
+			SET
+					sectionid = ".bkint($d->sectionid).",
+					complexid = ".bkint($d->complexid).",
+					typeattribute = '".bkstr($d->type)."',
+					nameattribute = '".bkstr($d->nameattribute)."',
+					applyattribute = '".bkstr($d->applyattribute)."',
+					locate = ".bkint($d->locate)."
+			WHERE attributeid=".bkint($d->compositeid)."
+			LIMIT 1
+		";
+	
+		$db->query_write($sql);
+	}
+	
 }
 
 ?>
