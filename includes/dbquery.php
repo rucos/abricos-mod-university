@@ -37,6 +37,22 @@ class UniversityQuery {
 		return $db->query_read($sql);
 	}
 	
+	public static function AppendAttribute(Ab_Database $db, $d){
+		$sql = "
+			INSERT INTO ".$db->prefix."un_attribute(sectionid, complexid, typeattribute, nameattribute, applyattribute, locate)
+			VALUES (
+					".bkint($d->sectionid).",
+					".bkint($d->complexid).",
+					'".bkstr($d->type)."',
+					'".bkstr($d->nameattribute)."',	
+					'".bkstr($d->applyattribute)."',	
+					".bkint($d->locate)."
+			)
+		";
+		
+		$db->query_write($sql);
+	}
+	
 }
 
 ?>

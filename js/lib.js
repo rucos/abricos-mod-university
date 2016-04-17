@@ -30,6 +30,9 @@ Component.entryPoint = function(NS){
     			args: ['sectionid'],
     			attribute: false,
     			type: 'modelList:AttributeList'
+    		},
+    		appendAttribute: {
+    			args: ['data']
     		}
         },
         ATTRS: {

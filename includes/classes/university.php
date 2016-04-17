@@ -33,6 +33,8 @@ class University extends AbricosApplication {
 				return $this->SectionListToJSON();
 			case 'attributeList':
 				return $this->AttributeListToJSON($d->sectionid);
+			case 'appendAttribute':
+				return $this->AppendAttributeToJSON($d->data);
         }
         return null;
     }
@@ -69,6 +71,24 @@ class University extends AbricosApplication {
 	    	}
 	    	
 	    	return $list;
+    }
+    
+    public function AppendAttributeToJSON($d){
+    	$res = $this->AppendAttribute($d);
+    	return $this->ResultToJSON('appendAttribute', $res);
+    }
+    
+    public function AppendAttribute($d){
+    	$utmf = Abricos::TextParser(true);
+    	
+    	$d->sectionid = intval($d->sectionid);
+    	$d->complexid = intval($d->complexid);
+    	$d->type = $utmf->Parser($d->type);
+    	$d->nameattribute = $utmf->Parser($d->nameattribute);
+    	$d->applyattribute = $utmf->Parser($d->applyattribute);
+    	$d->locate = intval($d->locate);
+    	 
+    	$rows = UniversityQuery::AppendAttribute($this->db, $d);
     }
     
 }
