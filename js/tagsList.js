@@ -175,7 +175,8 @@ Component.entryPoint = function(NS){
 	        		edit: "Добавить",
 	        		id: compositid,
 	        		сid: complexid,
-	        		click: "appendAtr"
+	        		click: "appendAtr",
+	        		key: parent ? compositid : complexid
         		};
         	
         	if(parent){
@@ -195,7 +196,7 @@ Component.entryPoint = function(NS){
         	var tp = this.template,
         		nameText = tp.one('composite.nameattribute-'+compositid).getDOMNode(),
         		applyText = tp.one('composite.applyattribute-'+compositid).getDOMNode(),
-        		locate = tp.one('composite.loc-'+compositid).getDOMNode(),
+        		locate = tp.one('composite.locate-'+compositid).getDOMNode(),
         		replaceObj = {
 	        		nameattribute: nameText.getAttribute('value'),
 	        		applyattribute: applyText.getAttribute('value'),
