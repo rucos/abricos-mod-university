@@ -213,16 +213,19 @@ Component.entryPoint = function(NS){
         				applyattribute.getAttribute('value'), 
         				locate.getAttribute('checked')
         		);
-
+        	
         	if(edit){
         		replaceObj.nameattribute = nameattribute.value;
         		replaceObj.applyattribute = applyattribute.value;
         		replaceObj.locate = locate.checked;
         		
         		this.reqActAttribute(replaceObj);
+        		replaceObj.locate = locate.checked ? 'Да' : 'Нет';
+        	} else {
+        		replaceObj.locate = locate.getAttribute('checked') !== null ? 'Да' : 'Нет';        		
         	}
+        	
         	replaceObj.remove = "Удалить";
-        	replaceObj.locate = replaceObj.locate ? "Да" : "Нет";
         	
         	parent.innerHTML = tp.replace('row', replaceObj);
         },
