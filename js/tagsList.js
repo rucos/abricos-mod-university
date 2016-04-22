@@ -91,7 +91,7 @@ Component.entryPoint = function(NS){
         		panelHead = "",
         		panel = "";
         		
-				panelHead = this.renderRow(complex, 'panelhead');
+				panelHead = this.renderRow(complex, 'panelhead', complex.get('id'));
 				
 				panel = tp.replace('panel', {
 					view: 'warning',
@@ -106,7 +106,8 @@ Component.entryPoint = function(NS){
         		row = "";
         	
 	          	row = tp.replace(block, [{
-	          		cid: complexid,
+	          		compositid: attr.get('id'),
+	          		complexid: complexid,
 	          		locate: attr.get('locate') ? 'Да' : 'Нет',
 	    			remove: attr.get('remove') ? 'Восстановить' : 'Удалить'
 	    		}, attr.toJSON()]);
@@ -146,11 +147,11 @@ Component.entryPoint = function(NS){
         			locate: ""
         		};
         	
-        	if(id){
+        	if(id){//добавляем составной
         		ret.nameattribute = tp.one(type + '.nameattribute-' + id).getDOMNode();
         		ret.applyattribute = tp.one(type + '.applyattribute-' + id).getDOMNode();
         		ret.locate = tp.one(type + '.locate-' + id).getDOMNode();
-        	} else {
+        	} else {//добавляем простой или сложный
         		ret.nameattribute = tp.gel(type + '.nameattribute');
         		ret.applyattribute = tp.gel(type + '.applyattribute');
         		ret.locate = tp.gel('addAtr.locate');
@@ -162,7 +163,7 @@ Component.entryPoint = function(NS){
         	this.set('waiting', true);
 	        	this.get('appInstance').actAttribute(data, function(err, result){
 	        		this.set('waiting', false);
-	        			if(!data.compositeid){
+	        			if(!data.compositid){
 		        			this.showFormAddAtr(false, '');
 	        				this.reloadList(this.get('sectionid'));
 	        			}
@@ -177,8 +178,8 @@ Component.entryPoint = function(NS){
 	        		applyattribute: "",
 	        		check: "",
 	        		edit: "Добавить",
-	        		id: compositid,
-	        		сid: complexid,
+	        		compositid: compositid,
+	        		complexid: complexid,
 	        		click: "appendAtr",
 	        		type: type,
 	        		key: parent ? compositid : complexid
@@ -199,28 +200,29 @@ Component.entryPoint = function(NS){
         },
         renderEditAtributeRow: function(complexid, compositid, type, parent, edit){
         	var tp = this.template,
-        		nameText = tp.one('composite.nameattribute-'+compositid).getDOMNode(),
-        		applyText = tp.one('composite.applyattribute-'+compositid).getDOMNode(),
-        		locate = tp.one('composite.locate-'+compositid).getDOMNode(),
-        		replaceObj = {
-	        		nameattribute: nameText.getAttribute('value'),
-	        		applyattribute: applyText.getAttribute('value'),
-	        		locate: locate.getAttribute('checked') === null ? 'Нет' : 'Да',
-	        		id: compositid,
-	        		cid: complexid,
-	        		typeattribute: type,
-	        		remove: 'Удалить'
-        		};
+        		inputs = this.getNode("composite", compositid),
+        		nameattribute = inputs.nameattribute,
+        		applyattribute = inputs.applyattribute,
+        		locate = inputs.locate,
+        		replaceObj = this.constructDataAttribute(
+        				complexid, 
+        				compositid, 
+        				type, 
+        				nameattribute.getAttribute('value'), 
+        				applyattribute.getAttribute('value'), 
+        				locate.getAttribute('checked')
+        		);
 
         	if(edit){
-        		var data = this.constructDataAttribute(complexid, compositid, type, nameText.value, applyText.value, locate.checked);
+        		replaceObj.nameattribute = nameattribute.value;
+        		replaceObj.applyattribute = applyattribute.value;
+        		replaceObj.locate = locate.checked;
         		
-        		this.reqActAttribute(data);
-        		
-        		replaceObj.nameattribute = nameText.value;
-        		replaceObj.applyattribute = applyText.value;
-        		replaceObj.locate = locate.checked ? 'Да' : 'Нет';
+        		this.reqActAttribute(replaceObj);
         	}
+        	replaceObj.remove = "Удалить";
+        	replaceObj.locate = replaceObj.locate ? "Да" : "Нет";
+        	
         	parent.innerHTML = tp.replace('row', replaceObj);
         },
         replaceAtributeRow: function(obj){
@@ -237,7 +239,7 @@ Component.entryPoint = function(NS){
         	return {
     			sectionid: this.get('sectionid'),
     			complexid: arguments[0] ? arguments[0] : 0,
-    			compositeid: arguments[1],
+    			compositid: arguments[1],
     			type: arguments[2],
     			nameattribute: arguments[3],
     			applyattribute: arguments[4],

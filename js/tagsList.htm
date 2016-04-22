@@ -31,20 +31,20 @@
           <h4>{v#nameattribute}</h4>
 	  </div>
 	 <div class="col-md-3">
-	  	 	<button data-click="actCompositAtr" data-id="{v#id}" data-act="addShow" data-type="composite" class="btn btn-default btn-xs" data-wait="disable">
+	  	 	<button data-click="actCompositAtr" data-id="{v#complexid}" data-act="addShow" data-type="composite" class="btn btn-default btn-xs" data-wait="disable">
            		 Добавить составной атрибут
         	</button>
 	  </div>
 	  <div class="col-md-2">
-	  	 	<button data-click="edit" data-id="{v#id}" class="btn btn-default btn-xs" data-wait="disable">
+	  	 	<button data-click="edit" data-id="{v#complexid}" class="btn btn-default btn-xs" data-wait="disable">
            		 Править
         	</button>
 	  </div>
   	  <div class="col-md-2">
-  	  	  <button id="{i#remove}-{v#id}" data-click="{v#act}" type="button" class="btn btn-default btn-xs" data-id="{v#id}" data-wait="disable">
+  	  	  <button id="{i#remove}-{v#complexid}" data-click="{v#act}" type="button" class="btn btn-default btn-xs" data-wait="disable">
             {v#remove}
         </button>
-         <div id="{i#removegroup}-{v#id}"  class="btn-group hide">
+         <div id="{i#removegroup}-{v#complexid}"  class="btn-group hide">
             <button data-click="remove"type="button" class="btn btn-danger btn-xs" data-id="{v#id}" 
             		data-wait="disable">
                 Удалить?
@@ -78,15 +78,15 @@
     <td>{v#applyattribute}</td>
     <td>{v#locate}</td>
     <td>
-        <button data-click="actCompositAtr" data-id="{v#cid}" data-aid="{v#id}" data-act="editShow" data-type="{v#typeattribute}" class="btn btn-default btn-xs" data-wait="disable">
+        <button data-click="actCompositAtr" data-id="{v#complexid}" data-aid="{v#compositid}" data-act="editShow" data-type="{v#typeattribute}" class="btn btn-default btn-xs" data-wait="disable">
             Править
         </button>
     </td>
     <td>
-         <button id="{i#remove}-{v#id}" type="button" class="btn btn-default btn-xs" data-id="{v#id}" data-wait="disable">
+         <button id="{i#remove}-{v#compositid}" type="button" class="btn btn-default btn-xs" data-id="{v#id}" data-wait="disable">
             {v#remove}
         </button>
-         <div id="{i#removegroup}-{v#id}"  class="btn-group hide">
+         <div id="{i#removegroup}-{v#compositid}"  class="btn-group hide">
             <button data-click="remove"type="button" class="btn btn-danger btn-xs" data-id="{v#id}" data-wait="disable">
                 Удалить?
             </button>
@@ -175,12 +175,12 @@
   	  	</div>
   	</td>
     <td>
-        <button data-aid="{v#id}" data-id="{v#сid}" data-click="{v#click}" data-type="{v#type}" data-act="edit" class="btn btn-default btn-xs" data-wait="disable">
+        <button data-aid="{v#compositid}" data-id="{v#complexid}" data-click="{v#click}" data-type="{v#type}" data-act="edit" class="btn btn-default btn-xs" data-wait="disable">
             {v#edit}
         </button>
     </td>
     <td>
-         <button data-aid="{v#id}" data-id="{v#сid}" data-click="actCompositAtr" data-type="{v#type}" data-act="cancel" type="button" class="btn btn-default btn-xs" data-wait="disable">
+         <button data-aid="{v#compositid}" data-id="{v#complexid}" data-click="actCompositAtr" data-type="{v#type}" data-act="cancel" type="button" class="btn btn-default btn-xs" data-wait="disable">
             Отмена
         </button>
     </td>

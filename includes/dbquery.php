@@ -63,7 +63,7 @@ class UniversityQuery {
 					nameattribute = '".bkstr($d->nameattribute)."',
 					applyattribute = '".bkstr($d->applyattribute)."',
 					locate = ".bkint($d->locate)."
-			WHERE attributeid=".bkint($d->compositeid)."
+			WHERE attributeid=".bkint($d->compositid)."
 			LIMIT 1
 		";
 	

@@ -82,14 +82,14 @@ class University extends AbricosApplication {
     	$utmf = Abricos::TextParser(true);
     	
     	$d->sectionid = intval($d->sectionid);
-    	$d->compositeid = intval($d->compositeid);
+    	$d->compositid = intval($d->compositid);
     	$d->complexid = intval($d->complexid);
     	$d->type = $utmf->Parser($d->type);
     	$d->nameattribute = $utmf->Parser($d->nameattribute);
     	$d->applyattribute = $utmf->Parser($d->applyattribute);
     	$d->locate = intval($d->locate);
     	
-    	if($d->compositeid > 0){
+    	if($d->compositid > 0){
     		$rows = UniversityQuery::EditAttribute($this->db, $d);
     	} else {
     		$rows = UniversityQuery::AppendAttribute($this->db, $d);
