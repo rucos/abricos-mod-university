@@ -108,6 +108,7 @@ Component.entryPoint = function(NS){
 	          	row = tp.replace(block, [{
 	          		compositid: attr.get('id'),
 	          		complexid: complexid,
+	          		type: attr.get('typeattribute'),
 	          		locate: attr.get('locate') ? 'Да' : 'Нет',
 	    			remove: attr.get('remove') ? 'Восстановить' : 'Удалить'
 	    		}, attr.toJSON()]);
