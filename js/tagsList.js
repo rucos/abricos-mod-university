@@ -130,23 +130,33 @@ Component.entryPoint = function(NS){
         },
         appendAttribute: function(type, complexid){
         	var tp = this.template,
-        		data = this.constructDataAttribute(type, complexid, 0);
+        		inputs = this.getNode(type, complexid),
+        		nameattribute = inputs.nameattribute.value,
+        		applyattribute = inputs.applyattribute.value,
+        		locate = inputs.locate.checked,
+        		data = this.constructDataAttribute(complexid, 0, type, nameattribute, applyattribute, locate);
+        		
+        		this.reqActAttribute(data);
+        },
+        getNode: function(type, id){
+        	var tp = this.template,
+        		ret = {
+        			nameattribute: "",
+        			applyattribute: "",
+        			locate: ""
+        		};
         	
-        	switch(type){
-        		case 'simple':
-        		case 'complex':
-        			data.nameattribute = tp.gel(type + '.nameattribute').value;
-        			data.applyattribute = tp.gel(type + '.applyattribute') ? tp.gel(type + '.applyattribute').value : '';
-        			data.locate = tp.gel('addAtr.locate').checked;
-        				break;
-        		case 'composite':
-        			data.nameattribute = tp.one(type + '.nameattribute-' + complexid).getDOMNode().value;
-            		data.applyattribute = tp.one(type + '.applyattribute-' + complexid).getDOMNode().value;
-            		data.locate = tp.one(type + '.locate-' + complexid).getDOMNode().checked;
-            			break;
+        	if(id){
+        		ret.nameattribute = tp.one(type + '.nameattribute-' + id).getDOMNode();
+        		ret.applyattribute = tp.one(type + '.applyattribute-' + id).getDOMNode();
+        		ret.locate = tp.one(type + '.locate-' + id).getDOMNode();
+        	} else {
+        		ret.nameattribute = tp.gel(type + '.nameattribute');
+        		ret.applyattribute = tp.gel(type + '.applyattribute');
+        		ret.locate = tp.gel('addAtr.locate');
         	}
         	
-        		this.reqActAttribute(data);
+        	return ret;
         },
         reqActAttribute: function(data){
         	this.set('waiting', true);
@@ -203,11 +213,7 @@ Component.entryPoint = function(NS){
         		};
 
         	if(edit){
-        		var data = this.constructDataAttribute(type, complexid, compositid);
-        		
-        		data.nameattribute = nameText.value;
-        		data.applyattribute = applyText.value;
-        		data.locate = locate.checked ? 'Да' : 'Нет';
+        		var data = this.constructDataAttribute(complexid, compositid, type, nameText.value, applyText.value, locate.checked);
         		
         		this.reqActAttribute(data);
         		
@@ -227,15 +233,15 @@ Component.entryPoint = function(NS){
         		parent.remove();	
         	}
         },
-        constructDataAttribute: function(type, complexid, compositeid){
+        constructDataAttribute: function(){
         	return {
     			sectionid: this.get('sectionid'),
-    			complexid: complexid ? complexid : 0,
-    			compositeid: compositeid,
-    			type: type,
-    			nameattribute: '',
-    			applyattribute: '',
-    			locate: ''
+    			complexid: arguments[0] ? arguments[0] : 0,
+    			compositeid: arguments[1],
+    			type: arguments[2],
+    			nameattribute: arguments[3],
+    			applyattribute: arguments[4],
+    			locate: arguments[5]
         	};
         }
     }, {
