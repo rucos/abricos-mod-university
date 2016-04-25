@@ -69,15 +69,19 @@ class UniversityQuery {
 	}
 	
 	public static function RemoveAttribute(Ab_Database $db, $d){
+		$where = "attributeid=".bkint($d->compositid);
+		
+		if($d->isComplex){
+			$where .=  " OR complexid=".bkint($d->compositid);
+		}
 		
 		$sql = "
 			UPDATE ".$db->prefix."un_attribute
 			SET
 				remove=1
-			WHERE attributeid=".bkint($d->compositid)."
-			LIMIT 1
+			WHERE ".$where."
 		";
-	
+		
 		return $db->query_write($sql);
 	}
 }

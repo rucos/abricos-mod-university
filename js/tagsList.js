@@ -124,31 +124,43 @@ Component.entryPoint = function(NS){
         		rows: rows 
         	});
         },
-        showFormAddAtr: function(show, type){
+        showFormAddAtr: function(show, type, complexid){
         	var tp = this.template,
-        		block = "";
-           	
+        		parent = "",
+        		replaceObj = {};
+        	
         	if(show){
-        		block = tp.replace(type, {
-					nameattribute: "",
-					divs: tp.replace('addAtr', {
-						complexid: 0,
-						type: type,
-						act: "Добавить",
-						checked: "",
-						click: 'addAtr-cancel'
-					})
-        		});
+        		replaceObj.nameCl = "in";
+        		replaceObj.none = 'block';
+        		replaceObj.type = type;
+        		replaceObj.nameattribute = "";
+        		
+	        		if(!complexid){
+	        			replaceObj.act = "Добавить";
+	        			replaceObj.complexid = 0;
+	        			replaceObj.hide = type === 'complex' ? 'hide' : '';
+	        		} else {
+	        			parent = tp.one('panelhead.own-' + complexid).getDOMNode();
+	        			
+	        			replaceObj.nameattribute = parent.children[0].textContent;
+	        			replaceObj.checked = parent.children[1].textContent === 'Установлен' ? 'checked' : '';
+	        			replaceObj.hide = 'hide';
+	        			replaceObj.act = "Изменить";
+	        			replaceObj.complexid = complexid;
+	        		}
+        	} else {
+        		replaceObj.none = 'none';
         	}
-        	tp.setHTML('formAddAtr', block);
+        	
+        	tp.setHTML('formAdd', tp.replace('modalFormAdd', replaceObj));
         },
-        appendAttribute: function(type, complexid){
+        appendAttribute: function(type, complexid, compositid){
         	var tp = this.template,
         		inputs = this.getNode(type, complexid),
         		nameattribute = inputs.nameattribute.value,
         		applyattribute = inputs.applyattribute.value,
         		locate = inputs.locate.checked,
-        		data = this.constructDataAttribute(complexid, 0, type, nameattribute, applyattribute, locate);
+        		data = this.constructDataAttribute(complexid, compositid, type, nameattribute, applyattribute, locate);
         		
         		this.reqActAttribute(data);
         },
@@ -160,14 +172,14 @@ Component.entryPoint = function(NS){
         			locate: ""
         		};
         	
-        	if(id != 0){//добавляем составной
+        	if(type === 'composite'){//добавляем составной
         		ret.nameattribute = tp.one(type + '.nameattribute-' + id).getDOMNode();
         		ret.applyattribute = tp.one(type + '.applyattribute-' + id).getDOMNode();
         		ret.locate = tp.one(type + '.locate-' + id).getDOMNode();
         	} else {//добавляем простой или сложный
-        		ret.nameattribute = tp.gel(type + '.nameattribute');
-        		ret.applyattribute = tp.gel(type + '.applyattribute');
-        		ret.locate = tp.gel('addAtr.locate');
+        		ret.nameattribute = tp.gel('modalFormAdd.nameattribute');
+        		ret.applyattribute = tp.gel('modalFormAdd.applyattribute');
+        		ret.locate = tp.gel('modalFormAdd.locate');
         	}
         	
         	return ret;
@@ -253,15 +265,23 @@ Component.entryPoint = function(NS){
     			locate: arguments[5]
         	};
         },
-        removeShow: function(compositid, show){
-        	this.template.toggleView(show, 'row.removegroup-' + compositid, 'row.remove-' + compositid);
+        removeShow: function(compositid, isComplex, show){
+        	var remgr = 'row.removegroup-',
+        		rem = 'row.remove-';
+      
+        	if(isComplex == 1){
+        		remgr = 'panelhead.removegroup-';
+        		rem = 'panelhead.remove-';
+        	}
+        	
+        	this.template.toggleView(show, remgr + compositid, rem + compositid);
         },
         reqActAttribute: function(data){
         	this.set('waiting', true);
 	        	this.get('appInstance').actAttribute(data, function(err, result){
 	        		this.set('waiting', false);
-	        			if(!data.compositid){
-		        			this.showFormAddAtr(false);
+	        			if(data.compositid !== 0){
+	        				this.showFormAddAtr(false);
 	        				this.reloadList(this.get('sectionid'));
 	        			}
 	        	}, this);
@@ -280,7 +300,7 @@ Component.entryPoint = function(NS){
     }, {
         ATTRS: {
         	component: {value: COMPONENT},
-            templateBlockName: {value: 'widget,panel,table,row,panelhead,addAtr,complex,simple,composite'},
+            templateBlockName: {value: 'widget,panel,table,row,panelhead,composite,modalFormAdd'},
             attributeList: {value: null},
             sectionid: {value: 0},
             flagAddComposite: {value: false}
@@ -288,11 +308,13 @@ Component.entryPoint = function(NS){
         CLICKS: {
         	'addAtr-show':{
         		event: function(e){
-        			var type = e.target.getData('type'),
-        				sectionid = this.get('sectionid');
+        			var targ = e.target,
+        				type = targ.getData('type'),
+        				sectionid = this.get('sectionid'),
+        				complexid = targ.getData('id');
         			
         			if(sectionid){
-        				this.showFormAddAtr(true, type);
+        				this.showFormAddAtr(true, type, complexid);
         			} else {
         				alert('Укажите раздел');
         			}
@@ -300,19 +322,23 @@ Component.entryPoint = function(NS){
         	},
         	'addAtr-cancel':{
         		event: function(e){
-        			this.showFormAddAtr(false, '');
+        			this.showFormAddAtr(false);
         		}
         	},
             'remove-show': {
                 event: function(e){
-                    var compositid = e.target.getData('id');
-                    	this.removeShow(compositid, true);
+                    var compositid = e.target.getData('aid'),
+                    	isComplex = e.target.getData('complex');
+                    
+                    	this.removeShow(compositid, isComplex, true);
                 }
             },
             'remove-cancel': {
                 event: function(e){
-                    var compositid = e.target.getData('id');
-                    	this.removeShow(compositid, false);
+                    var compositid = e.target.getData('aid'),
+                		isComplex = e.target.getData('complex');
+                    
+                    	this.removeShow(compositid, isComplex, false);
                 }
             },
         	actCompositAtr: {
@@ -344,16 +370,17 @@ Component.entryPoint = function(NS){
         		event: function(e){
         			var targ = e.target,
         				type = targ.getData('type'),
+        				compositid = targ.getData('aid'),
         				complexid = targ.getData('id');
         			
-        			this.appendAttribute(type, complexid);
+        			this.appendAttribute(type, complexid, compositid);
         		}
         	},
         	removeAtr: {
         		event: function(e){
         			var targ = e.target,
         				tp = this.template,
-        				atribid = targ.getData('id'),
+        				atribid = targ.getData('aid'),
         				type = targ.getData('type'),
         				isComplex = false,
         				parent = "";
@@ -361,7 +388,7 @@ Component.entryPoint = function(NS){
         			if(type){
         				parent = tp.one('row.rowAtr-' + atribid).getDOMNode();
         			} else {
-           				parent = tp.one('panel.panel-' + atribid).getDOMNode();
+           				parent = tp.one('panel.own-' + atribid).getDOMNode();
            					isComplex = true;
         			}
         			

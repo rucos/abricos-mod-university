@@ -11,12 +11,12 @@
         	</button>
  	 </div>
 </div>
-<div id="{i#formAddAtr}"></div>
+<div id="{i#formAdd}"></div>
 <hr>
 <div id="{i#tags}"></div>
 
 <!--{panel}-->
-<div class="panel panel-{v#view}">
+<div class="panel panel-{v#view}" id="{i#own}-{v#complexid}">
   <div class="panel-heading">
     {v#type}
   </div>
@@ -37,19 +37,19 @@
         	</button>
 	  </div>
 	  <div class="col-md-2">
-	  	 	<button data-click="editComplexAtr" data-id="{v#complexid}" class="btn btn-default btn-xs" data-wait="disable">
+	  	 	<button data-click="addAtr-show" data-id="{v#complexid}" data-type="complex" class="btn btn-default btn-xs" data-wait="disable">
            		 Править
         	</button>
 	  </div>
   	  <div class="col-md-2">
-  	  	  <button id="{i#remove}-{v#complexid}" data-click="{v#act}" type="button" class="btn btn-default btn-xs" data-wait="disable">
+  	  	  <button id="{i#remove}-{v#complexid}" data-aid="{v#complexid}" data-click="remove-show" data-complex="1" type="button" class="btn btn-default btn-xs" data-wait="disable">
             {v#remove}
         </button>
          <div id="{i#removegroup}-{v#complexid}"  class="btn-group hide">
-            <button data-click="remove"type="button" class="btn btn-danger btn-xs" data-id="{v#complexid}" data-wait="disable">
+            <button data-click="removeAtr" type="button" class="btn btn-danger btn-xs" data-aid="{v#complexid}" data-wait="disable">
                 Удалить?
             </button>
-            <button data-click="remove-cancel" type="button" class="btn btn-default btn-xs" data-id="{v#complexid}" data-wait="disable">
+            <button data-click="remove-cancel" type="button" class="btn btn-default btn-xs" data-complex="1" data-aid="{v#complexid}" data-wait="disable">
                 Отмена
             </button>
         </div>
@@ -81,78 +81,20 @@
         </button>
     </td>
     <td>
-         <button id="{i#remove}-{v#compositid}" data-id="{v#compositid}" data-click="remove-show" type="button" class="btn btn-default btn-xs" data-wait="disable">
+         <button id="{i#remove}-{v#compositid}" data-aid="{v#compositid}" data-click="remove-show" type="button" class="btn btn-default btn-xs" data-wait="disable">
             {v#remove}
         </button>
          <div id="{i#removegroup}-{v#compositid}"  class="btn-group hide">
-            <button data-click="removeAtr" type="button" class="btn btn-danger btn-xs" data-id="{v#compositid}" data-type="{v#type}" data-wait="disable">
+            <button data-click="removeAtr" type="button" class="btn btn-danger btn-xs" data-aid="{v#compositid}" data-type="{v#type}" data-wait="disable">
                 Удалить?
             </button>
-            <button data-click="remove-cancel" type="button" class="btn btn-default btn-xs" data-id="{v#compositid}" data-wait="disable">
+            <button data-click="remove-cancel" type="button" class="btn btn-default btn-xs" data-aid="{v#compositid}" data-wait="disable">
                 Отмена
             </button>
         </div>
     </td>
 </tr>
 
-<!--{simple}-->
-<hr>
-<div class="row bg-success">
-	<br>
-	  <div class="col-md-4">
-	  	  <div class="form-group">
-		    <label>Публикуемые данные</label>
-		   		<textarea id="{i#nameattribute}" class="form-control"></textarea>
-		  </div>
-	  </div>
-	  	<div class="col-md-3">
-	  	  <div class="form-group">
-		    <label>Применяемые атрибуты</label>
-		    	<input id="{i#applyattribute}" type="text" class="form-control">
-		  </div>
-		</div>
-		{v#divs}
-</div>
-	
-<!--{complex}-->
-<hr>
-<div class="row bg-warning">
-<br>
-  	<div class="col-md-3">
-  	  <div class="form-group">
-	    <label>Название атрибута</label>
-	    	<input id="{i#nameattribute}" type="text" class="form-control" value="{v#nameattribute}">
-	  </div>
-	</div>
-		<input id="{i#applyattribute}" type="text" class="form-control hide">
-	{v#divs}
-</div>
-	
-<!--{addAtr}-->	
- <div class="col-md-2">
- 	  <div class="form-group">
-        <div class="checkbox">
-	        <label>
-	          <input id="{i#locate}" type="checkbox" {v#checked}> Установить?
-	        </label>
-	    </div>
-  	  </div>
- </div>
- <div class="col-md-1">
- 	  <div class="form-group">
-  	 	<button data-click="appendAtr" data-id="{v#complexid}" data-type="{v#type}" class="btn btn-default btn-xs" data-wait="disable">
-          		 {v#act}
-       	</button>
-  </div>
- </div>
- <div class="col-md-1">
- 	  <div class="form-group">
-  	 	<button data-click="{v#click}" data-id="{v#complexid}" data-type="{v#type}" class="btn btn-default btn-xs" data-wait="disable">
-          		 Отмена
-       	</button>
-  </div>
- </div>
- 
  <!--{composite}-->
 <tr>
     <td>
@@ -183,3 +125,40 @@
         </button>
     </td>
 </tr>
+
+<!--{modalFormAdd}-->
+<div class="modal fade {v#nameCl}"  style="display: {v#none};">
+  <div class="modal-dialog">
+    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-click="addAtr-cancel"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title">Добавление/изменение атрибута</h4>
+	      </div>
+	      <div class="modal-body">
+				  	  <div class="form-group">
+					    <label>Публикуемые данные</label>
+					   		<textarea id="{i#nameattribute}" class="form-control">{v#nameattribute}</textarea>
+					  </div>
+				  	  <div class="form-group {v#hide}">
+					    <label>Применяемые атрибуты</label>
+					    	<input id="{i#applyattribute}" type="text" class="form-control">
+					  </div>
+				 	  <div class="form-group">
+				        <div class="checkbox">
+					        <label>
+					          <input id="{i#locate}" type="checkbox" {v#checked}> Установить?
+					        </label>
+					    </div>
+				  	  </div>
+			</div>
+		<div class="modal-footer">
+    		<button data-click="appendAtr" data-aid="{v#complexid}" data-type="{v#type}" class="btn btn-primary" data-wait="disable">
+		          		 {v#act}
+		    </button>
+		    <button data-click="addAtr-cancel" class="btn btn-default" data-wait="disable">
+					 Отмена
+			</button>
+      </div>
+      </div>
+   </div>
+</div>
