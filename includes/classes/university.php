@@ -34,7 +34,9 @@ class University extends AbricosApplication {
 			case 'attributeList':
 				return $this->AttributeListToJSON($d->sectionid);
 			case 'actAttribute':
-				return $this->ActAttribute($d->data);
+				return $this->ActAttributeToJSON($d->data);
+			case 'removeAttribute':
+				return $this->RemoveAttributeToJSON($d);
         }
         return null;
     }
@@ -94,8 +96,18 @@ class University extends AbricosApplication {
     	} else {
     		$rows = UniversityQuery::AppendAttribute($this->db, $d);
     	}
-    	 
+    }
+    
+    public function RemoveAttributeToJSON($d){
+    	$res = $this->RemoveAttribute($d);
+    	return $this->ResultToJSON('removeAttribute', $res);
+    }
+    
+    public function RemoveAttribute($d){
+    	$d->compositid = intval($d->compositid);
+    	$d->isComplex = intval($d->isComplex);
     	
+    	return UniversityQuery::RemoveAttribute($this->db, $d);
     }
     
 }

@@ -33,6 +33,9 @@ Component.entryPoint = function(NS){
     		},
     		actAttribute: {
     			args: ['data']
+    		},
+    		removeAttribute: {
+    			args: ['compositid', 'isComplex']
     		}
         },
         ATTRS: {

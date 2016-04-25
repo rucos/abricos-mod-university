@@ -28,11 +28,9 @@ class UniversityQuery {
 					typeattribute,
 					nameattribute,
 					applyattribute,
-					locate,
-					remove
+					locate
 			FROM ".$db->prefix."un_attribute
-			WHERE sectionid=".bkint($sectionid)."
-			
+			WHERE sectionid=".bkint($sectionid)." AND remove=0
 		";
 		return $db->query_read($sql);
 	}
@@ -70,6 +68,18 @@ class UniversityQuery {
 		$db->query_write($sql);
 	}
 	
+	public static function RemoveAttribute(Ab_Database $db, $d){
+		
+		$sql = "
+			UPDATE ".$db->prefix."un_attribute
+			SET
+				remove=1
+			WHERE attributeid=".bkint($d->compositid)."
+			LIMIT 1
+		";
+	
+		return $db->query_write($sql);
+	}
 }
 
 ?>

@@ -64,6 +64,7 @@ Component.entryPoint = function(NS){
     		
 			if(rows){
 				panel = tp.replace('panel', {
+					complexid: 0,
 					view: 'success',
 					type: 'Простые атрибуты',
 					body: this.renderTable(rows, 0)
@@ -89,11 +90,13 @@ Component.entryPoint = function(NS){
         parsingComplex: function(complex, rows){
         	var tp = this.template,
         		panelHead = "",
-        		panel = "";
+        		panel = "",
+        		complexid = complex.get('id');
         		
-				panelHead = this.renderRow(complex, 'panelhead', complex.get('id'));
+				panelHead = this.renderRow(complex, 'panelhead', complexid);
 				
 				panel = tp.replace('panel', {
+					complexid: complexid,
 					view: 'warning',
 					type: 'Сложный атрибут:' + panelHead,
 					body: this.renderTable(rows, complex.get('id'))
@@ -109,7 +112,7 @@ Component.entryPoint = function(NS){
 	          		compositid: attr.get('id'),
 	          		complexid: complexid,
 	          		type: attr.get('typeattribute'),
-	          		locate: attr.get('locate') ? 'Да' : 'Нет',
+	          		locate: attr.get('locate') ? 'Установлен' : 'Не установлен',
 	    			remove: attr.get('remove') ? 'Восстановить' : 'Удалить'
 	    		}, attr.toJSON()]);
           	
@@ -123,11 +126,20 @@ Component.entryPoint = function(NS){
         },
         showFormAddAtr: function(show, type){
         	var tp = this.template,
-        		block = show ? 
-        				tp.replace(type, {
-        					divs: tp.replace('addAtr', {type: type})
-        				}) : '';
-        	
+        		block = "";
+           	
+        	if(show){
+        		block = tp.replace(type, {
+					nameattribute: "",
+					divs: tp.replace('addAtr', {
+						complexid: 0,
+						type: type,
+						act: "Добавить",
+						checked: "",
+						click: 'addAtr-cancel'
+					})
+        		});
+        	}
         	tp.setHTML('formAddAtr', block);
         },
         appendAttribute: function(type, complexid){
@@ -148,7 +160,7 @@ Component.entryPoint = function(NS){
         			locate: ""
         		};
         	
-        	if(id){//добавляем составной
+        	if(id != 0){//добавляем составной
         		ret.nameattribute = tp.one(type + '.nameattribute-' + id).getDOMNode();
         		ret.applyattribute = tp.one(type + '.applyattribute-' + id).getDOMNode();
         		ret.locate = tp.one(type + '.locate-' + id).getDOMNode();
@@ -159,16 +171,6 @@ Component.entryPoint = function(NS){
         	}
         	
         	return ret;
-        },
-        reqActAttribute: function(data){
-        	this.set('waiting', true);
-	        	this.get('appInstance').actAttribute(data, function(err, result){
-	        		this.set('waiting', false);
-	        			if(!data.compositid){
-		        			this.showFormAddAtr(false, '');
-	        				this.reloadList(this.get('sectionid'));
-	        			}
-	        	}, this);
         },
         showAtributeRow: function(complexid, compositid, type, parent){
         	var tp = this.template,
@@ -189,7 +191,7 @@ Component.entryPoint = function(NS){
         	if(parent){
         		replaceObj.nameattribute = parent.cells[0].textContent;
         		replaceObj.applyattribute = parent.cells[1].textContent;
-        		replaceObj.check = parent.cells[2].textContent === 'Да' ? 'checked' : '';
+        		replaceObj.check = parent.cells[2].textContent === 'Установлен' ? 'checked' : '';
         		replaceObj.edit = "Изменить";
         		replaceObj.id = compositid;
         		replaceObj.click = 'actCompositAtr';
@@ -220,17 +222,14 @@ Component.entryPoint = function(NS){
         		replaceObj.locate = locate.checked;
         		
         		this.reqActAttribute(replaceObj);
-        		replaceObj.locate = locate.checked ? 'Да' : 'Нет';
+        		replaceObj.locate = locate.checked ? 'Установлен' : 'Не установлен';
         	} else {
-        		replaceObj.locate = locate.getAttribute('checked') !== null ? 'Да' : 'Нет';        		
+        		replaceObj.locate = locate.getAttribute('checked') !== null ? 'Установлен' : 'Не установлен';        		
         	}
         	
         	replaceObj.remove = "Удалить";
         	
         	parent.innerHTML = tp.replace('row', replaceObj);
-        },
-        replaceAtributeRow: function(obj){
-        	return this.template.replace('composite', obj);
         },
         cancelAtributeRow: function(complexid, compositid, type, parent){
         	if(compositid > 0){
@@ -238,6 +237,10 @@ Component.entryPoint = function(NS){
         	} else {
         		parent.remove();	
         	}
+        },
+        
+        replaceAtributeRow: function(obj){
+        	return this.template.replace('composite', obj);
         },
         constructDataAttribute: function(){
         	return {
@@ -249,6 +252,30 @@ Component.entryPoint = function(NS){
     			applyattribute: arguments[4],
     			locate: arguments[5]
         	};
+        },
+        removeShow: function(compositid, show){
+        	this.template.toggleView(show, 'row.removegroup-' + compositid, 'row.remove-' + compositid);
+        },
+        reqActAttribute: function(data){
+        	this.set('waiting', true);
+	        	this.get('appInstance').actAttribute(data, function(err, result){
+	        		this.set('waiting', false);
+	        			if(!data.compositid){
+		        			this.showFormAddAtr(false);
+	        				this.reloadList(this.get('sectionid'));
+	        			}
+	        	}, this);
+        },
+        reqRemoveAttribute: function(compositid, parent, isComplex){
+        	this.set('waiting', true);
+	        	this.get('appInstance').removeAttribute(compositid, isComplex, function(err, result){
+	        		this.set('waiting', false);
+	        			if(!err){
+	        				if(result.removeAttribute){
+	        					parent.remove();
+	        				}
+	        			}
+	        	}, this);
         }
     }, {
         ATTRS: {
@@ -276,6 +303,18 @@ Component.entryPoint = function(NS){
         			this.showFormAddAtr(false, '');
         		}
         	},
+            'remove-show': {
+                event: function(e){
+                    var compositid = e.target.getData('id');
+                    	this.removeShow(compositid, true);
+                }
+            },
+            'remove-cancel': {
+                event: function(e){
+                    var compositid = e.target.getData('id');
+                    	this.removeShow(compositid, false);
+                }
+            },
         	actCompositAtr: {
         		event: function(e){
         			var targ = e.target,
@@ -283,7 +322,7 @@ Component.entryPoint = function(NS){
         				compositid = targ.getData('aid'),
         				act = targ.getData('act'),
         				type = targ.getData('type'),
-        				parent = e.target.getDOMNode().parentNode.parentNode;
+        				parent = targ.getDOMNode().parentNode.parentNode;
         			
                 	switch(act){
 	    	    		case 'addShow':
@@ -307,7 +346,26 @@ Component.entryPoint = function(NS){
         				type = targ.getData('type'),
         				complexid = targ.getData('id');
         			
-        				this.appendAttribute(type, complexid);
+        			this.appendAttribute(type, complexid);
+        		}
+        	},
+        	removeAtr: {
+        		event: function(e){
+        			var targ = e.target,
+        				tp = this.template,
+        				atribid = targ.getData('id'),
+        				type = targ.getData('type'),
+        				isComplex = false,
+        				parent = "";
+        			
+        			if(type){
+        				parent = tp.one('row.rowAtr-' + atribid).getDOMNode();
+        			} else {
+           				parent = tp.one('panel.panel-' + atribid).getDOMNode();
+           					isComplex = true;
+        			}
+        			
+        			this.reqRemoveAttribute(atribid, parent, isComplex);
         		}
         	}
         }

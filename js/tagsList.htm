@@ -26,17 +26,18 @@
 </div>
 
 <!--{panelhead}-->
-<div class="row">
-	  <div class="col-md-5">
+<div class="row" id="{i#own}-{v#complexid}">
+	  <div class="col-md-3">
           <h4>{v#nameattribute}</h4>
 	  </div>
+	 <div class="col-md-2">{v#locate}</div>
 	 <div class="col-md-3">
 	  	 	<button data-click="actCompositAtr" data-id="{v#complexid}" data-act="addShow" data-type="composite" class="btn btn-default btn-xs" data-wait="disable">
            		 Добавить составной атрибут
         	</button>
 	  </div>
 	  <div class="col-md-2">
-	  	 	<button data-click="edit" data-id="{v#complexid}" class="btn btn-default btn-xs" data-wait="disable">
+	  	 	<button data-click="editComplexAtr" data-id="{v#complexid}" class="btn btn-default btn-xs" data-wait="disable">
            		 Править
         	</button>
 	  </div>
@@ -45,18 +46,15 @@
             {v#remove}
         </button>
          <div id="{i#removegroup}-{v#complexid}"  class="btn-group hide">
-            <button data-click="remove"type="button" class="btn btn-danger btn-xs" data-id="{v#id}" 
-            		data-wait="disable">
+            <button data-click="remove"type="button" class="btn btn-danger btn-xs" data-id="{v#complexid}" data-wait="disable">
                 Удалить?
             </button>
-            <button data-click="remove-cancel" type="button" class="btn btn-default btn-xs" data-id="{v#id}"
-                    data-wait="disable">
+            <button data-click="remove-cancel" type="button" class="btn btn-default btn-xs" data-id="{v#complexid}" data-wait="disable">
                 Отмена
             </button>
         </div>
   	  </div>
 </div>
-
 
 <!--{table}-->
 <table id="{i#tbl}-{v#id}" class="table table-striped table-hover">
@@ -64,7 +62,7 @@
 	    <tr>
 	   	 	<th>Публикуемые данные</th>
 	        <th>Применяемые атрибуты</th>
-	        <th>Показывать?</th>
+	        <th></th>
 	        <th></th>
 	        <th></th>
 	    </tr>
@@ -73,7 +71,7 @@
 </table>
 
 <!--{row}-->
-<tr>
+<tr id="{i#rowAtr}-{v#compositid}">
     <td>{v#nameattribute}</td>
     <td>{v#applyattribute}</td>
     <td>{v#locate}</td>
@@ -83,14 +81,14 @@
         </button>
     </td>
     <td>
-         <button id="{i#remove}-{v#compositid}" type="button" class="btn btn-default btn-xs" data-id="{v#id}" data-wait="disable">
+         <button id="{i#remove}-{v#compositid}" data-id="{v#compositid}" data-click="remove-show" type="button" class="btn btn-default btn-xs" data-wait="disable">
             {v#remove}
         </button>
          <div id="{i#removegroup}-{v#compositid}"  class="btn-group hide">
-            <button data-click="remove"type="button" class="btn btn-danger btn-xs" data-id="{v#id}" data-wait="disable">
+            <button data-click="removeAtr" type="button" class="btn btn-danger btn-xs" data-id="{v#compositid}" data-type="{v#type}" data-wait="disable">
                 Удалить?
             </button>
-            <button data-click="remove-cancel" type="button" class="btn btn-default btn-xs" data-id="{v#id}" data-wait="disable">
+            <button data-click="remove-cancel" type="button" class="btn btn-default btn-xs" data-id="{v#compositid}" data-wait="disable">
                 Отмена
             </button>
         </div>
@@ -123,7 +121,7 @@
   	<div class="col-md-3">
   	  <div class="form-group">
 	    <label>Название атрибута</label>
-	    	<input id="{i#nameattribute}" type="text" class="form-control">
+	    	<input id="{i#nameattribute}" type="text" class="form-control" value="{v#nameattribute}">
 	  </div>
 	</div>
 		<input id="{i#applyattribute}" type="text" class="form-control hide">
@@ -135,21 +133,21 @@
  	  <div class="form-group">
         <div class="checkbox">
 	        <label>
-	          <input id="{i#locate}" type="checkbox"> Отображать?
+	          <input id="{i#locate}" type="checkbox" {v#checked}> Установить?
 	        </label>
 	    </div>
   	  </div>
  </div>
  <div class="col-md-1">
  	  <div class="form-group">
-  	 	<button data-click="appendAtr" data-type="{v#type}" class="btn btn-default btn-xs" data-wait="disable">
-          		 Добавить
+  	 	<button data-click="appendAtr" data-id="{v#complexid}" data-type="{v#type}" class="btn btn-default btn-xs" data-wait="disable">
+          		 {v#act}
        	</button>
   </div>
  </div>
  <div class="col-md-1">
  	  <div class="form-group">
-  	 	<button data-click="addAtr-cancel" class="btn btn-default btn-xs" data-wait="disable">
+  	 	<button data-click="{v#click}" data-id="{v#complexid}" data-type="{v#type}" class="btn btn-default btn-xs" data-wait="disable">
           		 Отмена
        	</button>
   </div>
@@ -169,7 +167,7 @@
     	<div class="form-group">
         	<div class="checkbox">
 	        	<label>
-	        	  	<input id="{i#locate}-{v#key}" type="checkbox" {v#check}> Отображать?
+	        	  	<input id="{i#locate}-{v#key}" type="checkbox" {v#check}> Установить?
 	        	</label>
 	    	</div>
   	  	</div>
