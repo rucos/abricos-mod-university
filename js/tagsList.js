@@ -130,7 +130,6 @@ Component.entryPoint = function(NS){
         		replaceObj = {};
         	
         	if(show){
-        		replaceObj.nameCl = "in";
         		replaceObj.none = 'block';
         		replaceObj.type = type;
         		replaceObj.nameattribute = "";
@@ -226,14 +225,19 @@ Component.entryPoint = function(NS){
         				nameattribute.getAttribute('value'), 
         				applyattribute.getAttribute('value'), 
         				locate.getAttribute('checked')
-        		);
+        		),
+        		empty = "";
         	
         	if(edit){
         		replaceObj.nameattribute = nameattribute.value;
         		replaceObj.applyattribute = applyattribute.value;
         		replaceObj.locate = locate.checked;
         		
-        		this.reqActAttribute(replaceObj);
+        		empty = this.reqActAttribute(replaceObj);
+        		
+        		if(empty){
+        			return;
+        		}
         		replaceObj.locate = locate.checked ? 'Установлен' : 'Не установлен';
         	} else {
         		replaceObj.locate = locate.getAttribute('checked') !== null ? 'Установлен' : 'Не установлен';        		
@@ -278,9 +282,9 @@ Component.entryPoint = function(NS){
         },
         reqActAttribute: function(data){
         	this.set('waiting', true);
-	        	this.get('appInstance').actAttribute(data, function(err, result){
+        	this.get('appInstance').actAttribute(data, function(err, result){
 	        		this.set('waiting', false);
-	        			if(data.compositid !== 0){
+	        			if(data.compositid == 0 || data.type == 'complex'){
 	        				this.showFormAddAtr(false);
 	        				this.reloadList(this.get('sectionid'));
 	        			}
@@ -352,7 +356,7 @@ Component.entryPoint = function(NS){
         			
                 	switch(act){
 	    	    		case 'addShow':
-	    	    			this.showAtributeRow(complexid, compositid, type, "");
+	    	    			this.showAtributeRow(complexid, 0, type, "");
 	    	    				break;
 	    	    		case 'editShow': 
 	    	    			this.showAtributeRow(complexid, compositid, type, parent);
