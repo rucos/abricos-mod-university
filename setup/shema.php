@@ -29,6 +29,7 @@ if ($updateManager->isInstall('0.1.0')){
 				PRIMARY KEY (sectionid)
 			)".$charset
 		);
+		
 		/*
 		 *
 		* 2. Атрибуты
@@ -39,9 +40,11 @@ if ($updateManager->isInstall('0.1.0')){
 				attributeid int(10) unsigned NOT NULL auto_increment,
 				sectionid int(10) unsigned NOT NULL default 0 COMMENT 'Раздел',
 				complexid int(10) unsigned NOT NULL default 0 COMMENT 'id сложного атрибута',
-				typeattribute enum('simple','complex','composite') NOT NULL COMMENT 'Тип атрибута',
+				compositeid int(10) unsigned NOT NULL default 0 COMMENT 'id составного атрибута',
+				typeattribute enum('simple','complex','composite','subcomposite') NOT NULL COMMENT 'Тип атрибута',
 				nameattribute TEXT NOT NULL default '' COMMENT 'Название атрибута',
 				applyattribute varchar(255) NOT NULL default '' COMMENT 'Применяемый атрибут',
+				tablename varchar(50) NOT NULL default '' COMMENT 'Связующая таблица',
 				locate tinyint(1) unsigned NOT NULL default 0 COMMENT 'Показывать?',
 				remove tinyint(1) unsigned NOT NULL default 0 COMMENT 'Удален?',
 				PRIMARY KEY (attributeid)
@@ -50,37 +53,84 @@ if ($updateManager->isInstall('0.1.0')){
 		
 		/*
 		 *
-		* 3. Значение простого атрибута
+		* 3. Значение атрибута
 		*
 		* */
 		$db->query_write("
-			CREATE TABLE IF NOT EXISTS ".$pfx."un_simple_value(
-				splvalueid int(10) unsigned NOT NULL auto_increment,
-				attributeid int(10) unsigned NOT NULL default 0 COMMENT 'Простой атрибут',
-				value varchar(255) NOT NULL default '' COMMENT 'Значение атрибута',
+			CREATE TABLE IF NOT EXISTS ".$pfx."un_value(
+				valueid int(10) unsigned NOT NULL auto_increment,
+				attributeid int(10) unsigned NOT NULL default 0 COMMENT 'id атрибута',
+				id int(10) unsigned NOT NULL default 0 COMMENT 'id поля связующей таблицы',
+				value TEXT NOT NULL default '' COMMENT 'Значение атрибута',
 				nameurl TEXT NOT NULL default '' COMMENT 'Название ссылки',
 				namedoc varchar(255) NOT NULL default '' COMMENT 'Название документа',
+				subject varchar(255) default NULL COMMENT 'Название предмета',
 				datedoc int(10) unsigned NOT NULL default 0 COMMENT 'Дата утверждения',
-				PRIMARY KEY (splvalueid)
+				folder varchar(20) NOT NULL default '' COMMENT 'Название директории',
+				remove tinyint(1) unsigned NOT NULL default 0 COMMENT 'Удален?',
+				PRIMARY KEY (valueid)
 			)".$charset
 		);
 		
 		/*
 		 *
-		* 4. Значение составного атрибута
+		* 4. Направления, специальности
 		*
 		* */
 		$db->query_write("
-			CREATE TABLE IF NOT EXISTS ".$pfx."un_composite_value(
-				cmptvalueid int(10) unsigned NOT NULL auto_increment,
-				attributeid int(10) unsigned NOT NULL default 0 COMMENT 'Составной атрибут',
-				nameurl TEXT NOT NULL default '' COMMENT 'Название ссылки',
-				namedoc varchar(255) NOT NULL default '' COMMENT 'Название документа',
-				field varchar(20) NOT NULL default '' COMMENT 'Направление',
-				subject varchar(255) default NULL COMMENT 'Название предмета',
-				datedoc int(10) unsigned NOT NULL default 0 COMMENT 'Дата утверждения',
-				folder varchar(20) NOT NULL default '' COMMENT 'Название директории',
-				PRIMARY KEY (cmptvalueid)
+			CREATE TABLE IF NOT EXISTS ".$pfx."un_program(
+				programid int(10) unsigned NOT NULL auto_increment,
+				code varchar(20) default NULL COMMENT 'Код направления',
+				name varchar(255) default NULL COMMENT 'Направление',
+				remove tinyint(1) unsigned NOT NULL default 0 COMMENT 'Удален?',
+				PRIMARY KEY (programid)
+			)".$charset
+		);
+		
+		/*
+		 *
+		* 5. Уровень образования
+		*
+		* */
+		$db->query_write("
+			CREATE TABLE IF NOT EXISTS ".$pfx."un_edulevel(
+				edulevelid int(10) unsigned NOT NULL auto_increment,
+				programid int(10) unsigned NOT NULL default 0 COMMENT 'id направления',
+				level enum('бакалавриат академический','бакалавриат прикладной','специалитет') NOT NULL COMMENT 'уровень образования',
+				remove tinyint(1) unsigned NOT NULL default 0 COMMENT 'Удален?',
+				PRIMARY KEY (edulevelid),
+				UNIQUE KEY level (programid,level)
+			)".$charset
+		);
+		
+		/*
+		 *
+		* 6. Формы обучения
+		*
+		* */
+		$db->query_write("
+			CREATE TABLE IF NOT EXISTS ".$pfx."un_eduform(
+				eduformid int(10) unsigned NOT NULL auto_increment,
+				edulevelid int(10) unsigned NOT NULL default 0 COMMENT 'id уровня образования',
+				eduform enum('очная','очно-заочная ','заочная') NOT NULL COMMENT 'формы обучения',
+				educount tinyint(1) unsigned NOT NULL default 0 COMMENT 'Срок обучения',
+				remove tinyint(1) unsigned NOT NULL default 0 COMMENT 'Удален?',
+				PRIMARY KEY (eduformid),
+				UNIQUE KEY form (edulevelid,eduform)
+			)".$charset
+		);
+		
+		/*
+		 *
+		* 7. Сотрудники
+		*
+		* */
+		$db->query_write("
+			CREATE TABLE IF NOT EXISTS ".$pfx."un_employees(
+				employeesid int(10) unsigned NOT NULL auto_increment,
+				FIO varchar(255) default NULL COMMENT 'ФИО сотрудника',
+				remove tinyint(1) unsigned NOT NULL default 0 COMMENT 'Удален?',
+				PRIMARY KEY (employeesid)
 			)".$charset
 		);
 		
@@ -93,13 +143,5 @@ if ($updateManager->isInstall('0.1.0')){
 		
 		$sect = new Section();
 		
-		$sectionid = $sect->AppendSysMenu('sveden', $sect::SVEDEN);
-		$contentId = $sect->AppendContent($sect::SVEDEN);
-		$sect->AppendSysPage($sectionid, $contentId);
-		
-		$i = 0;
-			foreach($sect->menu as $menu => $name){
-				$sect->AppendSectionMenu($sectionid, $menu, $name, ++$i);
-			}
 }
 ?>
