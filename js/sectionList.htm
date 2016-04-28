@@ -3,9 +3,9 @@
 <hr>
 
 <!--{ulSection}-->
-<ul class="nav nav-pills" id="{i#sections}" data-click="pickSection">
+<ul class="nav nav-pills {v#stacked}" id="{i#sections}" data-click="pickSection">
 {v#li}
 </ul>
 
 <!--{liSection}-->
-<li role="presentation" id="{v#id}"><a href="#" data-id="{v#id}">{v#title}</a></li>
+<li id="{v#id}"><a href="#" data-id="{v#id}" data-section="{v#name}">{v#title}</a></li>

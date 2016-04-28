@@ -55,6 +55,7 @@ Component.entryPoint = function(NS){
 	        						break;
 	        			case "structA": 
 	        				this.setActive('structLi');
+	        					this.go("struct.view");
 	        						break;
 	        		}
         		}

@@ -25,6 +25,7 @@ Component.entryPoint = function(NS){
         },
         renderList: function(){
         	var sectionList = this.get('sectionList'),
+        		stacked = this.get('stacked'),
         		tp = this.template,
         		lst = "";
         	
@@ -32,7 +33,10 @@ Component.entryPoint = function(NS){
         		lst += tp.replace('liSection', [section.toJSON()]);
         	});
         	
-        	tp.setHTML('section', tp.replace('ulSection', {li: lst}));
+        	tp.setHTML('section', tp.replace('ulSection', {
+        		stacked: stacked ? 'nav-stacked' : '',
+        		li: lst
+        	}));
         },
         setPrimarySection: function(id){
         	var tp = this.template,
@@ -51,7 +55,8 @@ Component.entryPoint = function(NS){
         ATTRS: {
         	component: {value: COMPONENT},
             templateBlockName: {value: 'widget,ulSection,liSection'},
-            sectionList: {value: null}
+            sectionList: {value: null},
+            stacked: {value: false}
         }
     });
 };

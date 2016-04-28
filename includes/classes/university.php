@@ -115,6 +115,17 @@ class University extends AbricosApplication {
     	return UniversityQuery::RemoveAttribute($this->db, $d);
     }
     
+    public function ValueAttributeListToJSON($sectionid){
+    	$res = $this->ValueAttributeList($sectionid);
+    	return $this->ResultToJSON('valueAttributeList', $res);
+    }
+    
+    public function ValueAttributeList($sectionid){
+    	$sectionid = intval($sectionid);
+    
+    	UniversityQuery::ValueAttributeList($this->db, $sectionid);
+    }
+    
 }
 
 ?>

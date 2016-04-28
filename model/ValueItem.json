@@ -1,0 +1,46 @@
+{
+  "version": "0.1.0",
+  "type": "model",
+  "rolefn": "IsAdminRole",
+  "fields": {
+    "id": {
+      "type": "int"
+    },
+    "attributeid": {
+      "type": "int",
+      "json": "aid"
+    },
+    "value": {
+      "type": "string",
+      "json": "val"
+    },
+    "nameurl": {
+      "type": "string",
+      "json": "nu"
+    },
+    "namedoc": {
+      "type": "string",
+      "json": "nd"
+    },
+    "field": {
+      "type": "string",
+      "json": "fld"
+    },
+    "subject": {
+      "type": "string",
+      "json": "sj"
+    },
+    "datedoc": {
+      "type": "int",
+      "json": "dd"
+    },
+    "folder": {
+      "type": "string",
+      "json": "fld"
+    },
+   	"remove": {
+      "type": "int",
+      "json": "rm"
+    }
+  }
+}

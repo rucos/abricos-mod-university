@@ -90,6 +90,25 @@ class UniversityQuery {
 		return $db->query_write($sql);
 	}
 	
+	public static function ValueAttributeList(Ab_Database $db, $sectionid){
+		$sql = "
+			SELECT
+					a.attributeid,
+					a.nameattribute,
+					s.value,
+					s.nameurl,
+					s.namedoc,
+					s.datedoc
+			FROM ".$db->prefix."un_attribute a
+			LEFT JOIN ".$db->prefix."un_value s ON a.attributeid=s.attributeid
+			WHERE a.sectionid=".bkint($sectionid)." AND a.remove=0
+		";
+		$rows = $db->query_read($sql);
+		while (($d = $db->fetch_array($rows))){
+			print_r($d);
+		}
+	
+	}
 }
 
 ?>

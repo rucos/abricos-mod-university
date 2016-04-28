@@ -6,6 +6,10 @@
     "id": {
       "type": "int"
     },
+    "name": {
+      "type": "string",
+      "json": "nm"
+    },
     "title": {
       "type": "string",
       "json": "ttl"

@@ -36,18 +36,33 @@ Component.entryPoint = function(NS){
     		},
     		removeAttribute: {
     			args: ['compositid', 'isComplex']
+    		},
+    		valueAttributeList: {
+    			args: ['sectionid'],
+    			attribute: false,
+    			type: 'modelList:ValueAttributeList'
     		}
         },
         ATTRS: {
         	isLoadAppStructure: {value: true},
         	SectionList: {value: NS.SectionList},
-        	AttributeList: {value: NS.AttributeList}
+        	AttributeList: {value: NS.AttributeList},
+        	ValueAttributeList: {value: NS.ValueAttributeList},
+        	currentSection: {value: ''}
         },
         URLS: {
         	ws: "#app={C#MODNAMEURI}/wspace/ws/",
         	managerTags: {
         		view: function(){
         			 return this.getURL('ws') + 'managerTags/ManagerTagsWidget';
+        		}
+        	},
+        	struct: {
+        		view: function(){
+        			 return this.getURL('ws') + 'managerStruct/ManagerStructWidget';
+        		},
+        		sectionItem: function(sectionid, sectionName){
+        			return this.getURL('ws') + 'sectionEditor/SectionEditorWidget/' + sectionid + '/';
         		}
         	}
         }
