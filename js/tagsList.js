@@ -29,6 +29,7 @@ Component.entryPoint = function(NS){
         		tp = this.template,
         		arrComplex = [],
         		arrComposit = [],
+        		arrSubComposit = [],
         		simpleRows = "",
         		rows = "",
         		lst = "";
@@ -44,6 +45,9 @@ Component.entryPoint = function(NS){
 	        					return;
 	        			case 'composite':
 	        				arrComposit.push(atrr);
+	        					return;
+	        			case 'subcomposite':
+	        				arrSubComposit.push(atrr);
 	        					return;
 	        		}
         	}, this);
@@ -98,7 +102,7 @@ Component.entryPoint = function(NS){
 				panel = tp.replace('panel', {
 					complexid: complexid,
 					view: 'warning',
-					type: 'Сложный атрибут:' + panelHead,
+					type: panelHead,
 					body: this.renderTable(rows, complex.get('id'))
 				});
 			
@@ -133,17 +137,19 @@ Component.entryPoint = function(NS){
         		replaceObj.none = 'block';
         		replaceObj.type = type;
         		replaceObj.nameattribute = "";
+        		replaceObj.applyattribute = "";
+        		replaceObj.tablename = "";
         		
 	        		if(!complexid){
 	        			replaceObj.act = "Добавить";
 	        			replaceObj.complexid = 0;
-	        			replaceObj.hide = type === 'complex' ? 'hide' : '';
 	        		} else {
 	        			parent = tp.one('panelhead.own-' + complexid).getDOMNode();
 	        			
 	        			replaceObj.nameattribute = parent.children[0].textContent;
-	        			replaceObj.checked = parent.children[1].textContent === 'Установлен' ? 'checked' : '';
-	        			replaceObj.hide = 'hide';
+	        			replaceObj.applyattribute = parent.children[1].textContent;
+	        			replaceObj.tablename = parent.children[2].textContent;
+	        			replaceObj.checked = parent.children[3].textContent === 'Установлен' ? 'checked' : '';
 	        			replaceObj.act = "Изменить";
 	        			replaceObj.complexid = complexid;
 	        		}
@@ -158,8 +164,9 @@ Component.entryPoint = function(NS){
         		inputs = this.getNode(type, complexid),
         		nameattribute = inputs.nameattribute.value,
         		applyattribute = inputs.applyattribute.value,
+        		tablename = inputs.tablename.value,
         		locate = inputs.locate.checked,
-        		data = this.constructDataAttribute(complexid, compositid, type, nameattribute, applyattribute, locate);
+        		data = this.constructDataAttribute(complexid, compositid, type, nameattribute, applyattribute, tablename, locate);
         		
         		this.reqActAttribute(data);
         },
@@ -168,16 +175,19 @@ Component.entryPoint = function(NS){
         		ret = {
         			nameattribute: "",
         			applyattribute: "",
+        			tablename: "",
         			locate: ""
         		};
         	
         	if(type === 'composite'){//добавляем составной
         		ret.nameattribute = tp.one(type + '.nameattribute-' + id).getDOMNode();
         		ret.applyattribute = tp.one(type + '.applyattribute-' + id).getDOMNode();
+        		ret.tablename = tp.one(type + '.tablename-' + id).getDOMNode();
         		ret.locate = tp.one(type + '.locate-' + id).getDOMNode();
         	} else {//добавляем простой или сложный
         		ret.nameattribute = tp.gel('modalFormAdd.nameattribute');
         		ret.applyattribute = tp.gel('modalFormAdd.applyattribute');
+        		ret.tablename = tp.gel('modalFormAdd.tablename');
         		ret.locate = tp.gel('modalFormAdd.locate');
         	}
         	
@@ -190,6 +200,7 @@ Component.entryPoint = function(NS){
         		replaceObj = {
 	        		nameattribute: "",
 	        		applyattribute: "",
+	        		tablename: "",
 	        		check: "",
 	        		edit: "Добавить",
 	        		compositid: compositid,
@@ -202,7 +213,8 @@ Component.entryPoint = function(NS){
         	if(parent){
         		replaceObj.nameattribute = parent.cells[0].textContent;
         		replaceObj.applyattribute = parent.cells[1].textContent;
-        		replaceObj.check = parent.cells[2].textContent === 'Установлен' ? 'checked' : '';
+        		replaceObj.tablename = parent.cells[2].textContent;
+        		replaceObj.check = parent.cells[3].textContent === 'Установлен' ? 'checked' : '';
         		replaceObj.edit = "Изменить";
         		replaceObj.id = compositid;
         		replaceObj.click = 'actCompositAtr';
@@ -217,27 +229,26 @@ Component.entryPoint = function(NS){
         		inputs = this.getNode("composite", compositid),
         		nameattribute = inputs.nameattribute,
         		applyattribute = inputs.applyattribute,
+        		tablename = inputs.tablename,
         		locate = inputs.locate,
         		replaceObj = this.constructDataAttribute(
         				complexid, 
         				compositid, 
         				type, 
         				nameattribute.getAttribute('value'), 
-        				applyattribute.getAttribute('value'), 
+        				applyattribute.getAttribute('value'),
+        				tablename.getAttribute('value'),
         				locate.getAttribute('checked')
-        		),
-        		empty = "";
+        		);
         	
         	if(edit){
         		replaceObj.nameattribute = nameattribute.value;
         		replaceObj.applyattribute = applyattribute.value;
+        		replaceObj.tablename = tablename.value;
         		replaceObj.locate = locate.checked;
         		
-        		empty = this.reqActAttribute(replaceObj);
+        		this.reqActAttribute(replaceObj);
         		
-        		if(empty){
-        			return;
-        		}
         		replaceObj.locate = locate.checked ? 'Установлен' : 'Не установлен';
         	} else {
         		replaceObj.locate = locate.getAttribute('checked') !== null ? 'Установлен' : 'Не установлен';        		
@@ -266,7 +277,8 @@ Component.entryPoint = function(NS){
     			type: arguments[2],
     			nameattribute: arguments[3],
     			applyattribute: arguments[4],
-    			locate: arguments[5]
+    			tablename: arguments[5],
+    			locate: arguments[6]
         	};
         },
         removeShow: function(compositid, isComplex, show){

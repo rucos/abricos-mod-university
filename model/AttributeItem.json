@@ -10,6 +10,10 @@
       "type": "int",
       "json": "cid"
     },
+    "compositeid": {
+      "type": "int",
+      "json": "csid"
+    },
     "typeattribute": {
       "type": "string",
       "json": "tp"
@@ -21,6 +25,10 @@
     "applyattribute": {
       "type": "string",
       "json": "apl"
+    },
+    "tablename": {
+      "type": "string",
+      "json": "tn"
     },
     "locate": {
       "type": "int",

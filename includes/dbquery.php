@@ -13,6 +13,7 @@ class UniversityQuery {
 		$sql = "
 			SELECT
 					s.sectionid as id,
+					m.name,
 					m.title
 			FROM ".$db->prefix."un_section s
 			INNER JOIN ".$db->prefix."sys_menu m ON s.menuid = m.menuid
@@ -25,9 +26,11 @@ class UniversityQuery {
 			SELECT
 					attributeid as id,
 					complexid,
+					compositeid,
 					typeattribute,
 					nameattribute,
 					applyattribute,
+					tablename,
 					locate
 			FROM ".$db->prefix."un_attribute
 			WHERE sectionid=".bkint($sectionid)." AND remove=0
@@ -37,13 +40,14 @@ class UniversityQuery {
 	
 	public static function AppendAttribute(Ab_Database $db, $d){
 		$sql = "
-			INSERT INTO ".$db->prefix."un_attribute(sectionid, complexid, typeattribute, nameattribute, applyattribute, locate)
+			INSERT INTO ".$db->prefix."un_attribute(sectionid, complexid, typeattribute, nameattribute, applyattribute, tablename, locate)
 			VALUES (
 					".bkint($d->sectionid).",
 					".bkint($d->complexid).",
 					'".bkstr($d->type)."',
 					'".bkstr($d->nameattribute)."',	
-					'".bkstr($d->applyattribute)."',	
+					'".bkstr($d->applyattribute)."',
+					'".bkstr($d->tablename)."',
 					".bkint($d->locate)."
 			)
 		";
@@ -60,6 +64,7 @@ class UniversityQuery {
 					typeattribute = '".bkstr($d->type)."',
 					nameattribute = '".bkstr($d->nameattribute)."',
 					applyattribute = '".bkstr($d->applyattribute)."',
+					tablename = '".bkstr($d->tablename)."',
 					locate = ".bkint($d->locate)."
 			WHERE attributeid=".bkint($d->compositid)."
 			LIMIT 1
@@ -84,6 +89,7 @@ class UniversityQuery {
 		
 		return $db->query_write($sql);
 	}
+	
 }
 
 ?>

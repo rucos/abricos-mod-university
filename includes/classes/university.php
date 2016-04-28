@@ -14,13 +14,15 @@ class University extends AbricosApplication {
 				'SectionItem' => 'SectionItem',
 				'SectionList' => 'SectionList',
 				'AttributeList' => 'AttributeList',
-				'AttributeItem' => 'AttributeItem'
+				'AttributeItem' => 'AttributeItem',
+				'ValueAttributeList' => 'ValueAttributeList',
+				'ValueAttributeItem' => 'ValueAttributeItem'
 		);
 	}
 	
 	
 	protected function GetStructures(){
-		return 'SectionItem, AttributeItem';
+		return 'SectionItem, AttributeItem, ValueItem';
 	}
 
 	public function ResponseToJSON($d){
@@ -37,6 +39,8 @@ class University extends AbricosApplication {
 				return $this->ActAttributeToJSON($d->data);
 			case 'removeAttribute':
 				return $this->RemoveAttributeToJSON($d);
+			case 'valueAttributeList':
+				return $this->ValueAttributeListToJSON($d->sectionid);
         }
         return null;
     }
@@ -89,6 +93,7 @@ class University extends AbricosApplication {
     	$d->type = $utmf->Parser($d->type);
     	$d->nameattribute = $utmf->Parser($d->nameattribute);
     	$d->applyattribute = $utmf->Parser($d->applyattribute);
+    	$d->tablename = $utmf->Parser($d->tablename);
     	$d->locate = intval($d->locate);
     	
     	if($d->compositid > 0){
