@@ -1,19 +1,16 @@
 <!--{widget}-->
-<div class="row">
-	 <div class="col-md-3">
-	 	  	<button data-click="addAtr-show" data-type="simple" class="btn btn-success" data-wait="disable">
-           		 Добавить простой атрибут
-        	</button>
-	 </div>
- 	 <div class="col-md-3">
- 	 	  	 <button data-click="addAtr-show" data-type="complex" class="btn btn-warning" data-wait="disable">
-           		 Добавить сложный атрибут
-        	</button>
- 	 </div>
-</div>
 <div id="{i#formAdd}"></div>
-<hr>
 <div id="{i#tags}"></div>
+
+<!--{addButton}-->
+<div class="row">
+	<div class="col-md-offset-10">
+	 	<button data-click="addAtr-show" class="btn btn-default" data-wait="disable">
+	       		 +Добавить атрибут
+	    </button>
+    </div>
+</div>
+<hr>
 
 <!--{panel}-->
 <div class="panel panel-{v#view}" id="{i#own}-{v#complexid}">
@@ -150,6 +147,16 @@
 	        <h4 class="modal-title">Добавление/изменение атрибута</h4>
 	      </div>
 	      <div class="modal-body">
+	      			<div id="{i#subcomposit}"></div>
+	      			<div {v#hide}>
+					  <label class="radio-inline">
+						  <input type="radio" name="type" id="{i#simple}" value="simple">Добавить простой атрибут
+					  </label>
+						<label class="radio-inline">
+						  <input type="radio" name="type" id="{i#complex}" value="complex" {v#checkComposite}>Добавить сложный атрибут
+						</label>
+						<hr>
+					</div>
 				  	  <div class="form-group">
 					    <label>Публикуемые данные</label>
 					   		<textarea id="{i#nameattribute}" class="form-control" rows="5">{v#nameattribute}</textarea>
@@ -171,7 +178,7 @@
 				  	  </div>
 			</div>
 		<div class="modal-footer">
-    		<button data-click="appendAtr" data-aid="{v#complexid}" data-type="{v#type}" class="btn btn-primary" data-wait="disable">
+    		<button data-click="appendAtr" data-aid="{v#complexid}" class="btn btn-primary" data-wait="disable">
 		          		 {v#act}
 		    </button>
 		    <button data-click="addAtr-cancel" class="btn btn-default" data-wait="disable">

@@ -52,7 +52,7 @@ Component.entryPoint = function(NS){
 	        		}
         	}, this);
         	
-        	lst += this.parsingSimple(simpleRows);
+        	lst += tp.replace('addButton') + this.parsingSimple(simpleRows);
         	
 	        	for(var i = 0; i < arrComplex.length; i++){
 	        			rows = this.parsingComposit(arrComplex[i].get('id'), arrComposit);
@@ -128,40 +128,48 @@ Component.entryPoint = function(NS){
         		rows: rows 
         	});
         },
-        showFormAddAtr: function(show, type, complexid){
+        showFormAddAtr: function(show, complexid, type){
         	var tp = this.template,
         		parent = "",
         		replaceObj = {};
         	
         	if(show){
         		replaceObj.none = 'block';
-        		replaceObj.type = type;
         		replaceObj.nameattribute = "";
         		replaceObj.applyattribute = "";
         		replaceObj.tablename = "";
         		
-	        		if(!complexid){
-	        			replaceObj.act = "Добавить";
-	        			replaceObj.complexid = 0;
-	        		} else {
-	        			parent = tp.one('panelhead.own-' + complexid).getDOMNode();
-	        			
-	        			replaceObj.nameattribute = parent.children[0].textContent;
-	        			replaceObj.applyattribute = parent.children[1].textContent;
-	        			replaceObj.tablename = parent.children[2].textContent;
-	        			replaceObj.checked = parent.children[3].textContent === 'Установлен' ? 'checked' : '';
-	        			replaceObj.act = "Изменить";
-	        			replaceObj.complexid = complexid;
-	        		}
+        		if(!complexid){
+        			replaceObj.act = "Добавить";
+        			replaceObj.complexid = 0;
+        		} else {
+        			parent = tp.one('panelhead.own-' + complexid).getDOMNode();
+        			
+        			replaceObj.hide = "class='hide'";
+        			replaceObj.checkComposite = "checked";
+        			replaceObj.nameattribute = parent.children[0].textContent;
+        			replaceObj.applyattribute = parent.children[1].textContent;
+        			replaceObj.tablename = parent.children[2].textContent;
+        			replaceObj.checked = parent.children[3].textContent === 'Установлен' ? 'checked' : '';
+        			replaceObj.act = "Изменить";
+        			replaceObj.complexid = complexid;
+        		}
         	} else {
         		replaceObj.none = 'none';
         	}
         	
         	tp.setHTML('formAdd', tp.replace('modalFormAdd', replaceObj));
         },
-        appendAttribute: function(type, complexid, compositid){
+        appendAttribute: function(complexid, compositid, compositType){
         	var tp = this.template,
-        		inputs = this.getNode(type, complexid),
+        		type = compositType || this.getTypeAdd();
+        		
+        		if(!type){
+        			alert( 'Укажите тип атрибута' ); 
+        				return;
+        		}
+        		
+        	var inputs = this.getNode(type, complexid),
         		nameattribute = inputs.nameattribute.value,
         		applyattribute = inputs.applyattribute.value,
         		tablename = inputs.tablename.value,
@@ -169,6 +177,22 @@ Component.entryPoint = function(NS){
         		data = this.constructDataAttribute(complexid, compositid, type, nameattribute, applyattribute, tablename, locate);
         		
         		this.reqActAttribute(data);
+        },
+        getTypeAdd: function(){
+        	var tp = this.template,
+        		simpleRadio = tp.gel('modalFormAdd.simple'),
+        		complexRadio = tp.gel('modalFormAdd.complex'),
+        		type = "";
+        	
+        	if(simpleRadio.checked){
+        		type = simpleRadio.value;
+        	} else if(complexRadio.checked){
+        		type = complexRadio.value;
+        	} else {
+        		return false;
+        	}
+        	
+        	return type;
         },
         getNode: function(type, id){
         	var tp = this.template,
@@ -316,7 +340,7 @@ Component.entryPoint = function(NS){
     }, {
         ATTRS: {
         	component: {value: COMPONENT},
-            templateBlockName: {value: 'widget,panel,table,row,panelhead,composite,modalFormAdd'},
+            templateBlockName: {value: 'widget,panel,table,row,panelhead,composite,modalFormAdd,addButton'},
             attributeList: {value: null},
             sectionid: {value: 0},
             flagAddComposite: {value: false}
@@ -325,15 +349,10 @@ Component.entryPoint = function(NS){
         	'addAtr-show':{
         		event: function(e){
         			var targ = e.target,
-        				type = targ.getData('type'),
-        				sectionid = this.get('sectionid'),
-        				complexid = targ.getData('id');
+        				complexid = targ.getData('id'),
+        				type = targ.getData('type');
         			
-        			if(sectionid){
-        				this.showFormAddAtr(true, type, complexid);
-        			} else {
-        				alert('Укажите раздел');
-        			}
+        				this.showFormAddAtr(true, complexid, type);
         		}
         	},
         	'addAtr-cancel':{
@@ -385,11 +404,11 @@ Component.entryPoint = function(NS){
         	appendAtr: {
         		event: function(e){
         			var targ = e.target,
-        				type = targ.getData('type'),
         				compositid = targ.getData('aid'),
-        				complexid = targ.getData('id');
+        				complexid = targ.getData('id'),
+        				compositType = targ.getData('type');
         			
-        			this.appendAttribute(type, complexid, compositid);
+        			this.appendAttribute(complexid, compositid, compositType);
         		}
         	},
         	removeAtr: {
