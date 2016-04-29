@@ -19,7 +19,13 @@ Component.entryPoint = function(NS){
             NS.roles.load(function(){
                 this.initCallbackFire();
             }, this);
-        }
+        },
+        dataAttributeList: function(sectionid, isValue){
+    		return {
+    			sectionid: sectionid,
+    			isValue: isValue
+    		};
+    	}
     }, [], {
         REQS: {
         	sectionList: {
@@ -27,7 +33,7 @@ Component.entryPoint = function(NS){
     			type: 'modelList:SectionList'
     		},
     		attributeList: {
-    			args: ['sectionid'],
+    			args: ['data'],
     			attribute: false,
     			type: 'modelList:AttributeList'
     		},

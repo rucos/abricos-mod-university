@@ -21,7 +21,14 @@ class UniversityQuery {
 		return $db->query_read($sql);
 	}
 	
-	public static function AttributeList(Ab_Database $db, $sectionid){
+	public static function AttributeList(Ab_Database $db, $d){
+		
+		$where = "sectionid=".bkint($d->sectionid)." AND remove=0";
+
+		if($d->isValue){
+			$where .= " AND typeattribute IN (1, 2)";
+		}
+		
 		$sql = "
 			SELECT
 					attributeid as id,
@@ -33,7 +40,7 @@ class UniversityQuery {
 					tablename,
 					locate
 			FROM ".$db->prefix."un_attribute
-			WHERE sectionid=".bkint($sectionid)." AND remove=0
+			WHERE ".$where."
 		";
 		return $db->query_read($sql);
 	}

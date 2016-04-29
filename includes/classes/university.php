@@ -34,7 +34,7 @@ class University extends AbricosApplication {
 			case 'sectionList': 
 				return $this->SectionListToJSON();
 			case 'attributeList':
-				return $this->AttributeListToJSON($d->sectionid);
+				return $this->AttributeListToJSON($d->data);
 			case 'actAttribute':
 				return $this->ActAttributeToJSON($d->data);
 			case 'removeAttribute':
@@ -61,17 +61,18 @@ class University extends AbricosApplication {
     	return $list;
     }
     
-    public function AttributeListToJSON($sectionid){
-    	$res = $this->AttributeList($sectionid);
+    public function AttributeListToJSON($d){
+    	$res = $this->AttributeList($d);
     	return $this->ResultToJSON('attributeList', $res);
     }
     
-    public function AttributeList($sectionid){
-    	$sectionid = intval($sectionid);
-    	
-        $list = $this->models->InstanceClass('AttributeList');
+    public function AttributeList($d){
+    	$d->sectionid = intval($d->sectionid);
+    	$d->isValue = intval($d->isValue);
+
+    	$list = $this->models->InstanceClass('AttributeList');
         
-    	$rows = UniversityQuery::AttributeList($this->db, $sectionid);
+    	$rows = UniversityQuery::AttributeList($this->db, $d);
 	    	while (($d = $this->db->fetch_array($rows))){
 	    		$list->Add($this->models->InstanceClass('AttributeItem', $d));
 	    	}

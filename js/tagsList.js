@@ -16,9 +16,12 @@ Component.entryPoint = function(NS){
         	
         },
         reloadList: function(){
-        	var sectionid = this.get('sectionid');
+        	var lib = this.get('appInstance'),
+	    		sectionid = this.get('sectionid'),
+	    		data = lib.dataAttributeList(sectionid, false); 
+        	
         	this.set('waiting', true);
-	        	this.get('appInstance').attributeList(sectionid, function(err, result){
+	        	this.get('appInstance').attributeList(data, function(err, result){
 	        		this.set('waiting', false);
 	        			this.set('attributeList', result.attributeList);
 	        				this.renderList();
