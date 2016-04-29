@@ -18,11 +18,22 @@
 	</div>
 	<div class="panel-body">
 		<div class="row">
-		 	<div id="{v#attributeList}" class="col-md-6"></div>
-		 	<div id="{v#valueList}" class="col-md-6"></div>
+		 	<div id="{i#attributeList}" class="col-md-5"></div>
+		 	<div id="{i#valueList}" class="col-md-7"></div>
 		</div>  
 	</div>
 </div>
 
 <!--{panelHead}-->
 <h3 class="panel-title">{v#sectionName}</h3>
+
+<!--{attributeList}-->
+<div class="panel panel-default">
+  <div class="panel-heading">Атрибуты</div>
+	<ul class="list-group">
+		{v#li}
+	</ul>
+</div>
+
+<!--{attributeItem}-->
+<li class="list-group-item" data-id="{v#id}" data-type="{v#typeattribute}">{v#n}. {v#nameattribute}</li>

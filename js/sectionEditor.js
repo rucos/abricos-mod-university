@@ -39,18 +39,24 @@ Component.entryPoint = function(NS){
         },
         renderList: function(){
         	var attributeList = this.get('attributeList'),
-        		tp = this.template;
+        		tp = this.template,
+        		lst = "",
+        		n = 0;
         	
         	attributeList.each(function(attr){
-        		var type = attr.get('typeattribute');
-        		console.log(attr.toJSON());
-
+        			lst += tp.replace('attributeItem', [{
+        				n: ++n
+        			},attr.toJSON()]);
         	});
+        	
+        	tp.setHTML('attributeList', tp.replace('attributeList', {
+        		li: lst
+        	}));
         }
     }, {
         ATTRS: {
         	component: {value: COMPONENT},
-            templateBlockName: {value: 'widget,panelHead'},
+            templateBlockName: {value: 'widget,panelHead,attributeList,attributeItem'},
             sectionid: {value: 0},
             attributeList: {value: null}
         },
