@@ -55,7 +55,7 @@ Component.entryPoint = function(NS){
         	lst += tp.replace('addButton') + this.parsingSimple(simpleRows);
         	
 	        	for(var i = 0; i < arrComplex.length; i++){
-	        			rows = this.parsingComposit(arrComplex[i].get('id'), arrComposit);
+	        			rows = this.parsingComposit(arrComplex[i].get('id'), arrComposit, arrSubComposit);
 	        			
 	        			lst += this.parsingComplex(arrComplex[i], rows);
 	        	}
@@ -77,15 +77,22 @@ Component.entryPoint = function(NS){
 
 			return panel;
         },
-        parsingComposit: function(id, arrComposit){
-        	var len = arrComposit.length,
+        parsingComposit: function(id, arrComposit, arrSubComposit){
+        	var lenCom = arrComposit.length,
         		tp = this.template,
         		rows = "";
         	
- 			for(var i = 0; i < len; i++){
-				var complexid = arrComposit[i].get('complexid');
+ 			for(var i = 0; i < lenCom; i++){
+				var complexid = arrComposit[i].get('complexid'),
+					compositid = arrComposit[i].get('id');
+				
 					if(complexid === id){
-						rows += this.renderRow(arrComposit[i], 'row', id); 
+						rows += this.renderRow(arrComposit[i], 'row', id);
+							for(var j = 0; j < arrSubComposit.length; j++){
+								if(compositid === arrSubComposit[j].get('compositeid')){
+									rows += this.renderRow(arrSubComposit[j], 'row', id);
+								}
+							}
 					}
 			}
  			
