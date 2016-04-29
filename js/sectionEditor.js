@@ -23,19 +23,36 @@ Component.entryPoint = function(NS){
 		    	this.reloadList();
         },
         reloadList: function(){
-        	var sectionid = this.get('sectionid');
+        	var lib = this.get('appInstance'),
+        		sectionid = this.get('sectionid'),
+        		data = lib.dataAttributeList(sectionid, true); 
         	
         	this.set('waiting', true);
-	        	this.get('appInstance').valueAttributeList(sectionid, function(err, result){
+	        	this.get('appInstance').attributeList(data, function(err, result){
 	        		this.set('waiting', false);
+	        			if(!err){
+	        				this.set('attributeList', result.attributeList);
+	        					this.renderList();
+	        			}
 	        		
 	        	}, this);
+        },
+        renderList: function(){
+        	var attributeList = this.get('attributeList'),
+        		tp = this.template;
+        	
+        	attributeList.each(function(attr){
+        		var type = attr.get('typeattribute');
+        		console.log(attr.toJSON());
+
+        	});
         }
     }, {
         ATTRS: {
         	component: {value: COMPONENT},
-            templateBlockName: {value: 'widget,panelHead,table,row'},
-            sectionid: {value: 0}
+            templateBlockName: {value: 'widget,panelHead'},
+            sectionid: {value: 0},
+            attributeList: {value: null}
         },
         CLICKS: {
         	close: {
