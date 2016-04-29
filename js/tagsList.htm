@@ -41,7 +41,7 @@
            		 Править
         	</button>
 	  </div>
-  	  <div class="col-md-1">
+  	  <div class="col-md-2">
   	  	  <button id="{i#remove}-{v#complexid}" data-aid="{v#complexid}" data-click="remove-show" data-complex="1" type="button" class="btn btn-default btn-xs" data-wait="disable">
             {v#remove}
         </button>
@@ -64,7 +64,7 @@
 	        <th>Применяемые атрибуты</th>
 	        <th>Связующая таблица</th>
 	        <th></th>
-	        <th></th>
+	        {v#rowAddButton}
 	        <th></th>
 	        <th></th>
 	    </tr>
@@ -72,17 +72,25 @@
     <tbody>{v#rows}</tbody>
 </table>
 
+<!--{rowAddButtonTh}-->
+<th></th>
+
+<!--{rowAddButton}-->
+<td>
+    <button data-click="add" data-id="{v#complexid}" data-aid="{v#compositid}" class="btn btn-default btn-xs" data-wait="disable">
+        Добавить
+    </button>
+</td>
+
+        
+        
 <!--{row}-->
 <tr id="{i#rowAtr}-{v#compositid}">
     <td>{v#nameattribute}</td>
     <td>{v#applyattribute}</td>
     <td>{v#tablename}</td>
     <td>{v#locate}</td>
-    <td>
-    	<button data-click="add" data-id="{v#complexid}" data-aid="{v#compositid}" data-act="editShow" data-type="{v#type}" class="btn btn-default btn-xs" data-wait="disable">
-            Добавить
-        </button>
-    </td>
+	{v#rowAddButton}
     <td>
         <button data-click="actCompositAtr" data-id="{v#complexid}" data-aid="{v#compositid}" data-act="editShow" data-type="{v#type}" class="btn btn-default btn-xs" data-wait="disable">
             Править
@@ -125,7 +133,6 @@
 	    	</div>
   	  	</div>
   	</td>
-  	<td></td>
     <td>
         <button data-aid="{v#compositid}" data-id="{v#complexid}" data-click="{v#click}" data-type="{v#type}" data-act="edit" class="btn btn-default btn-xs" data-wait="disable">
             {v#edit}

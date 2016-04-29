@@ -110,11 +110,20 @@ Component.entryPoint = function(NS){
         },
         renderRow: function(attr, block, complexid){
         	var tp = this.template,
-        		row = "";
+        		row = "",
+        		rowAddButton = "",
+        		compositid = attr.get('id');
         	
+        		if(complexid) {
+        			rowAddButton = tp.replace('rowAddButton', [{
+        				compositid: compositid
+        			}, attr.toJSON()]);
+        		}
+        		
 	          	row = tp.replace(block, [{
-	          		compositid: attr.get('id'),
+	          		compositid: compositid,
 	          		complexid: complexid,
+	          		rowAddButton: rowAddButton,
 	          		type: attr.get('typeattribute'),
 	          		locate: attr.get('locate') ? 'Установлен' : 'Не установлен',
 	    			remove: attr.get('remove') ? 'Восстановить' : 'Удалить'
@@ -123,9 +132,12 @@ Component.entryPoint = function(NS){
           	return row;
         },
         renderTable: function(rows, complexid){
-        	return this.template.replace('table', {
+        	var tp = this.template;
+        	
+        	return tp.replace('table', {
         		id: complexid,
-        		rows: rows 
+        		rows: rows,
+        		rowAddButton: complexid ? tp.replace('rowAddButtonTh') : "" 
         	});
         },
         showFormAddAtr: function(show, complexid, type){
@@ -278,6 +290,15 @@ Component.entryPoint = function(NS){
         		replaceObj.locate = locate.getAttribute('checked') !== null ? 'Установлен' : 'Не установлен';        		
         	}
         	
+        	replaceObj.rowAddButton = "";
+        	
+        	if(complexid > 0){
+            	replaceObj.rowAddButton = tp.replace('rowAddButton', {
+            		complexid: complexid,
+            		compositid: compositid
+            	});
+        	}
+
         	replaceObj.remove = "Удалить";
         	
         	parent.innerHTML = tp.replace('row', replaceObj);
@@ -340,7 +361,7 @@ Component.entryPoint = function(NS){
     }, {
         ATTRS: {
         	component: {value: COMPONENT},
-            templateBlockName: {value: 'widget,panel,table,row,panelhead,composite,modalFormAdd,addButton'},
+            templateBlockName: {value: 'widget,panel,table,row,panelhead,composite,modalFormAdd,addButton,rowAddButton,rowAddButtonTh'},
             attributeList: {value: null},
             sectionid: {value: 0},
             flagAddComposite: {value: false}
