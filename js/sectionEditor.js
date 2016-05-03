@@ -52,6 +52,17 @@ Component.entryPoint = function(NS){
         	tp.setHTML('attributeList', tp.replace('attributeList', {
         		li: lst
         	}));
+        },
+        setActive: function(targ){
+        	targ.classList.add('active');
+        },
+        unSetActive: function(){
+        	var tp = this.template,
+        		colect = tp.gel('attributeList.attributeList').children;
+        	
+        	for(var i = 0; i < colect.length; i++){
+        		colect[i].classList.remove('active');
+        	}
         }
     }, {
         ATTRS: {
@@ -64,6 +75,16 @@ Component.entryPoint = function(NS){
         	close: {
         		event: function(){
         			this.go('struct.view');
+        		}
+        	},
+        	pickAttr: {
+        		event: function(e){
+        			var targ = e.target,
+        				attrid = targ.getData('id');
+        			
+        			this.unSetActive();
+        			this.setActive(targ.getDOMNode());
+        			
         		}
         	}
         }
