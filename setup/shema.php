@@ -60,7 +60,7 @@ if ($updateManager->isInstall('0.1.0')){
 			CREATE TABLE IF NOT EXISTS ".$pfx."un_value(
 				valueid int(10) unsigned NOT NULL auto_increment,
 				attributeid int(10) unsigned NOT NULL default 0 COMMENT 'id атрибута',
-				id int(10) unsigned NOT NULL default 0 COMMENT 'id поля связующей таблицы',
+				relationid int(10) unsigned NOT NULL default 0 COMMENT 'id поля связующей таблицы',
 				value TEXT NOT NULL default '' COMMENT 'Значение атрибута',
 				nameurl TEXT NOT NULL default '' COMMENT 'Название ссылки',
 				namedoc varchar(255) NOT NULL default '' COMMENT 'Название документа',
