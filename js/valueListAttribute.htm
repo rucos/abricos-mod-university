@@ -1,0 +1,81 @@
+<!--{widget}-->
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Значение атрибутов
+	</div>
+	<div class="panel-body">
+		<div id="{i#values}"></div>
+	</div>
+</div>
+
+<!--{tableValues}-->
+{v#addButton}
+<table class="table table-striped table-hover">
+    <thead>
+	    <tr>
+	   	 	<th>Значение</th>
+	        <th></th>
+	        <th></th>
+	    </tr>
+    </thead>
+    <tbody>{v#rows}</tbody>
+</table>
+<hr>
+
+<!--{rowValues}-->
+<tr>
+    <td>{v#value}</td>
+	{v#rowEdit}
+</tr>
+
+<!--{tableFiles}-->
+{v#addButton}
+<table class="table table-striped table-hover">
+    <thead>
+	    <tr>
+	        <th>Название ссылки</th>
+	        <th>Название документа</th>
+	        <th>Название предмета</th>
+	        <th>Дата утверждения</th>
+	        <th>Название директории</th>
+	        <th></th>
+	        <th></th>
+	    </tr>
+    </thead>
+    <tbody>{v#rows}</tbody>
+</table>
+
+<!--{rowFiles}-->
+<tr>
+    <td>{v#nameurl}</td>
+    <td>{v#namedoc}</td>
+    <td>{v#subject}</td>
+	<td>{v#datedoc}</td>
+	<td>{v#folder}</td>
+   	{v#rowEdit}
+</tr>
+
+<!--{rowEdit}-->
+ <td>
+        <button data-id="{v#id}" class="btn btn-default btn-xs" data-wait="disable">
+            Править
+        </button>
+  </td>
+  <td>
+         <button id="{i#remove}-{v#id}" data-click="remove-show" type="button" class="btn btn-default btn-xs" data-wait="disable">
+            Удалить
+        </button>
+         <div id="{i#removegroup}-{v#id}"  class="btn-group hide">
+            <button data-id="{v#id}" type="button" class="btn btn-danger btn-xs" data-wait="disable">
+                Удалить?
+            </button>
+            <button data-id="{v#id}" data-click="remove-cancel" type="button" class="btn btn-default btn-xs" data-wait="disable">
+                Отмена
+            </button>
+        </div>
+  </td>
+  
+  <!--{addButton}-->
+  <p>
+  	<button type="button" class="btn btn-default" data-mode="{v#mode}" data-click="addValue-show">+Добавить</button>
+  </p>

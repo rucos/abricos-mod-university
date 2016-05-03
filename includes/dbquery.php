@@ -97,24 +97,24 @@ class UniversityQuery {
 		return $db->query_write($sql);
 	}
 	
-	public static function ValueAttributeList(Ab_Database $db, $sectionid){
+	public static function SimpleValueAttributeList(Ab_Database $db, $attridd){
+		
 		$sql = "
 			SELECT
-					a.attributeid,
-					a.nameattribute,
-					s.value,
-					s.nameurl,
-					s.namedoc,
-					s.datedoc
-			FROM ".$db->prefix."un_attribute a
-			LEFT JOIN ".$db->prefix."un_value s ON a.attributeid=s.attributeid
-			WHERE a.sectionid=".bkint($sectionid)." AND a.remove=0
+					valueid as id,
+					relationid,
+					value,
+					nameurl,
+					namedoc,
+					subject,
+					datedoc,
+					folder,
+					remove
+			FROM ".$db->prefix."un_value
+			WHERE attributeid=".bkint($attridd)."
 		";
-		$rows = $db->query_read($sql);
-		while (($d = $db->fetch_array($rows))){
-			print_r($d);
-		}
-	
+		
+		return $db->query_read($sql);
 	}
 }
 

@@ -6,9 +6,9 @@
     "id": {
       "type": "int"
     },
-    "attributeid": {
+    "relationid": {
       "type": "int",
-      "json": "aid"
+      "json": "relid"
     },
     "value": {
       "type": "string",
@@ -21,10 +21,6 @@
     "namedoc": {
       "type": "string",
       "json": "nd"
-    },
-    "field": {
-      "type": "string",
-      "json": "fld"
     },
     "subject": {
       "type": "string",

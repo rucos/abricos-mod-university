@@ -2,7 +2,7 @@ var Component = new Brick.Component();
 Component.requires = {
     mod: [
         {name: 'sys', files: ['editor.js']},
-        {name: '{C#MODNAME}', files: ['lib.js']}
+        {name: '{C#MODNAME}', files: ['lib.js', 'valueListAttribute.js']}
     ]
 };
 Component.entryPoint = function(NS){
@@ -13,14 +13,23 @@ Component.entryPoint = function(NS){
 
     NS.SectionEditorWidget = Y.Base.create('sectionEditorWidget', SYS.AppWidget, [], {
         onInitAppWidget: function(err, appInstance){
-        	var tp = this.template,
-    			sectionName = appInstance.get('currentSection');
-    	
+           	var tp = this.template,
+           		sectionName = appInstance.get('currentSection');
+           	
 		    	tp.setHTML('panelHead', tp.replace('panelHead', {
 		    		sectionName: sectionName
 		    	}));
 		    	
 		    	this.reloadList();
+		    	
+		    	this.valueList = new NS.ValueListWidget({
+	                srcNode: tp.gel('valueList')
+	            });
+        },
+        destructor: function(){
+            if (this.valueList){
+                this.valueList.destroy();
+            }
         },
         reloadList: function(){
         	var lib = this.get('appInstance'),
@@ -80,11 +89,13 @@ Component.entryPoint = function(NS){
         	pickAttr: {
         		event: function(e){
         			var targ = e.target,
-        				attrid = targ.getData('id');
+        				attrid = targ.getData('id'),
+        				type = targ.getData('type');
         			
         			this.unSetActive();
         			this.setActive(targ.getDOMNode());
         			
+        			this.valueList.reloadList(attrid, type);
         		}
         	}
         }

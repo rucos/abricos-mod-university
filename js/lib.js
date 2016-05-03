@@ -44,7 +44,7 @@ Component.entryPoint = function(NS){
     			args: ['compositid', 'isComplex']
     		},
     		valueAttributeList: {
-    			args: ['sectionid'],
+    			args: ['data'],
     			attribute: false,
     			type: 'modelList:ValueAttributeList'
     		}
