@@ -35,7 +35,12 @@ Component.entryPoint = function(NS){
         		event: function(e){
         			var targ = e.target,
         				sectionid = targ.getData('id'),
-        				sectionName = targ.getDOMNode().textContent;
+        				a = targ.getDOMNode(),
+        				sectionName = a.textContent;
+        			
+        			if(!a.href){
+        				return;
+        			}
         			
         			this.get('appInstance').set('currentSection', sectionName);
         			

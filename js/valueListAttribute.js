@@ -59,7 +59,7 @@ Component.entryPoint = function(NS){
 				rowEdit: tp.replace('rowEdit', {
 					id: val.get('id')
 				})
-			}, val.toJSON()]);;
+			}, val.toJSON()]);
         },
         replaceTable: function(rows, block){
         	var tp = this.template;
