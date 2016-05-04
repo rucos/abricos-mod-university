@@ -57,7 +57,8 @@ Component.entryPoint = function(NS){
         	
         	return tp.replace(block, [{
 				rowEdit: tp.replace('rowEdit', {
-					id: val.get('id')
+					id: val.get('id'),
+					mode: block
 				})
 			}, val.toJSON()]);
         },
@@ -76,26 +77,36 @@ Component.entryPoint = function(NS){
         	var tp = this.template,
         		table = tp.gel(mode + '.' + mode),
         		row = table.insertRow(1),
-        		render = "";
+        		block = "",
+        		data = this.constructDataValue(0);
         	
         	switch(mode){
         		case 'tableValues':
-        			render = this.addRowRender('rowActValues', 'rowEditAct', 'Добавить', '', 0, 'appendValue');
+        			block = 'rowActValues';
         				break;
         		case 'tableFiles':
-        			render = this.addRowRender('rowActFiles', 'rowEditAct', 'Добавить', '', 0, 'appendValue');
+        			block = 'rowActFiles';
         				break;
         	}
         	
-        	row.innerHTML = render;
+        	row.innerHTML = this.addRowRender(block, 'rowEditAct', 'Добавить', data, 'appendValue');
         },
-        addRowRender: function(blockAct, blockEdit, act, value, id, event){
+        editShow: function(id, mode, tr){
+        	var tp = this.template,
+        		render = "";
+        	
+        },
+        addRowRender: function(blockAct, blockEdit, act, data, event){
         	var tp = this.template;
         	
         	return tp.replace(blockAct, {
-        		value: value,
+        		value: data.value,
+        		namedoc: data.namedoc,
+        		subject: data.subject,
+        		datedoc: data.datedoc,
+        		folder: data.folder,
         		rowEdit: tp.replace(blockEdit, {
-        			id: id,
+        			id: data.id,
         			act: act,
         			event: event,
         			mode: blockAct
@@ -168,6 +179,16 @@ Component.entryPoint = function(NS){
         			var tr = e.target.getDOMNode().parentNode.parentNode;
         			
         			tr.remove();
+        		}
+        	},
+        	'editValue-show': {
+        		event: function(e){
+        			var targ = e.target,
+        				id = targ.getData('id'),
+        				mode = targ.getData('mode'),
+        				tr = targ.getDOMNode().parentNode.parentNode;
+        			
+        			this.editShow(id, mode, tr);
         		}
         	},
         	appendValue: {
