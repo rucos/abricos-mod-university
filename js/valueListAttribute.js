@@ -53,15 +53,24 @@ Component.entryPoint = function(NS){
         	tp.setHTML('values', tables);
         },
         replaceRow: function(val, block){
-        	var tp = this.template;
+        	var tp = this.template,
+        		nameClass = "",
+        		act = 'Удалить',
+        		event = 'remove-show';
+        	
+        	if(val.get('remove')){
+        		nameClass = 'class="danger"';
+        		act = 'Восстановить';
+        		event = 'restoreValue';
+        	}
         	
         	return tp.replace(block, [{
-        		nameClass: val.get('remove') ? 'class="danger"' : "",
+        		nameClass: nameClass,
 				rowEdit: tp.replace('rowEdit', {
 					id: val.get('id'),
 					mode: block,
-					act: val.get('remove') ? 'Восстановить' : 'Удалить',
-			        event: val.get('remove') ? 'restoreValue' : 'remove-show'
+					act: act,
+			        event: event
 				})
 			}, val.toJSON()]);
         },
