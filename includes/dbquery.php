@@ -133,6 +133,24 @@ class UniversityQuery {
 	
 		return $db->query_write($sql);
 	}
+	
+	public static function EditValueAttribute(Ab_Database $db, $d){
+		$sql = "
+			UPDATE ".$db->prefix."un_value
+			SET
+				attributeid=".bkint($d->atrid).",
+				value='".bkstr($d->value)."',
+				nameurl='".bkstr($d->nameurl)."',
+				namedoc='".bkstr($d->namedoc)."',
+				subject='".bkstr($d->subject)."',
+				datedoc=".bkint($d->datedoc).",
+				folder='".bkstr($d->folder)."'
+			WHERE valueid=".bkint($d->id)."
+			LIMIT 1
+		";
+	
+		return $db->query_write($sql);
+	}
 }
 
 ?>

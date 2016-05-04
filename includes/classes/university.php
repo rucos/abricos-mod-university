@@ -169,7 +169,7 @@ class University extends AbricosApplication {
     	$d->atrid = intval($d->atrid);
     	
 		if($d->id > 0){
-			
+			return UniversityQuery::EditValueAttribute($this->db, $d);
 		} else {
 			return UniversityQuery::AppendValueAttribute($this->db, $d); 
 		} 	

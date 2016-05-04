@@ -93,14 +93,53 @@ Component.entryPoint = function(NS){
         },
         editShow: function(id, mode, tr){
         	var tp = this.template,
-        		render = "";
+        		data = this.constructDataValue(id);
         	
+        	switch(mode){
+	    		case 'rowValues':
+	    			block = 'rowActValues';
+	    			data.value = tr.cells[0].textContent;
+	    				break;
+	    		case 'rowFiles':
+	    			block = 'rowActFiles';
+	    			data.nameurl = tr.cells[0].textContent;
+	    			data.namedoc = tr.cells[1].textContent;
+	    			data.subject = tr.cells[2].textContent;
+	    			data.datedoc = tr.cells[3].textContent;
+	    			data.folder = tr.cells[4].textContent;
+	    				break;
+	    	}
+        	
+        	tr.innerHTML = this.addRowRender(block, 'rowEditAct', 'Изменить', data, 'editValue');
+        },
+        cancelEditShow: function(id, tr, mode){
+        	var tp = this.template,
+        		data = this.constructDataValue(id),
+        		blockAct = "";
+        	
+        	switch(mode){
+	    		case 'rowActValues':
+	    			blockAct = "rowValues";
+	    			data.value = tr.cells[0].firstChild.getAttribute('value');
+	    				break;
+	    		case 'rowActFiles':
+	    			blockAct = "rowFiles";
+	    			data.nameurl = tr.cells[0].firstChild.getAttribute('value');
+	    			data.namedoc = tr.cells[1].firstChild.getAttribute('value');
+	    			data.subject = tr.cells[2].firstChild.getAttribute('value');
+	    			data.datedoc = tr.cells[3].firstChild.getAttribute('value');
+	    			data.folder = tr.cells[4].firstChild.getAttribute('value');
+	    				break;
+	    	}
+        	
+        	tr.innerHTML = this.addRowRender(blockAct, 'rowEdit', 'Править', data);
         },
         addRowRender: function(blockAct, blockEdit, act, data, event){
         	var tp = this.template;
         	
         	return tp.replace(blockAct, {
         		value: data.value,
+        		nameurl: data.nameurl,
         		namedoc: data.namedoc,
         		subject: data.subject,
         		datedoc: data.datedoc,
@@ -113,15 +152,15 @@ Component.entryPoint = function(NS){
         		})
         	});
         },
-        appendValue: function(tr, mode){
+        appendValue: function(tr, mode, id){
         	var data = "";
         	
         	switch(mode){
 	    		case 'rowActValues':
-	    			data = this.constructDataValue(0, tr.cells[0].firstChild.value);
+	    			data = this.constructDataValue(id, tr.cells[0].firstChild.value);
 	    				break;
 	    		case 'rowActFiles':
-	    			data = this.constructDataValue.apply(this, this.renderRowActFiles(0, tr));
+	    			data = this.constructDataValue.apply(this, this.renderRowActFiles(id, tr));
 	    				break;
 	    	}
         	this.reqAppendValue(data);
@@ -176,9 +215,16 @@ Component.entryPoint = function(NS){
         	},
         	'act-cancel': {
         		event: function(e){
-        			var tr = e.target.getDOMNode().parentNode.parentNode;
+        			var targ = e.target,
+        				tr = targ.getDOMNode().parentNode.parentNode,
+        				mode = targ.getData('mode');
+        				id = targ.getData('id');
         			
-        			tr.remove();
+        			if(id > 0){
+        				this.cancelEditShow(id, tr, mode);
+        			} else {
+        				tr.remove();
+        			}
         		}
         	},
         	'editValue-show': {
@@ -197,7 +243,17 @@ Component.entryPoint = function(NS){
         				mode = targ.getData('mode'), 
         				tr = targ.getDOMNode().parentNode.parentNode;
         			
-        			this.appendValue(tr, mode);
+        			this.appendValue(tr, mode, 0);
+        		}
+        	},
+        	editValue: {
+        		event: function(e){
+        			var targ = e.target,
+        				id = targ.getData('id'),
+        				mode = targ.getData('mode'), 
+        				tr = targ.getDOMNode().parentNode.parentNode;
+        			
+        			this.appendValue(tr, mode, id);
         		}
         	}
         }

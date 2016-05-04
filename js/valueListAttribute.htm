@@ -82,13 +82,13 @@
   
  <!--{rowActValues}-->
 <tr>
-    <td><textarea id="{i#val}" class="form-control" rows="10">{v#value}</textarea></td>
+    <td><textarea id="{i#val}" class="form-control" rows="10" value="{v#value}">{v#value}</textarea></td>
 	{v#rowEdit}
 </tr>
 
  <!--{rowActFiles}-->
 <tr>
-    <td><textarea id="{i#nameurl}" class="form-control" rows="5">{v#value}</textarea></td>
+    <td><textarea id="{i#nameurl}" class="form-control" rows="5" value="{v#nameurl}">{v#nameurl}</textarea></td>
     <td><input id="{i#namedoc}" type="text" class="form-control" value="{v#namedoc}"></td>
     <td><input id="{i#subject}" type="text" class="form-control" value="{v#subject}"></td>
     <td><input id="{i#datedoc}" type="date" class="form-control" value="{v#datedoc}"></td>
@@ -103,7 +103,7 @@
         </button>
   </td>
   <td>
-		<button data-id="{v#id}" data-click="act-cancel" type="button" class="btn btn-default btn-xs" data-wait="disable">
+		<button data-id="{v#id}" data-click="act-cancel" data-mode="{v#mode}" type="button" class="btn btn-default btn-xs" data-wait="disable">
         	Отмена
 		</button>
   </td>
