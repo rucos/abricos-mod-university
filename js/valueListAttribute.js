@@ -56,9 +56,12 @@ Component.entryPoint = function(NS){
         	var tp = this.template;
         	
         	return tp.replace(block, [{
+        		nameClass: val.get('remove') ? 'class="danger"' : "",
 				rowEdit: tp.replace('rowEdit', {
 					id: val.get('id'),
-					mode: block
+					mode: block,
+					act: val.get('remove') ? 'Восстановить' : 'Удалить',
+			        event: val.get('remove') ? 'restoreValue' : 'remove-show'
 				})
 			}, val.toJSON()]);
         },
@@ -132,7 +135,7 @@ Component.entryPoint = function(NS){
 	    				break;
 	    	}
         	
-        	tr.innerHTML = this.addRowRender(blockAct, 'rowEdit', 'Править', data);
+        	tr.innerHTML = this.addRowRender(blockAct, 'rowEdit', 'Удалить', data, 'remove-show');
         },
         addRowRender: function(blockAct, blockEdit, act, data, event){
         	var tp = this.template;
@@ -184,6 +187,20 @@ Component.entryPoint = function(NS){
 	        			}
 	        	}, this);
         },
+        reqRemoveValue: function(valueid, remove){
+        	var data = {
+        		valueid: valueid,
+        		remove: remove
+        	};
+        	
+        	this.set('waiting', true);
+        	this.get('appInstance').removeValueAttribute(data, function(err, result){
+        		 this.set('waiting', false);
+	        		if(!err){
+	        			this.reloadList();
+	        		}
+        	}, this);
+        },
         constructDataValue: function(){
         	return {
         		id: arguments[0],
@@ -195,6 +212,9 @@ Component.entryPoint = function(NS){
         		folder: arguments[6] || '',
         		atrid: this.get('currentAttrid')
         	};
+        },
+        removeShow: function(show, id){
+        	this.template.toggleView(show, 'rowEdit.removegroup-' + id, 'rowEdit.remove-' + id);
         }
     }, {
         ATTRS: {
@@ -235,6 +255,34 @@ Component.entryPoint = function(NS){
         				tr = targ.getDOMNode().parentNode.parentNode;
         			
         			this.editShow(id, mode, tr);
+        		}
+        	},
+        	'remove-show': {
+        		event: function(e){
+        			var id = e.target.getData('id');
+        			
+        			this.removeShow(true, id);
+        		}
+        	},
+        	'remove-cancel': {
+        		event: function(e){
+        			var id = e.target.getData('id');
+    			
+        			this.removeShow(false, id);
+        		}
+        	},
+        	removeValue: {
+        		event: function(e){
+        			var id = e.target.getData('id');
+        			
+        			this.reqRemoveValue(id, 1);
+        		}
+        	},
+        	restoreValue: {
+        		event: function(e){
+        			var id = e.target.getData('id');
+        			
+        			this.reqRemoveValue(id, 0);
         		}
         	},
         	appendValue: {

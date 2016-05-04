@@ -43,6 +43,8 @@ class University extends AbricosApplication {
 				return $this->ValueAttributeListToJSON($d->data);
 			case 'actValueAttribute':
 				return $this->ActValueAttributeToJSON($d->data);
+			case 'removeValueAttribute':
+				return $this->RemoveValueAttributeToJSON($d->data);
         }
         return null;
     }
@@ -173,6 +175,18 @@ class University extends AbricosApplication {
 		} else {
 			return UniversityQuery::AppendValueAttribute($this->db, $d); 
 		} 	
+    }
+    
+    public function RemoveValueAttributeToJSON($d){
+    	$res = $this->RemoveValueAttribute($d);
+    	return $this->ResultToJSON('removeValueAttribute', $res);
+    }
+    
+    public function RemoveValueAttribute($d){
+    	$d->valueid = intval($d->valueid);
+    	$d->remove = intval($d->remove);
+    	 
+    	return UniversityQuery::RemoveValueAttribute($this->db, $d);
     }
     
 }

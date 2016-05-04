@@ -51,6 +51,9 @@ Component.entryPoint = function(NS){
     		actValueAttribute: {
     			args: ['data'],
     			attribute: false
+    		},
+    		removeValueAttribute: {
+    			args: ['data']
     		}
         },
         ATTRS: {

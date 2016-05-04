@@ -40,13 +40,13 @@
 </table>
 
 <!--{rowValues}-->
-<tr>
+<tr {v#nameClass}>
     <td>{v#value}</td>
 	{v#rowEdit}
 </tr>
 
 <!--{rowFiles}-->
-<tr>
+<tr {v#nameClass}>
     <td>{v#nameurl}</td>
     <td>{v#namedoc}</td>
     <td>{v#subject}</td>
@@ -62,11 +62,11 @@
         </button>
   </td>
   <td>
-         <button id="{i#remove}-{v#id}" data-click="remove-show" type="button" class="btn btn-default btn-xs" data-wait="disable">
-            Удалить
+         <button id="{i#remove}-{v#id}" data-id="{v#id}" data-click="{v#event}" type="button" class="btn btn-default btn-xs" data-wait="disable">
+            {v#act}
         </button>
          <div id="{i#removegroup}-{v#id}"  class="btn-group hide">
-            <button data-id="{v#id}" type="button" class="btn btn-danger btn-xs" data-wait="disable">
+            <button data-id="{v#id}" data-click="removeValue" type="button" class="btn btn-danger btn-xs" data-wait="disable">
                 Удалить?
             </button>
             <button data-id="{v#id}" data-click="remove-cancel" type="button" class="btn btn-default btn-xs" data-wait="disable">

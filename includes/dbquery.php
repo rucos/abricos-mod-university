@@ -151,6 +151,19 @@ class UniversityQuery {
 	
 		return $db->query_write($sql);
 	}
+	
+	public static function RemoveValueAttribute(Ab_Database $db, $d){
+	
+		$sql = "
+			UPDATE ".$db->prefix."un_value
+			SET
+				remove=".bkint($d->remove)."
+			WHERE valueid=".bkint($d->valueid)."
+			LIMIT 1
+		";
+	
+		return $db->query_write($sql);
+	}
 }
 
 ?>
