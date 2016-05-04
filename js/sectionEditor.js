@@ -95,7 +95,9 @@ Component.entryPoint = function(NS){
         			this.unSetActive();
         			this.setActive(targ.getDOMNode());
         			
-        			this.valueList.reloadList(attrid, type);
+        			this.valueList.set('currentAttrid', attrid);
+        			this.valueList.set('currentType', type);
+        			this.valueList.reloadList();
         		}
         	}
         }

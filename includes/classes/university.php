@@ -41,6 +41,8 @@ class University extends AbricosApplication {
 				return $this->RemoveAttributeToJSON($d);
 			case 'valueAttributeList':
 				return $this->ValueAttributeListToJSON($d->data);
+			case 'actValueAttribute':
+				return $this->ActValueAttributeToJSON($d->data);
         }
         return null;
     }
@@ -147,6 +149,30 @@ class University extends AbricosApplication {
     		$list->Add($this->models->InstanceClass('ValueAttributeItem', $d));
     	}
     	return $list;
+    }
+    
+    public function ActValueAttributeToJSON($d){
+    	$res = $this->ActValueAttribute($d);
+    	return $this->ResultToJSON('actValueAttribute', $res);
+    }
+    
+    public function ActValueAttribute($d){
+    	$utmf = Abricos::TextParser(true);
+    	 
+    	$d->id = intval($d->id);
+    	$d->datedoc = intval($d->datedoc);
+    	$d->folder = $utmf->Parser($d->folder);
+    	$d->namedoc = $utmf->Parser($d->namedoc);
+    	$d->nameurl = $utmf->Parser($d->nameurl);
+    	$d->subject = $utmf->Parser($d->subject);
+    	$d->value = $utmf->Parser($d->value);
+    	$d->atrid = intval($d->atrid);
+    	
+		if($d->id > 0){
+			
+		} else {
+			return UniversityQuery::AppendValueAttribute($this->db, $d); 
+		} 	
     }
     
 }

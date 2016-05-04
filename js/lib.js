@@ -47,6 +47,10 @@ Component.entryPoint = function(NS){
     			args: ['data'],
     			attribute: false,
     			type: 'modelList:ValueAttributeList'
+    		},
+    		actValueAttribute: {
+    			args: ['data'],
+    			attribute: false
     		}
         },
         ATTRS: {

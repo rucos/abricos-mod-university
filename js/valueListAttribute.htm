@@ -10,7 +10,7 @@
 
 <!--{tableValues}-->
 {v#addButton}
-<table class="table table-striped table-hover">
+<table id="{i#tableValues}" class="table table-striped table-hover">
     <thead>
 	    <tr>
 	   	 	<th>Значение</th>
@@ -22,15 +22,9 @@
 </table>
 <hr>
 
-<!--{rowValues}-->
-<tr>
-    <td>{v#value}</td>
-	{v#rowEdit}
-</tr>
-
 <!--{tableFiles}-->
 {v#addButton}
-<table class="table table-striped table-hover">
+<table id="{i#tableFiles}" class="table table-striped table-hover">
     <thead>
 	    <tr>
 	        <th>Название ссылки</th>
@@ -44,6 +38,12 @@
     </thead>
     <tbody>{v#rows}</tbody>
 </table>
+
+<!--{rowValues}-->
+<tr>
+    <td>{v#value}</td>
+	{v#rowEdit}
+</tr>
 
 <!--{rowFiles}-->
 <tr>
@@ -79,3 +79,31 @@
   <p>
   	<button type="button" class="btn btn-default" data-mode="{v#mode}" data-click="addValue-show">+Добавить</button>
   </p>
+  
+ <!--{rowActValues}-->
+<tr>
+    <td><textarea id="{i#val}" class="form-control" rows="10">{v#value}</textarea></td>
+	{v#rowEdit}
+</tr>
+
+ <!--{rowActFiles}-->
+<tr>
+    <td><textarea id="{i#nameurl}" class="form-control" rows="5">{v#value}</textarea></td>
+    <td><input id="{i#namedoc}" type="text" class="form-control"></td>
+    <td><input id="{i#subject}" type="text" class="form-control"></td>
+    <td><input id="{i#datedoc}" type="date" class="form-control"></td>
+    <td><input id="{i#folder}" type="text" class="form-control"></td>
+	{v#rowEdit}
+</tr>
+  
+ <!--{rowEditAct}-->
+ <td>
+        <button data-id="{v#id}" data-click="{v#event}" data-mode="{v#mode}" class="btn btn-default btn-xs" data-wait="disable">
+            {v#act}
+        </button>
+  </td>
+  <td>
+		<button data-id="{v#id}" data-click="act-cancel" type="button" class="btn btn-default btn-xs" data-wait="disable">
+        	Отмена
+		</button>
+  </td>

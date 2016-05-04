@@ -15,10 +15,10 @@ Component.entryPoint = function(NS){
         onInitAppWidget: function(err, appInstance){
         	
         },
-        reloadList: function(attrid, type){
+        reloadList: function(){
         	var data = {
-        		attrid: attrid,
-        		type: type
+        		attrid: this.get('currentAttrid'),
+        		type: this.get('currentType')
         	};
         	
         	this.set('waiting', true);
@@ -62,7 +62,8 @@ Component.entryPoint = function(NS){
 			}, val.toJSON()]);
         },
         replaceTable: function(rows, block){
-        	var tp = this.template;
+        	var tp = this.template,
+        		atrid = this.get('currentAttrid');
         	
         	return tp.replace(block, {
         		addButton: tp.replace('addButton', {
@@ -70,15 +71,114 @@ Component.entryPoint = function(NS){
         		}),
         		rows: rows
         	});
+        },
+        addShow: function(mode){
+        	var tp = this.template,
+        		table = tp.gel(mode + '.' + mode),
+        		row = table.insertRow(1),
+        		render = "";
+        	
+        	switch(mode){
+        		case 'tableValues':
+        			render = this.addRowRender('rowActValues', 'rowEditAct', 'Добавить', '', 0, 'appendValue');
+        				break;
+        		case 'tableFiles':
+        			render = this.addRowRender('rowActFiles', 'rowEditAct', 'Добавить', '', 0, 'appendValue');
+        				break;
+        	}
+        	
+        	row.innerHTML = render;
+        },
+        addRowRender: function(blockAct, blockEdit, act, value, id, event){
+        	var tp = this.template;
+        	
+        	return tp.replace(blockAct, {
+        		value: value,
+        		rowEdit: tp.replace(blockEdit, {
+        			id: id,
+        			act: act,
+        			event: event,
+        			mode: blockAct
+        		})
+        	});
+        },
+        appendValue: function(tr, mode){
+        	var data = "";
+        	
+        	switch(mode){
+	    		case 'rowActValues':
+	    			data = this.constructDataValue(0, tr.cells[0].firstChild.value);
+	    				break;
+	    		case 'rowActFiles':
+	    			data = this.constructDataValue.apply(this, this.renderRowActFiles(0, tr));
+	    				break;
+	    	}
+        	this.reqAppendValue(data);
+        },
+        renderRowActFiles: function(id, tr){
+        	var cells = tr.cells,
+        		len = cells.length - 2,
+        		arr = [id, ''];
+        	
+        	for(var i = 0; i < len; i++){
+        		arr.push(cells[i].firstChild.value);
+        	}
+        	return arr;
+        },
+        reqAppendValue: function(data){
+        	this.set('waiting', true);
+	        	this.get('appInstance').actValueAttribute(data, function(err, result){
+	        		this.set('waiting', false);
+	        			if(!err){
+	        				this.reloadList();
+	        			}
+	        	}, this);
+        },
+        constructDataValue: function(){
+        	return {
+        		id: arguments[0],
+        		value: arguments[1] || '',
+        		nameurl: arguments[2] || '',
+        		namedoc: arguments[3] || '',
+        		subject: arguments[4] || '',
+        		datedoc: arguments[5] || '',
+        		folder: arguments[6] || '',
+        		atrid: this.get('currentAttrid')
+        	};
         }
     }, {
         ATTRS: {
         	component: {value: COMPONENT},
-            templateBlockName: {value: 'widget,tableValues,rowValues,tableFiles,rowFiles,rowEdit,addButton'},
-            valueAttributeList: {value: null}
+            templateBlockName: {value: 'widget,tableValues,rowValues,tableFiles,rowFiles,rowEdit,addButton,rowActValues,rowActFiles,rowEditAct'},
+            valueAttributeList: {value: null},
+            currentAttrid: {value: null},
+            currentType: {value: null}
         },
         CLICKS: {
-        	
+        	'addValue-show': {
+        		event: function(e){
+        			var targ = e.target,
+        				mode = targ.getData('mode');
+        			
+        			this.addShow(mode);
+        		}
+        	},
+        	'act-cancel': {
+        		event: function(e){
+        			var tr = e.target.getDOMNode().parentNode.parentNode;
+        			
+        			tr.remove();
+        		}
+        	},
+        	appendValue: {
+        		event: function(e){
+        			var targ = e.target,
+        				mode = targ.getData('mode'), 
+        				tr = targ.getDOMNode().parentNode.parentNode;
+        			
+        			this.appendValue(tr, mode);
+        		}
+        	}
         }
     });
 };

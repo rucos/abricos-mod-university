@@ -116,6 +116,23 @@ class UniversityQuery {
 		
 		return $db->query_read($sql);
 	}
+	
+	public static function AppendValueAttribute(Ab_Database $db, $d){
+		$sql = "
+			INSERT INTO ".$db->prefix."un_value(attributeid, value, nameurl, namedoc, subject, datedoc, folder)
+			VALUES (
+					".bkint($d->atrid).",
+					'".bkstr($d->value)."',
+					'".bkstr($d->nameurl)."',
+					'".bkstr($d->namedoc)."',
+					'".bkstr($d->subject)."',
+					".bkint($d->datedoc).",
+					'".bkstr($d->folder)."'
+			)
+		";
+	
+		return $db->query_write($sql);
+	}
 }
 
 ?>
