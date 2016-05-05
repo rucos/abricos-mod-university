@@ -63,9 +63,9 @@ Component.entryPoint = function(NS){
         		act = 'Восстановить';
         		event = 'restoreValue';
         	}
-        	
         	return tp.replace(block, [{
         		nameClass: nameClass,
+        		datedoc: Brick.dateExt.convert(val.get('datedoc'), 2),
 				rowEdit: tp.replace('rowEdit', {
 					id: val.get('id'),
 					mode: block,
@@ -117,7 +117,7 @@ Component.entryPoint = function(NS){
 	    			data.nameurl = tr.cells[0].textContent;
 	    			data.namedoc = tr.cells[1].textContent;
 	    			data.subject = tr.cells[2].textContent;
-	    			data.datedoc = tr.cells[3].textContent;
+	    			data.datedoc = this.get('appInstance').setDate(tr.cells[3].textContent);
 	    			data.folder = tr.cells[4].textContent;
 	    				break;
 	    	}
@@ -139,7 +139,7 @@ Component.entryPoint = function(NS){
 	    			data.nameurl = tr.cells[0].firstChild.getAttribute('value');
 	    			data.namedoc = tr.cells[1].firstChild.getAttribute('value');
 	    			data.subject = tr.cells[2].firstChild.getAttribute('value');
-	    			data.datedoc = tr.cells[3].firstChild.getAttribute('value');
+	    			data.datedoc = this.get('appInstance').setCancelDate(tr.cells[3].firstChild.getAttribute('value'));
 	    			data.folder = tr.cells[4].firstChild.getAttribute('value');
 	    				break;
 	    	}
@@ -217,7 +217,7 @@ Component.entryPoint = function(NS){
         		nameurl: arguments[2] || '',
         		namedoc: arguments[3] || '',
         		subject: arguments[4] || '',
-        		datedoc: arguments[5] || '',
+        		datedoc: Date.parse(arguments[5]) / 1000 || '',
         		folder: arguments[6] || '',
         		atrid: this.get('currentAttrid')
         	};

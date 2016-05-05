@@ -25,7 +25,13 @@ Component.entryPoint = function(NS){
     			sectionid: sectionid,
     			isValue: isValue
     		};
-    	}
+    	},
+        setDate: function(date){
+        	return date.split('.').reverse().join('-');
+        },
+        setCancelDate: function(date){
+        	return date.split('-').reverse().join('.');
+        }
     }, [], {
         REQS: {
         	sectionList: {
