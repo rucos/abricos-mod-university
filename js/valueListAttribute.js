@@ -127,7 +127,10 @@ Component.entryPoint = function(NS){
         cancelEditShow: function(id, tr, mode){
         	var tp = this.template,
         		data = this.constructDataValue(id),
-        		blockAct = "";
+        		blockAct = "",
+        		act = 'Удалить',
+        		event =  'remove-show';
+        	
         	
         	switch(mode){
 	    		case 'rowActValues':
@@ -144,7 +147,11 @@ Component.entryPoint = function(NS){
 	    				break;
 	    	}
         	
-        	tr.innerHTML = this.addRowRender(blockAct, 'rowEdit', 'Удалить', data, 'remove-show');
+        	if(tr.className == 'danger'){
+        		act = 'Восстановить';
+        		event = 'restoreValue';
+        	}
+        	tr.innerHTML = this.addRowRender(blockAct, 'rowEdit', act, data, event);
         },
         addRowRender: function(blockAct, blockEdit, act, data, event){
         	var tp = this.template;
