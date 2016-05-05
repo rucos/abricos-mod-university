@@ -1,0 +1,98 @@
+<!--{widget}-->
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<div class="row">
+            <div class="col-md-9">
+            	<h3 class="panel-title">Добавить/изменить направление</h3>
+            </div>
+            <div class="col-md-3">
+                <div class="btn-toolbar pull-right">
+                    <button data-click="close" type="button" class="btn btn-default" data-wait="disable">
+                        Отмена
+                    </button>
+                </div>
+
+                <span data-wait="show" class="pull-right">
+                    <img src="/images/loading.gif"/>
+                </span>
+            </div>
+        </div>
+	</div>
+	<div class="panel-body">
+		  <div class="form-group">
+			    <label>Код направления</label>
+			    <input type="text" class="form-control" id="{i#programCode}" placeholder="Код">
+		  </div>
+		  <div class="form-group">
+			    <label>Наименование направления</label>
+			    <input type="text" class="form-control" id="{i#programName}" placeholder="Направление">
+		  </div>
+		<label>Срок обучения:</label>
+		  <div class="row">
+		  	<div class="col-md-6">
+				<table id="{i#level}" class="table table-striped table-hover">
+				    <thead>
+					    <tr>
+					   	 	<th>Уровень образования</th>
+					        <th width="15%">Очная</th>
+					        <th width="15%">Очно-заочная</th>
+					        <th width="15%">Заочная</th>
+					    </tr>
+				    </thead>
+				    <tbody>
+				    	<tr>
+				    		<td>
+				    			бакалавриат академический
+				    		</td>
+				    		<td>
+				    			<input type="number" class="form-control" min="1" max="7">
+				    		</td>
+				    		<td>
+				    			<input type="number" class="form-control" min="1" max="7">
+				    		</td>
+				    		<td>
+				    			<input type="number" class="form-control" min="1" max="7">
+				    		</td>
+				    	</tr>
+				    	<tr>
+				    		<td>
+				    			бакалавриат прикладной
+				    		</td>
+				    		<td>
+				    			<input type="number" class="form-control" min="1" max="7">
+				    		</td>
+				    		<td>
+				    			<input type="number" class="form-control" min="1" max="7">
+				    		</td>
+				    		<td>
+				    			<input type="number" class="form-control" min="1" max="7">
+				    		</td>
+				    	</tr>
+				    	<tr>
+				    		<td>
+				    			специалитет
+				    		</td>
+				    		<td>
+				    			<input type="number" class="form-control" min="1" max="7">
+				    		</td>
+				    		<td>
+				    			<input type="number" class="form-control" min="1" max="7">
+				    		</td>
+				    		<td>
+				    			<input type="number" class="form-control" min="1" max="7">
+				    		</td>
+				    	</tr>
+				    </tbody>
+				</table>
+			</div>
+		</div>
+	        <div class="btn-toolbar pull-right">
+	               <button data-click="append" type="button" class="btn btn-primary" data-wait="disable">
+	                  Добавить
+	              </button>
+	              <button data-click="close" type="button" class="btn btn-default" data-wait="disable">
+	                  Отмена
+	              </button>
+	        </div>
+	</div>
+</div>

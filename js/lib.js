@@ -83,6 +83,14 @@ Component.entryPoint = function(NS){
         		sectionItem: function(sectionid, sectionName){
         			return this.getURL('ws') + 'sectionEditor/SectionEditorWidget/' + sectionid + '/';
         		}
+        	},
+        	program: {
+        		view: function(){
+        			return this.getURL('ws') + 'managerProgram/ManagerProgramWidget';
+        		},
+        		act: function(programid){
+        			return this.getURL('ws') + 'editorProgram/EditorProgramWidget/' + programid + '/';
+        		}
         	}
         }
     });
