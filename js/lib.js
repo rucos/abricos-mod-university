@@ -68,8 +68,17 @@ Component.entryPoint = function(NS){
     			attribute: false,
     			type: 'modelList:ProgramList'
     		},
+    		programItem: {
+    			args: ['programid'],
+    			attribute: false,
+    			type: 'model:ProgramItem'
+    		},
     		removeProgram: {
     			args: ['data']
+    		},
+    		programLevelList: {
+    			attribute: false,
+    			type: 'modelList:ProgramLevelList'
     		}
         },
         ATTRS: {
@@ -78,6 +87,8 @@ Component.entryPoint = function(NS){
         	AttributeList: {value: NS.AttributeList},
         	ValueAttributeList: {value: NS.ValueAttributeList},
         	ProgramList: {value: NS.ProgramList},
+        	ProgramItem: {value: NS.ProgramItem},
+        	ProgramLevelList: {value: NS.ProgramLevelList},
         	currentSection: {value: ''}
         },
         URLS: {

@@ -227,6 +227,35 @@ class UniversityQuery {
 		";
 		return $db->query_read($sql);
 	}
+	
+	public static function ProgramItem(Ab_Database $db, $programid){
+		$sql = "
+			SELECT
+					programid as id,
+					code,
+					name
+			FROM ".$db->prefix."un_program
+			WHERE programid=".bkint($programid)."
+			LIMIT 1
+		";
+		return $db->query_first($sql);
+	}
+	
+	public static function ProgramLevelList(Ab_Database $db, $programid){
+		
+		$sql = "
+			SELECT
+					f.eduformid as id,
+					l.level,
+					l.edulevelid,
+					f.eduform,
+					f.educount
+			FROM ".$db->prefix."un_edulevel l
+			INNER JOIN ".$db->prefix."un_eduform f ON l.edulevelid=f.edulevelid
+			WHERE programid=".bkint($programid)."
+		";
+		return $db->query_read($sql);
+	}
 }
 
 ?>

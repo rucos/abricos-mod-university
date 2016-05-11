@@ -1,0 +1,26 @@
+{
+  "version": "0.1.0",
+  "type": "model",
+  "rolefn": "IsAdminRole",
+  "fields": {
+    "id": {
+      "type": "int"
+    },
+    "level": {
+      "type": "string",
+      "json": "lv"
+    },
+    "edulevelid": {
+      "type": "int",
+      "json": "eid"
+    },
+    "eduform": {
+      "type": "string",
+      "json": "ef"
+    },
+    "educount": {
+      "type": "int",
+      "json": "cnt"
+    }
+  }
+}

@@ -14,21 +14,41 @@ Component.entryPoint = function(NS){
     NS.EditorProgramWidget = Y.Base.create('editorProgramWidget', SYS.AppWidget, [], {
         onInitAppWidget: function(err, appInstance){
         	var programid = this.get('programid');
-        	
+
         	if(programid > 0){
-        		this.editShow();
+        		this.editShow(programid);
         	} else {
-        		this.appendShow();
+        		this.reloadPanel();
         	}
         },
-        appendShow: function(){
+        editShow: function(programid){
+        	this.set('waiting', true);
+	        	this.get('appInstance').programItem(programid, function(err, result){
+	        		this.set('waiting', false);
+	        			if(!err){
+	        				this.set('programItem', result.programItem);
+	        				this.set('programLevelList', result.programLevelList);
+	        					this.reloadPanel();
+	        			}
+	        	}, this);
+        },
+        reloadPanel: function(){
         	var tp = this.template,
-        		lst = "";
+        		lst = "",
+        		programItem = this.get('programItem'),
+        		replaceObj = {
+        			code: '',
+        			name: '',
+        			act: 'Добавить'
+        		};
         	
-        	tp.setHTML('panel', tp.replace('panel', {
-        		code: '',
-        		name: ''
-        	}));
+        	if(programItem){
+        		replaceObj.code = programItem.get('code');
+        		replaceObj.name = programItem.get('name');
+        		replaceObj.act = "Изменить";
+        	}
+        	
+        	tp.setHTML('panel', tp.replace('panel', replaceObj));
         },
         renderPanel: function(){
         	var tp = this.template,
@@ -73,7 +93,9 @@ Component.entryPoint = function(NS){
         ATTRS: {
         	component: {value: COMPONENT},
             templateBlockName: {value: 'widget,panel'},
-            programid: {value: 0}
+            programid: {value: 0},
+            programItem: {value: null},
+            programLevelList: {value: null}
         },
         CLICKS: {
         	close: {

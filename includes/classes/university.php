@@ -18,13 +18,15 @@ class University extends AbricosApplication {
 				'ValueAttributeList' => 'ValueAttributeList',
 				'ValueAttributeItem' => 'ValueAttributeItem',
 				'ProgramItem' => 'ProgramItem',
-				'ProgramList' => 'ProgramList'
+				'ProgramList' => 'ProgramList',
+				'ProgramLevelList' => 'ProgramLevelList',
+				'ProgramLevelItem' => 'ProgramLevelItem'
 		);
 	}
 	
 	
 	protected function GetStructures(){
-		return 'SectionItem, AttributeItem, ValueItem, ProgramItem';
+		return 'SectionItem, AttributeItem, ValueItem, ProgramItem, ProgramLevelItem';
 	}
 
 	public function ResponseToJSON($d){
@@ -53,6 +55,8 @@ class University extends AbricosApplication {
 				return $this->ProgramListToJSON();
 			case 'removeProgram':
 				return $this->RemoveProgramToJSON($d->data);
+			case 'programItem':
+				return $this->ProgramItemToJSON($d->programid);
         }
         return null;
     }
@@ -249,6 +253,38 @@ class University extends AbricosApplication {
     	$d->remove = intval($d->remove);
     
 		return UniversityQuery::RemoveProgram($this->db, $d);
+    }
+    
+    public function ProgramItemToJSON($programid){
+    	$programid = intval($programid);
+    	
+    	$item = $this->ProgramItem($programid);
+    	$level = $this->ProgramLevelList($programid);
+    	
+    	
+    	return $this->ImplodeJSON(
+    			$this->ResultToJSON('programItem', $item),
+    			$this->ResultToJSON('programLevelList', $level)
+    	);
+    }
+    
+    public function ProgramItem($programid){
+    	$rows = UniversityQuery::ProgramItem($this->db, $programid);
+    	
+    	return $this->models->InstanceClass('ProgramItem', $rows);
+    }
+    
+    public function ProgramLevelList($programid){
+    	
+    	$list = $this->models->InstanceClass('ProgramLevelList');
+    	
+    	$rows = UniversityQuery::ProgramLevelList($this->db, $programid);
+    	
+    	while (($d = $this->db->fetch_array($rows))){
+    		$list->Add($this->models->InstanceClass('ProgramLevelItem', $d));
+    	}
+    	
+    	return $list;
     }
     
 }

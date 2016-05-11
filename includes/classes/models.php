@@ -37,9 +37,20 @@ class ValueAttributeList extends AbricosModelList {
 class ProgramItem extends AbricosModel {
 	protected $_structModule = 'university';
 	protected $_structName = 'ProgramItem';
+	
 }
 
 class ProgramList extends AbricosModelList {
+
+}
+
+class ProgramLevelItem extends AbricosModel {
+	protected $_structModule = 'university';
+	protected $_structName = 'ProgramLevelItem';
+
+}
+
+class ProgramLevelList extends AbricosModelList {
 
 }
 ?>

@@ -101,6 +101,13 @@ Component.entryPoint = function(NS){
         			
         			this.remove(id, true);
         		}
+        	},
+        	edit: {
+        		event: function(e){
+        			var id = e.target.getData('id');
+        			
+        			this.go('program.act', id);
+        		}
         	}
         }
     });
