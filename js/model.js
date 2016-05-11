@@ -33,4 +33,12 @@ Component.entryPoint = function(NS){
     NS.ValueAttributeList = Y.Base.create('valueAttributeList', SYS.AppModelList, [], {
         appItem: NS.ValueAttributeItem
     });
+    
+    NS.ProgramItem = Y.Base.create('programItem', SYS.AppModel, [], {
+        structureName: 'ProgramItem'
+    });
+    
+    NS.ProgramList = Y.Base.create('programList', SYS.AppModelList, [], {
+        appItem: NS.ProgramItem
+    });
 };

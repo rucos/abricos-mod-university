@@ -16,13 +16,15 @@ class University extends AbricosApplication {
 				'AttributeList' => 'AttributeList',
 				'AttributeItem' => 'AttributeItem',
 				'ValueAttributeList' => 'ValueAttributeList',
-				'ValueAttributeItem' => 'ValueAttributeItem'
+				'ValueAttributeItem' => 'ValueAttributeItem',
+				'ProgramItem' => 'ProgramItem',
+				'ProgramList' => 'ProgramList'
 		);
 	}
 	
 	
 	protected function GetStructures(){
-		return 'SectionItem, AttributeItem, ValueItem';
+		return 'SectionItem, AttributeItem, ValueItem, ProgramItem';
 	}
 
 	public function ResponseToJSON($d){
@@ -47,6 +49,8 @@ class University extends AbricosApplication {
 				return $this->RemoveValueAttributeToJSON($d->data);
 			case 'actProgram':
 				return $this->ActProgramToJSON($d->data);
+			case 'programList':
+				return $this->ProgramListToJSON();
         }
         return null;
     }
@@ -215,6 +219,22 @@ class University extends AbricosApplication {
     		return UniversityQuery::AppendProgram($this->db, $d);
     	}
     	
+    }
+    
+    public function ProgramListToJSON(){
+    	$res = $this->ProgramList();
+    	return $this->ResultToJSON('programList', $res);
+    }
+    
+    public function ProgramList(){
+    	 
+    	$list = $this->models->InstanceClass('ProgramList');
+    	$rows = UniversityQuery::ProgramList($this->db);
+    
+    	while (($d = $this->db->fetch_array($rows))){
+    		$list->Add($this->models->InstanceClass('ProgramItem', $d));
+    	}
+    	return $list;
     }
     
 }

@@ -33,4 +33,13 @@ class ValueAttributeItem extends AbricosModel {
 class ValueAttributeList extends AbricosModelList {
 
 }
+
+class ProgramItem extends AbricosModel {
+	protected $_structModule = 'university';
+	protected $_structName = 'ProgramItem';
+}
+
+class ProgramList extends AbricosModelList {
+
+}
 ?>

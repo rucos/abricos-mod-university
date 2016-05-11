@@ -1,0 +1,22 @@
+{
+  "version": "0.1.0",
+  "type": "model",
+  "rolefn": "IsAdminRole",
+  "fields": {
+    "id": {
+      "type": "int"
+    },
+    "code": {
+      "type": "string",
+      "json": "cd"
+    },
+    "name": {
+      "type": "string",
+      "json": "nm"
+    },
+    "remove": {
+      "type": "int",
+      "json": "rmv"
+    }
+  }
+}

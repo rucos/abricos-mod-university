@@ -204,6 +204,18 @@ class UniversityQuery {
 	    	}
     	}
 	}
+	
+	public static function ProgramList(Ab_Database $db){
+		$sql = "
+			SELECT
+				programid as id,
+				code,
+				name,
+				remove
+			FROM ".$db->prefix."un_program
+		";
+		return $db->query_read($sql);
+	}
 }
 
 ?>

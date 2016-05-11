@@ -1,7 +1,7 @@
 var Component = new Brick.Component();
 Component.requires = {
     mod: [
-        {name: '{C#MODNAME}', files: ['lib.js']}
+        {name: '{C#MODNAME}', files: ['lib.js', 'programList.js']}
     ]
 };
 Component.entryPoint = function(NS){
@@ -14,9 +14,14 @@ Component.entryPoint = function(NS){
     NS.ManagerProgramWidget = Y.Base.create('managerProgramWidget', SYS.AppWidget, [], {
         onInitAppWidget: function(err, appInstance, options){
         	
+        	this.programList = new NS.ProgramListWidget({
+                srcNode: this.template.gel('programList')
+            });
         },
         destructor: function(){
-        	
+        	if(this.programList){
+        		this.programList.destroy();
+        	}
         }
     }, {
         ATTRS: {

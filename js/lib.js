@@ -63,6 +63,10 @@ Component.entryPoint = function(NS){
     		},
     		actProgram: {
     			args: ['data']
+    		},
+    		programList: {
+    			attribute: false,
+    			type: 'modelList:ProgramList'
     		}
         },
         ATTRS: {
@@ -70,6 +74,7 @@ Component.entryPoint = function(NS){
         	SectionList: {value: NS.SectionList},
         	AttributeList: {value: NS.AttributeList},
         	ValueAttributeList: {value: NS.ValueAttributeList},
+        	ProgramList: {value: NS.ProgramList},
         	currentSection: {value: ''}
         },
         URLS: {
