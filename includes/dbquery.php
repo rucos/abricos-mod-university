@@ -164,6 +164,46 @@ class UniversityQuery {
 	
 		return $db->query_write($sql);
 	}
+	
+	public static function AppendProgram(Ab_Database $db, $d){
+		$sql = "
+			INSERT INTO ".$db->prefix."un_program(code, name)
+			VALUES (
+					'".bkstr($d->code)."',
+					'".bkstr($d->name)."'
+			)
+		";
+		$db->query_write($sql);
+    	$programid = mysql_insert_id();
+    	
+	    foreach($d->eduLevel as $keyLvl => $eduLevel){
+	    	if($eduLevel !== ''){
+	    		$sql = "
+	    				INSERT INTO ".$db->prefix."un_edulevel(programid, level)
+	    				VALUES (
+	    						".$programid.",
+	    						".++$keyLvl."
+	    				)
+	    			";
+	    		$db->query_write($sql);
+	    		$eduLevelid = mysql_insert_id();
+	    		$insert = "";
+	    		
+	    		foreach($eduLevel as $keyForm => $eduFrom){
+	    			 if($eduFrom !== ''){
+	    			 	$insert .= "(".$eduLevelid.",".++$keyForm.",".bkint($eduFrom)."),";
+	    			 }
+	    		}
+	    		$insert = substr($insert, 0, -1);
+	    		
+	    		$sql = "
+	    				INSERT INTO ".$db->prefix."un_eduform(edulevelid, eduform, educount)
+	    				VALUES ".$insert."
+	    			";
+	    		$db->query_write($sql);
+	    	}
+    	}
+	}
 }
 
 ?>

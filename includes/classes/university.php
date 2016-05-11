@@ -45,6 +45,8 @@ class University extends AbricosApplication {
 				return $this->ActValueAttributeToJSON($d->data);
 			case 'removeValueAttribute':
 				return $this->RemoveValueAttributeToJSON($d->data);
+			case 'actProgram':
+				return $this->ActProgramToJSON($d->data);
         }
         return null;
     }
@@ -187,6 +189,32 @@ class University extends AbricosApplication {
     	$d->remove = intval($d->remove);
     	 
     	return UniversityQuery::RemoveValueAttribute($this->db, $d);
+    }
+    
+    public function ActProgramToJSON($d){
+    	$res = $this->ActProgram($d);
+    	return $this->ResultToJSON('actProgram', $res);
+    }
+    
+    public function ActProgram($d){
+    	$utmf = Abricos::TextParser(true);
+    	
+    	$d->programid = intval($d->programid);
+    	$d->code = $utmf->Parser($d->code);
+    	$d->name = $utmf->Parser($d->name);
+    	
+    	foreach($d->eduLevel as $key => $value){
+    		if($value !== ''){
+    			$d->eduLevel[$key] = explode(',', $value);
+    		} 
+    	}
+    	
+    	if($d->programid > 0){
+    		
+    	} else {
+    		return UniversityQuery::AppendProgram($this->db, $d);
+    	}
+    	
     }
     
 }
