@@ -216,6 +216,17 @@ class UniversityQuery {
 		";
 		return $db->query_read($sql);
 	}
+	
+	public static function RemoveProgram(Ab_Database $db, $d){
+		$sql = "
+			UPDATE ".$db->prefix."un_program
+			SET
+				remove=".bkint($d->remove)."
+			WHERE programid=".bkint($d->programid)."
+			LIMIT 1
+		";
+		return $db->query_read($sql);
+	}
 }
 
 ?>

@@ -51,6 +51,8 @@ class University extends AbricosApplication {
 				return $this->ActProgramToJSON($d->data);
 			case 'programList':
 				return $this->ProgramListToJSON();
+			case 'removeProgram':
+				return $this->RemoveProgramToJSON($d->data);
         }
         return null;
     }
@@ -235,6 +237,18 @@ class University extends AbricosApplication {
     		$list->Add($this->models->InstanceClass('ProgramItem', $d));
     	}
     	return $list;
+    }
+    
+    public function RemoveProgramToJSON($d){
+    	$res = $this->RemoveProgram($d);
+    	return $this->ResultToJSON('removeProgram', $res);
+    }
+    
+    public function RemoveProgram($d){
+    	$d->programid = intval($d->programid);
+    	$d->remove = intval($d->remove);
+    
+		return UniversityQuery::RemoveProgram($this->db, $d);
     }
     
 }

@@ -67,6 +67,9 @@ Component.entryPoint = function(NS){
     		programList: {
     			attribute: false,
     			type: 'modelList:ProgramList'
+    		},
+    		removeProgram: {
+    			args: ['data']
     		}
         },
         ATTRS: {

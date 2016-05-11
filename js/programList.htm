@@ -26,14 +26,14 @@
         </button>
     </td>
     <td>
-         <button id="{i#remove}-{v#id}" data-act="{v#remove}" type="button" class="btn btn-default btn-xs" data-wait="disable">
+         <button id="{i#remove}-{v#id}" data-click="remove-show" data-id="{v#id}" data-act="{v#remove}" type="button" class="btn btn-default btn-xs" data-wait="disable">
             {v#act}
         </button>
          <div id="{i#removegroup}-{v#id}"  class="btn-group hide">
-            <button type="button" class="btn btn-danger btn-xs" data-id="{v#id}" data-wait="disable">
+            <button type="button" class="btn btn-danger btn-xs" data-click="remove" data-id="{v#id}" data-wait="disable">
                 Удалить?
             </button>
-            <button type="button" class="btn btn-default btn-xs" data-id="{v#id}" data-wait="disable">
+            <button type="button" class="btn btn-default btn-xs" data-click="remove-cancel" data-id="{v#id}" data-wait="disable">
                 Отмена
             </button>
         </div>
