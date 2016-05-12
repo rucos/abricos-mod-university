@@ -39,7 +39,8 @@ Component.entryPoint = function(NS){
         		replaceObj = {
         			code: '',
         			name: '',
-        			act: 'Добавить'
+        			act: 'Добавить',
+        			edulevel: this.replaceEduLevel()
         		};
         	
         	if(programItem){
@@ -49,6 +50,29 @@ Component.entryPoint = function(NS){
         	}
         	
         	tp.setHTML('panel', tp.replace('panel', replaceObj));
+        },
+        replaceEduLevel: function(){
+        	var tp = this.template,
+        		programLevelList = this.get('programLevelList'),
+        		lst = "";
+        	
+        	if(programLevelList){
+            	programLevelList.each(function(level){
+            		
+            	});
+        	} else {
+        		lst += tp.replace('edulevel', {
+        			akad: this.replaceEduForm('Бакалавриат академический'),
+        			prik: this.replaceEduForm('Бакалавриат прикладной'),
+        			spec: this.replaceEduForm('Специалитет')
+        		});
+        	}
+        	return lst;
+        },
+        replaceEduForm: function(name){
+        	return this.template.replace('eduform', {
+        		name: name
+        	});
         },
         renderPanel: function(){
         	var tp = this.template,
@@ -64,9 +88,9 @@ Component.entryPoint = function(NS){
         renderEduLevel: function(){
         	var tp = this.template,
         		eduLevel = [
-        			tp.gel('panel.akad'),
-        			tp.gel('panel.prik'),
-        			tp.gel('panel.spec')
+        			tp.gel('edulevel.akad'),
+        			tp.gel('edulevel.prik'),
+        			tp.gel('edulevel.spec')
         		];
         	
         	for(var i = 0; i < 3; i++){
@@ -83,6 +107,7 @@ Component.entryPoint = function(NS){
     		return eduLevel;
         },
         reqActProgram: function(data){
+        	console.log(data);
         	this.set('waiting', true);
 	        	this.get('appInstance').actProgram(data, function(err, result){
 	        		this.set('waiting', false);
@@ -92,7 +117,7 @@ Component.entryPoint = function(NS){
     }, {
         ATTRS: {
         	component: {value: COMPONENT},
-            templateBlockName: {value: 'widget,panel'},
+            templateBlockName: {value: 'widget,panel,edulevel,eduform'},
             programid: {value: 0},
             programItem: {value: null},
             programLevelList: {value: null}

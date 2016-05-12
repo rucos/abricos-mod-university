@@ -176,28 +176,20 @@ class UniversityQuery {
 		$db->query_write($sql);
     	$programid = mysql_insert_id();
     	
-	    foreach($d->eduLevel as $keyLvl => $eduLevel){
-	    	if($eduLevel !== ''){
-	    		$sql = "
-	    				INSERT INTO ".$db->prefix."un_edulevel(programid, level)
-	    				VALUES (
-	    						".$programid.",
-	    						".++$keyLvl."
-	    				)
-	    			";
-	    		$db->query_write($sql);
-	    		$eduLevelid = mysql_insert_id();
+	    foreach($d->eduLevel as $level => $eduFormArr){
+	    	if($eduFormArr !== ''){
 	    		$insert = "";
+	    		$level++;
 	    		
-	    		foreach($eduLevel as $keyForm => $eduFrom){
-	    			 if($eduFrom !== ''){
-	    			 	$insert .= "(".$eduLevelid.",".++$keyForm.",".bkint($eduFrom)."),";
-	    			 }
+	    		foreach ($eduFormArr as $eduform => $educount){
+	    			if($educount !== ''){
+	    				$insert .= "(".$programid.",".$level.",".++$eduform.",".$educount."),";
+	    			}
 	    		}
 	    		$insert = substr($insert, 0, -1);
 	    		
 	    		$sql = "
-	    				INSERT INTO ".$db->prefix."un_eduform(edulevelid, eduform, educount)
+	    				INSERT INTO ".$db->prefix."un_edulevel(programid, level, eduform, educount)
 	    				VALUES ".$insert."
 	    			";
 	    		$db->query_write($sql);
@@ -235,7 +227,7 @@ class UniversityQuery {
 					code,
 					name
 			FROM ".$db->prefix."un_program
-			WHERE programid=".bkint($programid)."
+			WHERE p.programid=".$programid."
 			LIMIT 1
 		";
 		return $db->query_first($sql);
@@ -246,7 +238,6 @@ class UniversityQuery {
 		$sql = "
 			SELECT
 					f.eduformid as id,
-					l.level,
 					l.edulevelid,
 					f.eduform,
 					f.educount

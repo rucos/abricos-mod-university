@@ -39,48 +39,7 @@
 					    </tr>
 				    </thead>
 				    <tbody>
-				    	<tr id="{i#akad}">
-				    		<td>
-				    			бакалавриат академический
-				    		</td>
-				    		<td>
-				    			<input type="number" class="form-control" min="1" max="7">
-				    		</td>
-				    		<td>
-				    			<input type="number" class="form-control" min="1" max="7">
-				    		</td>
-				    		<td>
-				    			<input type="number" class="form-control" min="1" max="7">
-				    		</td>
-				    	</tr>
-				    	<tr id="{i#prik}">
-				    		<td>
-				    			бакалавриат прикладной
-				    		</td>
-				    		<td>
-				    			<input type="number" class="form-control" min="1" max="7">
-				    		</td>
-				    		<td>
-				    			<input type="number" class="form-control" min="1" max="7">
-				    		</td>
-				    		<td>
-				    			<input type="number" class="form-control" min="1" max="7">
-				    		</td>
-				    	</tr>
-				    	<tr id="{i#spec}">
-				    		<td>
-				    			специалитет
-				    		</td>
-				    		<td>
-				    			<input type="number" class="form-control" min="1" max="7">
-				    		</td>
-				    		<td>
-				    			<input type="number" class="form-control" min="1" max="7">
-				    		</td>
-				    		<td>
-				    			<input type="number" class="form-control" min="1" max="7">
-				    		</td>
-				    	</tr>
+						{v#edulevel}
 				    </tbody>
 				</table>
 			</div>
@@ -95,3 +54,28 @@
 	        </div>
 	</div>
 </div>
+
+<!--{edulevel}-->
+<tr id="{i#akad}" data-eduid="{v#akadid}">
+	{v#akad}
+</tr>
+<tr id="{i#prik}" data-eduid="{v#prikid}">
+	{v#prik}
+</tr>
+<tr id="{i#spec}"  data-eduid="{v#specid}">
+	{v#spec}
+</tr>
+
+<!--{eduform}-->
+<td>
+	{v#name}
+</td>
+<td>
+	<input type="number" class="form-control" min="1" max="7">
+</td>
+<td>
+	<input type="number" class="form-control" min="1" max="7">
+</td>
+<td>
+	<input type="number" class="form-control" min="1" max="7">
+</td>
