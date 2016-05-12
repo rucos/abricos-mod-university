@@ -176,25 +176,8 @@ class UniversityQuery {
 		$db->query_write($sql);
     	$programid = mysql_insert_id();
     	
-	    foreach($d->eduLevel as $level => $eduFormArr){
-	    	if($eduFormArr !== ''){
-	    		$insert = "";
-	    		$level++;
-	    		
-	    		foreach ($eduFormArr as $eduform => $educount){
-	    			if($educount !== ''){
-	    				$insert .= "(".$programid.",".$level.",".++$eduform.",".$educount."),";
-	    			}
-	    		}
-	    		$insert = substr($insert, 0, -1);
-	    		
-	    		$sql = "
-	    				INSERT INTO ".$db->prefix."un_edulevel(programid, level, eduform, educount)
-	    				VALUES ".$insert."
-	    			";
-	    		$db->query_write($sql);
-	    	}
-    	}
+   		UniversityQuery::AppendEduForm($db, $d->eduLevel, $programid);
+
 	}
 	
 	public static function ProgramList(Ab_Database $db){
@@ -217,7 +200,7 @@ class UniversityQuery {
 			WHERE programid=".bkint($d->programid)."
 			LIMIT 1
 		";
-		return $db->query_read($sql);
+		return $db->query_write($sql);
 	}
 	
 	public static function ProgramItem(Ab_Database $db, $programid){
@@ -227,7 +210,7 @@ class UniversityQuery {
 					code,
 					name
 			FROM ".$db->prefix."un_program
-			WHERE p.programid=".$programid."
+			WHERE programid=".$programid."
 			LIMIT 1
 		";
 		return $db->query_first($sql);
@@ -237,15 +220,69 @@ class UniversityQuery {
 		
 		$sql = "
 			SELECT
-					f.eduformid as id,
-					l.edulevelid,
-					f.eduform,
-					f.educount
-			FROM ".$db->prefix."un_edulevel l
-			INNER JOIN ".$db->prefix."un_eduform f ON l.edulevelid=f.edulevelid
+					edulevelid as id,
+					level,
+					eduform,
+					educount
+			FROM ".$db->prefix."un_edulevel
 			WHERE programid=".bkint($programid)."
 		";
 		return $db->query_read($sql);
+	}
+	
+	public static function EditProgram(Ab_Database $db, $d){
+		$sql = "
+			UPDATE ".$db->prefix."un_program
+			SET
+				code='".bkstr($d->code)."',
+				name='".bkstr($d->name)."'
+			WHERE programid=".bkint($d->programid)."
+			LIMIT 1
+		";
+		$db->query_write($sql);
+		
+		$sql = "
+			DELETE 
+			FROM ".$db->prefix."un_edulevel
+			WHERE programid=".bkint($d->programid)."
+		";
+		$db->query_write($sql);
+		
+		UniversityQuery::AppendEduForm($db, $d->eduLevel, $d->programid);
+		
+	}
+	
+	private function AppendEduForm($db, $eduLevel, $programid){
+		
+		$insert = "";
+			
+		foreach($eduLevel as $level => $eduForm){
+			$pos = $eduForm / 1;
+		
+			if($pos !== 0){
+				$level++;
+				for($i = 1; $i <= 3; $i++){
+					$educount = $eduForm[$i - 1];
+		
+					if($educount > 0){
+						$insert .= "(".$programid.",".$level.",".$i.",".$educount."),";
+					}
+				}
+			}
+		}
+		
+		if($insert !== ""){
+			$insert = substr($insert, 0, -1);
+		
+			$sql = "
+		    		INSERT INTO ".$db->prefix."un_edulevel(programid, level, eduform, educount)
+		    		VALUES ".$insert."
+		    	";
+			$db->query_write($sql);
+		} else {
+			return false;
+		}
+		
 	}
 }
 

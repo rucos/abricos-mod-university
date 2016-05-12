@@ -8,19 +8,11 @@
     },
     "level": {
       "type": "string",
-      "json": "lv"
-    },
-    "edulevelid": {
-      "type": "int",
-      "json": "eid"
+      "json": "lvl"
     },
     "eduform": {
       "type": "string",
       "json": "ef"
-    },
-    "educount": {
-      "type": "int",
-      "json": "cnt"
     }
   }
 }

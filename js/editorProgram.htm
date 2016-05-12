@@ -39,7 +39,48 @@
 					    </tr>
 				    </thead>
 				    <tbody>
-						{v#edulevel}
+						<tr id="{i#akad}">
+							<td>
+								Бакалавриат академический
+							</td>
+							<td>
+								<input type="checkbox" value="4">
+							</td>
+							<td>
+								<input type="checkbox" value="5">
+							</td>
+							<td>
+								<input type="checkbox" value="5">
+							</td>
+						</tr>
+						<tr id="{i#prik}">
+							<td>
+								Бакалавриат прикладной
+							</td>
+							<td>
+								<input type="checkbox" value="4">
+							</td>
+							<td>
+								<input type="checkbox" value="5">
+							</td>
+							<td>
+								<input type="checkbox" value="5">
+							</td>
+						</tr>
+						<tr id="{i#spec}">
+							<td>
+								Специалитет
+							</td>
+							<td>
+								<input type="checkbox" value="5">
+							</td>
+							<td>
+								<input type="checkbox" value="6">
+							</td>
+							<td>
+								<input type="checkbox" value="6">
+							</td>
+						</tr>
 				    </tbody>
 				</table>
 			</div>
@@ -54,28 +95,3 @@
 	        </div>
 	</div>
 </div>
-
-<!--{edulevel}-->
-<tr id="{i#akad}" data-eduid="{v#akadid}">
-	{v#akad}
-</tr>
-<tr id="{i#prik}" data-eduid="{v#prikid}">
-	{v#prik}
-</tr>
-<tr id="{i#spec}"  data-eduid="{v#specid}">
-	{v#spec}
-</tr>
-
-<!--{eduform}-->
-<td>
-	{v#name}
-</td>
-<td>
-	<input type="number" class="form-control" min="1" max="7">
-</td>
-<td>
-	<input type="number" class="form-control" min="1" max="7">
-</td>
-<td>
-	<input type="number" class="form-control" min="1" max="7">
-</td>

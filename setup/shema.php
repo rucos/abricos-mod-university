@@ -97,7 +97,7 @@ if ($updateManager->isInstall('0.1.0')){
 				edulevelid int(10) unsigned NOT NULL auto_increment,
 				programid int(10) unsigned NOT NULL default 0 COMMENT 'id направления',
 				level enum('бакалавриат академический','бакалавриат прикладной','специалитет') NOT NULL COMMENT 'уровень образования',
-				eduform enum('очная','очно-заочная ','заочная') NOT NULL COMMENT 'формы обучения',
+				eduform enum('очная','очно-заочная','заочная') NOT NULL COMMENT 'формы обучения',
 				educount tinyint(1) unsigned NOT NULL default 0 COMMENT 'Срок обучения',
 				PRIMARY KEY (edulevelid),
 				UNIQUE KEY level (programid,level,eduform)

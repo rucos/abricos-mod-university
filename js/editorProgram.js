@@ -39,8 +39,7 @@ Component.entryPoint = function(NS){
         		replaceObj = {
         			code: '',
         			name: '',
-        			act: 'Добавить',
-        			edulevel: this.replaceEduLevel()
+        			act: 'Добавить'
         		};
         	
         	if(programItem){
@@ -50,29 +49,45 @@ Component.entryPoint = function(NS){
         	}
         	
         	tp.setHTML('panel', tp.replace('panel', replaceObj));
-        },
-        replaceEduLevel: function(){
-        	var tp = this.template,
-        		programLevelList = this.get('programLevelList'),
-        		lst = "";
         	
-        	if(programLevelList){
-            	programLevelList.each(function(level){
-            		
-            	});
-        	} else {
-        		lst += tp.replace('edulevel', {
-        			akad: this.replaceEduForm('Бакалавриат академический'),
-        			prik: this.replaceEduForm('Бакалавриат прикладной'),
-        			spec: this.replaceEduForm('Специалитет')
-        		});
+        	if(programItem){//workaround
+        		this.renderProgramLevelList();
         	}
-        	return lst;
         },
-        replaceEduForm: function(name){
-        	return this.template.replace('eduform', {
-        		name: name
-        	});
+        renderProgramLevelList: function(){
+        	var tp = this.template,
+        		programLevelList = this.get('programLevelList');
+        	
+        	programLevelList.each(function(level){
+        		var obj = level.toJSON(),
+        			lvl = '',
+        			form = 0;
+        		
+        		switch(obj.level){
+        			case 'бакалавриат академический':
+        				lvl = 'panel.akad';
+        					break;
+        			case 'бакалавриат прикладной':
+        				lvl = 'panel.prik';
+        					break;
+        			case 'специалитет':
+        				lvl = 'panel.spec';
+        					break;
+        		}
+        		
+        		switch(obj.eduform){
+	    			case 'очная':
+	    				form = 1;
+	    					break;
+	    			case 'очно-заочная':
+	    				form = 2;
+	    					break;
+	    			case 'заочная':
+	    				form = 3;
+	    					break;
+	    		}
+        		this.template.gel(lvl).cells[form].firstChild.checked = true;
+        	}, this);
         },
         renderPanel: function(){
         	var tp = this.template,
@@ -88,26 +103,26 @@ Component.entryPoint = function(NS){
         renderEduLevel: function(){
         	var tp = this.template,
         		eduLevel = [
-        			tp.gel('edulevel.akad'),
-        			tp.gel('edulevel.prik'),
-        			tp.gel('edulevel.spec')
+        			tp.gel('panel.akad'),
+        			tp.gel('panel.prik'),
+        			tp.gel('panel.spec')
         		];
         	
         	for(var i = 0; i < 3; i++){
-        		for(var j = 1, value = ''; j < 4; j++){
-        			value += eduLevel[i].cells[j].firstChild.value + ',';
+        		for(var j = 1, value = '', curCh = ''; j < 4; j++){
+        			curCh = eduLevel[i].cells[j].firstChild;
+        			
+        			if(curCh.checked){
+        				value += curCh.value;
+        			} else {
+        				value += 0;
+        			}
         		}
-        		
-        		if(value.length > 3){
-        			eduLevel[i] = value.slice(0, -1);        			
-        		} else {
-        			eduLevel[i] = "";
-        		}
+        		eduLevel[i] = value;
         	}
     		return eduLevel;
         },
         reqActProgram: function(data){
-        	console.log(data);
         	this.set('waiting', true);
 	        	this.get('appInstance').actProgram(data, function(err, result){
 	        		this.set('waiting', false);
@@ -117,7 +132,7 @@ Component.entryPoint = function(NS){
     }, {
         ATTRS: {
         	component: {value: COMPONENT},
-            templateBlockName: {value: 'widget,panel,edulevel,eduform'},
+            templateBlockName: {value: 'widget,panel,eduform'},
             programid: {value: 0},
             programItem: {value: null},
             programLevelList: {value: null}
