@@ -31,50 +31,63 @@ Component.entryPoint = function(NS){
         		lst = "";
         	
         	employeesList.each(function(employees){
-        		var remove = employees.get('remove'),
-        			objReplace = {
-        				act: 'Удалить',
-            			danger: ''
-        			};
+        		var id = employees.get('id'),
+        			fio = employees.get('FIO'),
+        			remove = employees.get('remove');
         		
-        		if(remove){
-        			objReplace.act = 'Восстановить';
-        			objReplace.danger = "class='danger'";
-        		}
-        		lst += tp.replace('row', [objReplace, employees.toJSON()]);
+        			lst += this.rowReplaceObj(id, fio, remove);
         	}, this);
         	
         	tp.setHTML('emploees', tp.replace('table', {
         		rows: lst
         	}));
         },
-        actEmployeesRowShow: function(employeesid, parent){
+        actEmployeesRowShow: function(id, remove, parent){
         	var tp = this.template,
-        		tr = parent || tp.gel('table.table').insertRow(1),
-        		objReplace = {
-        			act: "Добавить",
-        			fio: '',
-        			employeesid: employeesid,
-        			eventCancel: 'add-cancel'
-        		};
+        		tr = parent || tp.gel('table.table').insertRow(1);
+        		
+        		tr.outerHTML = this.rowActReplaceObj(id, remove, tr)
+        },
+        rowActReplaceObj: function(id, remove, tr){
+        	var replaceObj = {
+	    			id: id,
+	        		remove: remove
+        		},
+        		collect = tr.cells[0]; 
         	
-        	if(employeesid > 0){
-        		objReplace.act = "Изменить";
-        		objReplace.fio = tr.cells[0].textContent;
-        		objReplace.eventCancel = 'edit-cancel';
+        	if(collect){
+        		replaceObj.act = 'Править';
+        		replaceObj.fio = collect.textContent;
+        		replaceObj.eventCancel = 'edit-cancel';
+        	} else {
+        		replaceObj.act = 'Добавить';
+        		replaceObj.fio = "";
+        		replaceObj.eventCancel = 'add-cancel';
         	}
         	
-        	tr.outerHTML = tp.replace('rowAct', objReplace);
+        	return this.template.replace('rowAct', replaceObj);
         },
-        editCancelRow: function(id, tr){
-        	var tp = this.template,
-        		fio = tr.cells[0].firstChild.getAttribute('value');
+        rowReplaceObj: function(id, fio, remove){
+        	var replaceObj = {
+        			id: id,
+            		fio: fio,
+            		remove: remove
+        		};
         	
-        	tr.outerHTML = tp.replace('row', {
-        		id: id,
-        		FIO: fio,
-        		act: 'Удалить'
-        	});
+        	if(remove == 1){
+        		replaceObj.act = 'Восстановить';
+        		replaceObj.danger = "class='danger'";
+        	} else {
+        		replaceObj.act = 'Удалить';
+        		replaceObj.danger = "";
+        	}
+        	
+        	return this.template.replace('row', replaceObj);
+        },
+        editCancelRow: function(id, tr, remove){
+        	var fio = tr.cells[0].firstChild.getAttribute('value');
+        	
+        	tr.outerHTML = this.rowReplaceObj(id, fio, remove);
         },
         actEmployees: function(id){
         	var tp = this.template,
@@ -115,7 +128,7 @@ Component.entryPoint = function(NS){
         CLICKS: {
         	'add-show': {
         		event: function(){
-        			this.actEmployeesRowShow(0);
+        			this.actEmployeesRowShow(0, 0);
         		}
         	},
         	'add-cancel': {
@@ -129,18 +142,20 @@ Component.entryPoint = function(NS){
         		event: function(e){
         			var targ = e.target,
         				id = targ.getData('id'),
-        				tr = targ.getDOMNode().parentNode.parentNode;
+        				tr = targ.getDOMNode().parentNode.parentNode,
+        				remove = targ.getData('remove');
         			
-        			this.actEmployeesRowShow(id, tr);
+        			this.actEmployeesRowShow(id, remove, tr);
         		}
         	},
         	'edit-cancel': {
         		event: function(e){
         			var targ = e.target,
         				id = targ.getData('id'),
-        				tr = targ.getDOMNode().parentNode.parentNode;
+        				tr = targ.getDOMNode().parentNode.parentNode,
+        				remove = targ.getData('remove');
         			
-        			this.editCancelRow(id, tr);
+        			this.editCancelRow(id, tr, remove);
         		}
         	},
         	actEmployees: {
@@ -172,8 +187,7 @@ Component.entryPoint = function(NS){
         	},
         	removeEmployees: {
         		event: function(e){
-        			var targ = e.target, 
-        				id = targ.getData('id');
+        			var id = e.target.getData('id');
         			
         				this.removeEmployees(id, 1);
         		}

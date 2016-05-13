@@ -18,9 +18,9 @@
 
 <!--{row}-->
 <tr {v#danger}>
-    <td>{v#FIO}</td>
+    <td>{v#fio}</td>
     <td>
-        <button class="btn btn-default btn-xs" data-id="{v#id}" data-click="edit-show" data-wait="disable">
+        <button class="btn btn-default btn-xs" data-id="{v#id}" data-click="edit-show" data-remove="{v#remove}" data-wait="disable">
             Править
         </button>
     </td>
@@ -40,15 +40,15 @@
 </tr>
 
 <!--{rowAct}-->
-<tr id="{i#rowAct}-{v#employeesid}">
+<tr id="{i#rowAct}-{v#id}">
     <td><textarea class="form-control" rows="5" value="{v#fio}">{v#fio}</textarea></td>
     <td>
-        <button class="btn btn-default btn-xs" data-click="actEmployees" data-id="{v#employeesid}" data-wait="disable">
+        <button class="btn btn-default btn-xs" data-click="actEmployees" data-id="{v#id}" data-wait="disable">
             {v#act}
         </button>
     </td>
     <td>
-       <button type="button" data-id="{v#employeesid}" data-click="{v#eventCancel}" class="btn btn-default btn-xs" data-wait="disable">
+       <button type="button" data-id="{v#id}" data-click="{v#eventCancel}" data-remove="{v#remove}" class="btn btn-default btn-xs" data-wait="disable">
            Отмена
        </button>
     </td>
