@@ -41,7 +41,36 @@ Component.entryPoint = function(NS){
         	tp.setHTML('emploees', tp.replace('table', {
         		rows: lst
         	}));
-        }
+        },
+        actEmployeesRowShow: function(employeesid){
+        	var tp = this.template,
+        		tr = tp.gel('table.table').insertRow(1),
+        		objReplace = {
+        			act: "Добавить",
+        			fio: '',
+        			employeesid: employeesid
+        		};
+        	
+        	tr.outerHTML = tp.replace('rowAct', objReplace);
+        },
+        actEmployees: function(id){
+        	var tp = this.template,
+        		tr = tp.one('rowAct.rowAct-' + id).getDOMNode().cells,
+        		data = {
+	        		employeesid: id,
+	        		fio: tr[1].firstChild.value
+	        	};
+        	
+        	this.reqActEmployees(data);
+        },
+        reqActEmployees: function(data){
+        	this.set('waiting', true);
+	        	this.get('appInstance').actEmployees(data, function(err, result){
+	        		this.set('waiting', false);
+	        			if(!err){
+	        				this.reloadList();
+	        			}
+	        	}, this);
         }
     }, {
         ATTRS: {
@@ -50,6 +79,25 @@ Component.entryPoint = function(NS){
             employeesList: {value: null}
         },
         CLICKS: {
+        	'add-show': {
+        		event: function(){
+        			this.actEmployeesRowShow(0);
+        		}
+        	},
+        	'add-cancel': {
+        		event: function(e){
+        			var tr = e.target.getDOMNode().parentNode.parentNode;
+        			
+        			tr.remove();
+        		}
+        	},
+        	actEmployees: {
+        		event: function(e){
+        			var id = e.target.getData('id');
+        			
+        			this.actEmployees(id);
+        		}
+        	}
         }
     });
 };

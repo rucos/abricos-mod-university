@@ -295,6 +295,16 @@ class UniversityQuery {
 		";
 		return $db->query_read($sql);
 	}
+	
+	public static function AppendEmployees(Ab_Database $db, $fio){
+		$sql = "
+			INSERT INTO ".$db->prefix."un_employees(FIO)
+			VALUES (
+					'".bkstr($fio)."'
+			)
+		";
+		return $db->query_write($sql);
+	}
 }
 
 ?>

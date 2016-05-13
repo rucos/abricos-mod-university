@@ -83,6 +83,9 @@ Component.entryPoint = function(NS){
     		employeesList: {
     			attribute: false,
     			type: 'modelList:EmployeesList'
+    		},
+    		actEmployees: {
+    			args: ['data']
     		}
         },
         ATTRS: {

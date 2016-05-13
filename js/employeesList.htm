@@ -42,11 +42,11 @@
 </tr>
 
 <!--{rowAct}-->
-<tr>
+<tr id="{i#rowAct}-{v#employeesid}">
     <td></td>
     <td><textarea class="form-control" rows="5">{v#fio}</textarea></td>
     <td>
-        <button class="btn btn-default btn-xs" data-wait="disable">
+        <button class="btn btn-default btn-xs" data-click="actEmployees" data-id="{v#employeesid}" data-wait="disable">
             {v#act}
         </button>
     </td>

@@ -61,6 +61,8 @@ class University extends AbricosApplication {
 				return $this->ProgramItemToJSON($d->programid);
 			case 'employeesList':
 				return $this->EmployeesListToJSON();
+			case 'actEmployees':
+				return $this->ActEmployeesToJSON($d->data);
         }
         return null;
     }
@@ -299,6 +301,25 @@ class University extends AbricosApplication {
     		$list->Add($this->models->InstanceClass('EmployeesItem', $d));
     	}
     	return $list;
+    }
+    
+    public function ActEmployeesToJSON($d){
+    	$res = $this->ActEmployees($d);
+    	return $this->ResultToJSON('actEmployees', $res);
+    }
+    
+    public function ActEmployees($d){
+    	$utmf = Abricos::TextParser(true);
+    	 
+    	$d->employeesid = intval($d->employeesid);
+    	$d->fio = $utmf->Parser($d->fio);
+    	 
+    	if($d->employeesid > 0){
+    		$rows = UniversityQuery::EditEmployees($this->db, $d);
+    	} else {
+    		$rows = UniversityQuery::AppendEmployees($this->db, $d->fio);
+    	}
+    	return $rows;
     }
     
 }
