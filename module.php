@@ -51,7 +51,7 @@ class UniversityPermission extends Ab_UserPermission {
 
     public function GetRoles(){
         return array(
-        	UniversityModule::ADMIN => $this->CheckAction(UniversityModule::ADMIN)
+        	UniversityAction::ADMIN => $this->CheckAction(UniversityAction::ADMIN)
         );
     }
 }

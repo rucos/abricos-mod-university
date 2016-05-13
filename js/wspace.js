@@ -61,6 +61,10 @@ Component.entryPoint = function(NS){
 	        				this.setActive('programLi');
 	        					this.go("program.view");
 	        						break;
+	        			case "employeesA": 
+	        				this.setActive('employeesLi');
+	        					this.go("employees.view");
+	        						break;
 	        		}
         		}
         	}

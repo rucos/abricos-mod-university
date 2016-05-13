@@ -79,6 +79,10 @@ Component.entryPoint = function(NS){
     		programLevelList: {
     			attribute: false,
     			type: 'modelList:ProgramLevelList'
+    		},
+    		employeesList: {
+    			attribute: false,
+    			type: 'modelList:EmployeesList'
     		}
         },
         ATTRS: {
@@ -89,6 +93,7 @@ Component.entryPoint = function(NS){
         	ProgramList: {value: NS.ProgramList},
         	ProgramItem: {value: NS.ProgramItem},
         	ProgramLevelList: {value: NS.ProgramLevelList},
+        	EmployeesList: {value: NS.EmployeesList},
         	currentSection: {value: ''}
         },
         URLS: {
@@ -112,6 +117,11 @@ Component.entryPoint = function(NS){
         		},
         		act: function(programid){
         			return this.getURL('ws') + 'editorProgram/EditorProgramWidget/' + programid + '/';
+        		}
+        	},
+        	employees: {
+        		view: function(){
+        			return this.getURL('ws') + 'managerEmployees/ManagerEmployeesWidget';
         		}
         	}
         }

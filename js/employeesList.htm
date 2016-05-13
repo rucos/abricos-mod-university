@@ -1,0 +1,58 @@
+<!--{widget}-->
+<button type="button" data-click="add-show" class="btn btn-success">+Добавить сотрудника</button>
+<hr>
+<div id="{i#emploees}"></div>
+
+
+<!--{table}-->
+<table id="{i#table}" class="table table-striped table-hover">
+    <thead>
+	    <tr>
+	   	 	<th>#</th>
+	        <th>ФИО</th>
+	        <th></th>
+	        <th></th>
+	    </tr>
+    </thead>
+    <tbody>{v#rows}</tbody>
+</table>
+
+<!--{row}-->
+<tr>
+    <td>{v#n}</td>
+    <td>{v#FIO}</td>
+    <td>
+        <button class="btn btn-default btn-xs" data-wait="disable">
+            Править
+        </button>
+    </td>
+    <td>
+         <button id="{i#remove}-{v#id}" type="button" class="btn btn-default btn-xs" data-wait="disable">
+            {v#act}
+        </button>
+         <div id="{i#removegroup}-{v#id}"  class="btn-group hide">
+            <button type="button" class="btn btn-danger btn-xs" data-wait="disable">
+                Удалить?
+            </button>
+            <button type="button" class="btn btn-default btn-xs" data-wait="disable">
+                Отмена
+            </button>
+        </div>
+    </td>
+</tr>
+
+<!--{rowAct}-->
+<tr>
+    <td></td>
+    <td><textarea class="form-control" rows="5">{v#fio}</textarea></td>
+    <td>
+        <button class="btn btn-default btn-xs" data-wait="disable">
+            {v#act}
+        </button>
+    </td>
+    <td>
+       <button type="button" data-click="add-cancel" class="btn btn-default btn-xs" data-wait="disable">
+           Отмена
+       </button>
+    </td>
+</tr>

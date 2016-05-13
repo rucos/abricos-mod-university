@@ -284,6 +284,17 @@ class UniversityQuery {
 		}
 		
 	}
+	
+	public static function EmployeesList(Ab_Database $db){
+		$sql = "
+			SELECT
+					employeesid as id,
+					FIO,
+					remove
+			FROM ".$db->prefix."un_employees
+		";
+		return $db->query_read($sql);
+	}
 }
 
 ?>

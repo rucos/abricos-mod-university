@@ -20,13 +20,15 @@ class University extends AbricosApplication {
 				'ProgramItem' => 'ProgramItem',
 				'ProgramList' => 'ProgramList',
 				'ProgramLevelList' => 'ProgramLevelList',
-				'ProgramLevelItem' => 'ProgramLevelItem'
+				'ProgramLevelItem' => 'ProgramLevelItem',
+				'EmployeesList' => 'EmployeesList',
+				'EmployeesItem' => 'EmployeesItem'
 		);
 	}
 	
 	
 	protected function GetStructures(){
-		return 'SectionItem, AttributeItem, ValueItem, ProgramItem, ProgramLevelItem';
+		return 'SectionItem, AttributeItem, ValueItem, ProgramItem, ProgramLevelItem, EmployeesItem';
 	}
 
 	public function ResponseToJSON($d){
@@ -57,6 +59,8 @@ class University extends AbricosApplication {
 				return $this->RemoveProgramToJSON($d->data);
 			case 'programItem':
 				return $this->ProgramItemToJSON($d->programid);
+			case 'employeesList':
+				return $this->EmployeesListToJSON();
         }
         return null;
     }
@@ -278,6 +282,22 @@ class University extends AbricosApplication {
     		$list->Add($this->models->InstanceClass('ProgramLevelItem', $d));
     	}
     	
+    	return $list;
+    }
+    
+    public function EmployeesListToJSON(){
+    	$res = $this->EmployeesList();
+    	return $this->ResultToJSON('employeesList', $res);
+    }
+    
+    public function EmployeesList(){
+    	 
+    	$list = $this->models->InstanceClass('EmployeesList');
+    	$rows = UniversityQuery::EmployeesList($this->db);
+    
+    	while (($d = $this->db->fetch_array($rows))){
+    		$list->Add($this->models->InstanceClass('EmployeesItem', $d));
+    	}
     	return $list;
     }
     

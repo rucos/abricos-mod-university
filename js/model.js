@@ -49,4 +49,12 @@ Component.entryPoint = function(NS){
     NS.ProgramLevelList = Y.Base.create('programLevelList', SYS.AppModelList, [], {
         appItem: NS.ProgramLevelItem
     });
+    
+    NS.EmployeesItem = Y.Base.create('employeesItem', SYS.AppModel, [], {
+        structureName: 'EmployeesItem'
+    });
+    
+    NS.EmployeesList = Y.Base.create('employeesList', SYS.AppModelList, [], {
+        appItem: NS.EmployeesItem
+    });
 };

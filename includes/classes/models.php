@@ -53,4 +53,14 @@ class ProgramLevelItem extends AbricosModel {
 class ProgramLevelList extends AbricosModelList {
 
 }
+
+class EmployeesItem extends AbricosModel {
+	protected $_structModule = 'university';
+	protected $_structName = 'EmployeesItem';
+
+}
+
+class EmployeesList extends AbricosModelList {
+
+}
 ?>
