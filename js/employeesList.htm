@@ -8,7 +8,6 @@
 <table id="{i#table}" class="table table-striped table-hover">
     <thead>
 	    <tr>
-	   	 	<th>#</th>
 	        <th>ФИО</th>
 	        <th></th>
 	        <th></th>
@@ -18,23 +17,22 @@
 </table>
 
 <!--{row}-->
-<tr>
-    <td>{v#n}</td>
+<tr {v#danger}>
     <td>{v#FIO}</td>
     <td>
-        <button class="btn btn-default btn-xs" data-wait="disable">
+        <button class="btn btn-default btn-xs" data-id="{v#id}" data-click="edit-show" data-wait="disable">
             Править
         </button>
     </td>
     <td>
-         <button id="{i#remove}-{v#id}" type="button" class="btn btn-default btn-xs" data-wait="disable">
+         <button id="{i#remove}-{v#id}" data-id="{v#id}" data-click="remove-show" data-remove="{v#remove}" type="button" class="btn btn-default btn-xs" data-wait="disable">
             {v#act}
         </button>
          <div id="{i#removegroup}-{v#id}"  class="btn-group hide">
-            <button type="button" class="btn btn-danger btn-xs" data-wait="disable">
+            <button data-id="{v#id}" data-click="removeEmployees" type="button" class="btn btn-danger btn-xs" data-wait="disable">
                 Удалить?
             </button>
-            <button type="button" class="btn btn-default btn-xs" data-wait="disable">
+            <button data-id="{v#id}" type="button" data-click="remove-cancel" class="btn btn-default btn-xs" data-wait="disable">
                 Отмена
             </button>
         </div>
@@ -43,15 +41,14 @@
 
 <!--{rowAct}-->
 <tr id="{i#rowAct}-{v#employeesid}">
-    <td></td>
-    <td><textarea class="form-control" rows="5">{v#fio}</textarea></td>
+    <td><textarea class="form-control" rows="5" value="{v#fio}">{v#fio}</textarea></td>
     <td>
         <button class="btn btn-default btn-xs" data-click="actEmployees" data-id="{v#employeesid}" data-wait="disable">
             {v#act}
         </button>
     </td>
     <td>
-       <button type="button" data-click="add-cancel" class="btn btn-default btn-xs" data-wait="disable">
+       <button type="button" data-id="{v#employeesid}" data-click="{v#eventCancel}" class="btn btn-default btn-xs" data-wait="disable">
            Отмена
        </button>
     </td>

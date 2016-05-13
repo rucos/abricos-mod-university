@@ -305,6 +305,28 @@ class UniversityQuery {
 		";
 		return $db->query_write($sql);
 	}
+	
+	public static function EditEmployees(Ab_Database $db, $d){
+		$sql = "
+			UPDATE ".$db->prefix."un_employees
+			SET
+				FIO='".bkstr($d->fio)."'
+			WHERE employeesid=".bkint($d->employeesid)."
+			LIMIT 1
+		";
+		return $db->query_write($sql);
+	}
+	
+	public static function RemoveEmployees(Ab_Database $db, $d){
+		$sql = "
+			UPDATE ".$db->prefix."un_employees
+			SET
+				remove=".bkint($d->remove)."
+			WHERE employeesid=".bkint($d->employeesid)."
+			LIMIT 1
+		";
+		return $db->query_write($sql);
+	}
 }
 
 ?>
