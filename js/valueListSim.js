@@ -15,6 +15,9 @@ Component.entryPoint = function(NS){
         onInitAppWidget: function(err, appInstance){
         	
         },
+        destroy: function(){
+        	this.template.setHTML('values', "");
+        },
         reloadList: function(){
         	var data = {
         		attrid: this.get('currentAttrid'),

@@ -91,11 +91,13 @@ class University extends AbricosApplication {
     public function AttributeList($d){
     	$d->sectionid = intval($d->sectionid);
     	$d->isValue = intval($d->isValue);
+    	$d->complexid = intval($d->complexid);
 
     	$list = $this->models->InstanceClass('AttributeList');
-        
+    	
     	$rows = UniversityQuery::AttributeList($this->db, $d);
 	    	while (($d = $this->db->fetch_array($rows))){
+	    	
 	    		$list->Add($this->models->InstanceClass('AttributeItem', $d));
 	    	}
 	    	

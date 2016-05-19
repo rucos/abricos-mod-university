@@ -26,7 +26,11 @@ class UniversityQuery {
 		$where = "sectionid=".bkint($d->sectionid)." AND remove=0";
 
 		if($d->isValue){
-			$where .= " AND typeattribute IN (1, 2)";
+			if($d->complexid !== 0){
+				$where .= " AND typeattribute IN (3, 4) AND complexid=".bkint($d->complexid)."";
+			} else {
+				$where .= " AND typeattribute IN (1, 2)";
+			}
 		}
 		
 		$sql = "

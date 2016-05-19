@@ -20,10 +20,11 @@ Component.entryPoint = function(NS){
                 this.initCallbackFire();
             }, this);
         },
-        dataAttributeList: function(sectionid, isValue){
+        dataAttributeList: function(sectionid, isValue, complexid){
     		return {
     			sectionid: sectionid,
-    			isValue: isValue
+    			isValue: isValue,
+    			complexid: complexid || 0
     		};
     	},
         setDate: function(date){

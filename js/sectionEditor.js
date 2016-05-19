@@ -23,7 +23,8 @@ Component.entryPoint = function(NS){
 		    	this.reloadList();
 		    	
 		    	this.valueList = new NS.ValueListWidget({
-	                srcNode: tp.gel('valueList')
+	                srcNode: tp.gel('valueList'),
+	                sectionid: this.get('sectionid')
 	            });
         },
         destructor: function(){

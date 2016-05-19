@@ -13,15 +13,15 @@ Component.entryPoint = function(NS){
 
     NS.ValueListWidget = Y.Base.create('valueListWidget', SYS.AppWidget, [], {
         onInitAppWidget: function(err, appInstance){
-        	var tp = this.template,
-        		src = tp.gel('values'); 
-        	
+        	var tp = this.template;
+        		 
         	this.valueSimple = new NS.ValueListSimpleWidget({
-                srcNode: src
+                srcNode: tp.gel('valuesSimple')
     		});
         	
         	this.valueComplex = new NS.ValueListComplexWidget({
-                srcNode: src
+                srcNode: tp.gel('valuesComplex'),
+                sectionid: this.get('sectionid')
     		});
         },
         destructor: function(){
@@ -33,12 +33,15 @@ Component.entryPoint = function(NS){
             }
         },
         reloadList: function(){
-        	var type = this.get('currentType');
+        	var tp = this.template,
+        		type = this.get('currentType');
     	
 	    	if(type == 'simple'){
 	    		this.renderList(this.valueSimple, type);
+	    		this.valueComplex.destroy();
 	    	} else {
 	    		this.renderList(this.valueComplex, type);
+	    		this.valueSimple.destroy();
 	    	}
 	    	
         }, 
@@ -55,6 +58,7 @@ Component.entryPoint = function(NS){
         	component: {value: COMPONENT},
             templateBlockName: {value: 'widget'},
             valueAttributeList: {value: null},
+            sectionid: {value: null},
             currentAttrid: {value: null},
             currentType: {value: null}
         }
