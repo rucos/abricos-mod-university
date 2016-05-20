@@ -216,8 +216,7 @@ class Section {
 		
 		$rows = "
 			(".$idSection.", ".$complexid.", 0, 'composite', 'Образовательная программа', '', 'program'),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о реализуемых уровнях образования', 'EduLevel', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о сроке действия государственной аккредитации образовательной программы', 'DateEnd', '')
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о реализуемых уровнях образования', 'EduLevel', '')
 		";
 		$this->AppendUnAttr($rows);
 		
@@ -230,6 +229,11 @@ class Section {
 			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'Очная форма обучения', 'EduForm', ''),
 			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'Очно-заочная форма обучения', 'EduForm', ''),
 			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'Заочная форма обучения', 'EduForm', '')
+		";
+		$this->AppendUnAttr($rows);
+		
+		$rows = "
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о сроке действия государственной аккредитации образовательной программы', 'DateEnd', '')
 		";
 		$this->AppendUnAttr($rows);
 		
@@ -262,8 +266,7 @@ class Section {
 		
 		$rows = "
 			(".$idSection.", ".$complexid.", 0, 'composite', 'Наименование специальности/направления подготовки', '', 'program'),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Форма обучения', '', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Средняя сумма набранных баллов по всем вступительным испытаниям', '', '')
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Форма обучения', '', '')
 		";
 		$this->AppendUnAttr($rows);
 		
@@ -277,6 +280,11 @@ class Section {
 			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'за счет бюджетов субъектов Российской Федерации', 'BudgAmount', ''),
 			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'за счет местных бюджетов', 'BudgAmount', ''),
 			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'за счет средств физических и (или) юридических лиц', 'PaidAmount', '')
+		";
+		$this->AppendUnAttr($rows);
+		
+		$rows = "
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Средняя сумма набранных баллов по всем вступительным испытаниям', '', '')
 		";
 		$this->AppendUnAttr($rows);
 		
