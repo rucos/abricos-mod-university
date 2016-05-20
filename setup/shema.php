@@ -45,7 +45,7 @@ if ($updateManager->isInstall('0.1.0')){
 				nameattribute TEXT NOT NULL default '' COMMENT 'Название атрибута',
 				applyattribute varchar(255) NOT NULL default '' COMMENT 'Применяемый атрибут',
 				tablename varchar(50) NOT NULL default '' COMMENT 'Связующая таблица',
-				locate tinyint(1) unsigned NOT NULL default 0 COMMENT 'Показывать?',
+				locate tinyint(1) unsigned NOT NULL default 1 COMMENT 'Показывать?',
 				remove tinyint(1) unsigned NOT NULL default 0 COMMENT 'Удален?',
 				PRIMARY KEY (attributeid)
 			)".$charset
@@ -60,6 +60,7 @@ if ($updateManager->isInstall('0.1.0')){
 			CREATE TABLE IF NOT EXISTS ".$pfx."un_value(
 				valueid int(10) unsigned NOT NULL auto_increment,
 				attributeid int(10) unsigned NOT NULL default 0 COMMENT 'id атрибута',
+				numrow tinyint(2) unsigned NOT NULL default 0 COMMENT 'позиция значения в таблице',
 				relationid int(10) unsigned NOT NULL default 0 COMMENT 'id поля связующей таблицы',
 				value TEXT NOT NULL default '' COMMENT 'Значение атрибута',
 				nameurl TEXT NOT NULL default '' COMMENT 'Название ссылки',
