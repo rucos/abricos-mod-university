@@ -16,22 +16,20 @@ Component.entryPoint = function(NS){
         onInitAppWidget: function(err, appInstance){
         	
         },
-        showModal: function(view, id){
+        showModal: function(view, valueItem){
         	var tp = this.template,
         		replaceObj = {
-        			id: id,
         			hide: '',
         			act: 'Добавить',
         			none: 'block'
         		};
         	
-        	if(id > 0){
-        		replaceObj.act = 'Именить';
+        	if(valueItem.id > 0){
+        		replaceObj.act = 'Изменить';
         		replaceObj.hide = 'class="hide"';
-        		//запрос
-        	} else {
-        		this.set('valueList', this.constrData());
         	}
+        	
+        	this.set('valueItem', valueItem);
         	
         	tp.setHTML('modal', tp.replace('modalFormAdd', replaceObj));
         	
@@ -45,28 +43,28 @@ Component.entryPoint = function(NS){
 	        	tp.setHTML('modalFormAdd.form', replace);
         },
         replaceForm: function(){
-        	var valueList = this.get('valueList'),
+        	var valueItem = this.get('valueItem'),
         		view = this.get('view');
-        		
-        	return this.template.replace(view, valueList);
+        	console.log(view);
+        	return this.template.replace(view, valueItem);
         },
         actValue: function(atrid){
-        	var valueList = this.get('valueList'),
+        	var valueItem = this.get('valueItem'),
         		view = this.get('view'),
         		tp = this.template;
         	
         	if(view == 'file'){
-        		valueList.nameurl = tp.gel('file.nameurl').value;
-        		valueList.namedoc = tp.gel('file.namedoc').value;
-        		valueList.subject = tp.gel('file.subject').value;
-        		valueList.datedoc = tp.gel('file.datedoc').value;
-        		valueList.folder = tp.gel('file.folder').value;
+        		valueItem.nameurl = tp.gel('file.nameurl').value;
+        		valueItem.namedoc = tp.gel('file.namedoc').value;
+        		valueItem.subject = tp.gel('file.subject').value;
+        		valueItem.datedoc = tp.gel('file.datedoc').value;
+        		valueItem.folder = tp.gel('file.folder').value;
         	} else {
-        		valueList.value = tp.gel('value.value').value;
+        		valueItem.value = tp.gel('value.value').value;
         	}
-        	valueList.atrid = atrid;
+        	valueItem.atrid = atrid;
         	
-        	this.reqActValue(valueList);
+        	this.reqActValue(valueItem);
         },
         reqActValue: function(data){
         	this.set('waiting', true);
@@ -77,9 +75,9 @@ Component.entryPoint = function(NS){
 		        		}
 	        	}, this);
         },
-        constrData: function(){
+        constrData: function(id){
         	return {
-        		id: 0,
+        		id: id,
         		value: '',
         		nameurl: '',
         		namedoc: '',
@@ -101,7 +99,7 @@ Component.entryPoint = function(NS){
         ATTRS: {
         	component: {value: COMPONENT},
             templateBlockName: {value: 'widget,modalFormAdd,value,file'},
-            valueList: {value: null},
+            valueItem: {value: null},
             view: ''
         },
         CLICKS: {
