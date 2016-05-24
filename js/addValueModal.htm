@@ -1,0 +1,67 @@
+<!--{widget}-->
+<div id="{i#modal}"></div>
+
+<!--{modalFormAdd}-->
+<div class="modal fade in"  style="display: {v#none};">
+  <div class="modal-dialog">
+    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-click="addValue-cancel"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title">Добавление/изменение значения</h4>
+	      </div>
+	      <div class="modal-body">
+	    		<div {v#hide} data-click="checkView">
+					<div class="btn-group" id="{i#btnView}">
+						<button type="button" class="btn btn-default active" data-view="value">Простое значение</button>
+						<button type="button" class="btn btn-default" data-view="file">Файл</button>
+					</div>
+					<hr>
+				</div>
+				<div id="{i#form}"></div>
+		</div>
+		<div class="modal-footer">
+    		<button data-act="{v#id}" data-click="addValue" class="btn btn-primary" data-wait="disable">
+		       		 {v#act}
+		    </button>
+		    <button data-click="addValue-cancel" class="btn btn-default" data-wait="disable">
+					 Отмена
+			</button>
+      </div>
+      </div>
+   </div>
+</div>
+
+<!--{value}-->
+<div class="form-group">
+	  <label>Значение</label>
+ 		<textarea id="{i#value}" class="form-control" rows="5">{v#value}</textarea>
+</div>
+
+<!--{file}-->
+<div class="form-group">
+  <label>Название ссылки</label>
+  	<input id="{i#nameurl}" class="form-control" value="{v#nameurl}">
+</div>
+<div class="form-group">
+  <label>Название документа</label>
+  	<input id="{i#namedoc}" class="form-control" value="{v#namedoc}">
+</div>
+<div class="form-group">
+  <label>Название предмета</label>
+  	<input id="{i#subject}" class="form-control" value="{v#subject}">
+</div>
+<div class="form-group">
+  <label>Дата утверждения</label>
+  	<input id="{i#datedoc}" type="date" class="form-control" value="{v#datedoc}">
+</div>
+<div class="form-group">
+  <label>Название директории</label>
+  	<input id="{i#folder}" class="form-control" value="{v#folder}">
+</div>
+<form action="/university/upload/1/1" method="post" enctype="multipart/form-data">
+	<div class="form-group">
+	    <label for="exampleInputFile">File input</label>
+	    <input type="file" id="exampleInputFile" name="uploadfile">
+	    <input type="submit" value="Загрузить">
+	</div>
+</form>
