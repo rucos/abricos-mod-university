@@ -3,7 +3,7 @@
 <div id="{i#values}"></div>
 
 <!--{table}-->
-<button type="button" class="btn btn-default" data-click="modal-show" data-id="0">+Добавить</button>
+<button type="button" class="btn btn-default" data-click="modal-show" data-id="0" data-view="value">+Добавить</button>
 <table class="table table-striped table-hover">
     <thead>
 	    <tr>
@@ -20,14 +20,14 @@
 <tr>
 	<td>{v#value}</td>
 	<td>
-		<button data-id="{v#id}" data-click="actValue-show" class="btn btn-default btn-xs" data-wait="disable">Править</button>
+		<button data-id="{v#id}" data-view="{v#view}" data-click="modal-show" class="btn btn-default btn-xs" data-wait="disable">Править</button>
 	</td>
 	<td>
 		 <button id="{i#remove}-{v#id}" data-click="remove-show" type="button" class="btn btn-default btn-xs" data-id="{v#id}" data-wait="disable">
             {v#actremove}
         </button>
          <div id="{i#removegroup}-{v#id}"  class="btn-group hide">
-            <button data-click="remove" type="button" class="btn btn-danger btn-xs" data-id="{v#id}" data-wait="disable">
+            <button data-click="removeValue" type="button" class="btn btn-danger btn-xs" data-id="{v#id}" data-wait="disable">
                 Удалить?
             </button>
             <button data-click="remove-cancel" type="button" class="btn btn-default btn-xs" data-id="{v#id}" data-wait="disable">
@@ -36,3 +36,6 @@
         </div>
 	</td>
 </tr>
+
+<!--{refer}-->
+<a href="/data/section/{v#folder}/{v#namedoc}" target="_blank">{v#nameurl}</a>
