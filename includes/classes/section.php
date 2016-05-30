@@ -16,11 +16,15 @@ class Section {
 
 	private $menu = null;
 	
+	public static $docroot;
+	
 	private $db = null;
 	private $pfx = null;
 	private $sectionid = null; 
 	
 	public function __construct(){
+		$this->docroot = $_SERVER['DOCUMENT_ROOT'];
+		
 		$this->menu = new stdClass();
 		$this->menu->common = 'Основные сведения';
 		$this->menu->struct = 'Структура и органы управления';
@@ -46,8 +50,11 @@ class Section {
 	}
 	
 	private function FillSection(){
+		mkdir($this->docroot."/data-edu", 0700);
+		
 		$i = 0;
 		foreach($this->menu as $menu => $name){
+			mkdir($this->docroot."/data-edu/".$menu, 0700);
 			$this->AppendSectionMenu($this->sectionid, $menu, $name, ++$i);
 		}
 	}

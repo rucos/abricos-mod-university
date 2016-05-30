@@ -31,7 +31,7 @@ Component.entryPoint = function(NS){
 	        		this.set('waiting', false);
 		        		if(!err){
 		        			this.set('valueAttributeList', result.valueAttributeList);
-		        			this.renderList();
+		        				this.renderList();
 		        		}
 	        	}, this);
         },
@@ -41,9 +41,14 @@ Component.entryPoint = function(NS){
         		lst = "";
         	
 	        	valueList.each(function(val){
-	        		lst += tp.replace('row', [{
-	        			actremove: val.get('remove') ? 'Восстановить' : 'Удалить'
-	        		}, val.toJSON()]);
+	        		var id = val.get('id'),
+	        			value = val.get('value');
+
+	        		lst += tp.replace('row', {
+	        			id: id,
+	        			actremove: val.get('remove') ? 'Восстановить' : 'Удалить',
+	        			value:  value ? value : tp.replace('refer', val.toJSON())
+	        		});
 	        	}, this);
 	        	
 	        	tp.setHTML('values', tp.replace('table', {
@@ -70,7 +75,7 @@ Component.entryPoint = function(NS){
     }, {
         ATTRS: {
         	component: {value: COMPONENT},
-            templateBlockName: {value: 'widget,table,row'},
+            templateBlockName: {value: 'widget,table,row,refer'},
             valueAttributeList: {value: null},
             currentAttrid: {value: null},
             currentType: {value: null}
@@ -78,9 +83,13 @@ Component.entryPoint = function(NS){
         CLICKS: {
         	"modal-show": {
         		event: function(e){
-        			var id = e.target.getData('id');
+        			var targ = e.target,
+        				id = targ.getData('id'),
+        				view = targ.getData('view'),
+        				atrid = this.get('currentAttrid'),
+        				valueItem = this.addValueModal.constrData(id, atrid);
         			
-        			this.addValueModal.showModal('value', id);
+        			this.addValueModal.showModal(view, valueItem);
         		}
         	},
         	'remove-show': {
@@ -97,6 +106,17 @@ Component.entryPoint = function(NS){
         			this.removeShow(false, id);
         		}
         	},
+        	addValue: {
+        		event: function(e){
+        			var _self = this;
+        			
+        			this.addValueModal.actValue(function(respond){
+        				if(respond){
+        					_self.reloadList();
+        				}
+        			});
+        		}
+        	},
         	removeValue: {
         		event: function(e){
         			var id = e.target.getData('id');
@@ -109,14 +129,6 @@ Component.entryPoint = function(NS){
         			var id = e.target.getData('id');
         			
         			this.reqRemoveValue(id, 0);
-        		}
-        	},
-        	addValue: {
-        		event: function(e){
-        			var atrid = this.get('currentAttrid');
-        			
-        			this.addValueModal.actValue(atrid);
-        			this.reloadList();
         		}
         	}
         }

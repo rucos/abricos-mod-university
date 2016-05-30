@@ -182,7 +182,6 @@ class University extends AbricosApplication {
     	$utmf = Abricos::TextParser(true);
     	 
     	$d->id = intval($d->id);
-    	$d->datedoc = intval($d->datedoc);
     	$d->folder = $utmf->Parser($d->folder);
     	$d->namedoc = $utmf->Parser($d->namedoc);
     	$d->nameurl = $utmf->Parser($d->nameurl);

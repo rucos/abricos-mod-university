@@ -45,10 +45,10 @@ Component.entryPoint = function(NS){
         replaceForm: function(){
         	var valueItem = this.get('valueItem'),
         		view = this.get('view');
-        	console.log(view);
+        	
         	return this.template.replace(view, valueItem);
         },
-        actValue: function(atrid){
+        actValue: function(respondCallback){
         	var valueItem = this.get('valueItem'),
         		view = this.get('view'),
         		tp = this.template;
@@ -59,25 +59,61 @@ Component.entryPoint = function(NS){
         		valueItem.subject = tp.gel('file.subject').value;
         		valueItem.datedoc = tp.gel('file.datedoc').value;
         		valueItem.folder = tp.gel('file.folder').value;
+        		valueItem.file = tp.gel('file.exampleInputFile').files[0];
+        		
+        			return this.reqActFiles(valueItem, respondCallback);
         	} else {
         		valueItem.value = tp.gel('value.value').value;
+        		return this.reqActValue(valueItem, respondCallback);
         	}
-        	valueItem.atrid = atrid;
-        	
-        	this.reqActValue(valueItem);
         },
-        reqActValue: function(data){
+        reqActFiles: function(valueItem, respondCallback){
+        	var tp = this.template,
+        		form = new FormData(),
+        		xhr = new XMLHttpRequest(),
+        		_self = this;
+        	
+        	for(var i in valueItem){
+        		form.append(i, valueItem[i]);
+        	}
+			xhr.open("post", "/university/upload/", true);
+			xhr.send(form);
+				
+			xhr.onload = function() {
+				var str = "" + xhr.response,
+					result = str.match(/\$\d\d\d/)[0],
+					respond = _self.parseError(result);
+				
+				respondCallback(respond);
+			};
+        },
+        reqActValue: function(data, respondCallback){
         	this.set('waiting', true);
 	        	this.get('appInstance').actValueAttribute(data, function(err, result){
 	        		this.set('waiting', false);
 		        		if(!err){
 		        			this.template.setHTML('modal', '');
+		        				respondCallback(true);
 		        		}
 	        	}, this);
         },
-        constrData: function(id){
+        parseError: function(result){
+        	
+			switch(result){
+				case '$200':
+					this.template.setHTML('modal', '');
+						return true;
+				case '$100': 
+					alert('Не верно заполнена форма');
+						break;
+			}
+			
+			return false;
+        },
+        constrData: function(id, atrid){
         	return {
         		id: id,
+        		atrid: atrid,
         		value: '',
         		nameurl: '',
         		namedoc: '',
