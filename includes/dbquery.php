@@ -123,13 +123,14 @@ class UniversityQuery {
 	
 	public static function AppendValueAttribute(Ab_Database $db, $d){
 		$sql = "
-			INSERT INTO ".$db->prefix."un_value(attributeid, value, nameurl, namedoc, subject, folder)
+			INSERT INTO ".$db->prefix."un_value(attributeid, value, nameurl, namedoc, subject, datedoc, folder)
 			VALUES (
 					".bkint($d->atrid).",
 					'".bkstr($d->value)."',
 					'".bkstr($d->nameurl)."',
 					'".bkstr($d->namedoc)."',
 					'".bkstr($d->subject)."',
+					'".bkstr($d->datedoc)."',
 					'".bkstr($d->folder)."'
 			)
 		";
@@ -146,6 +147,7 @@ class UniversityQuery {
 				nameurl='".bkstr($d->nameurl)."',
 				namedoc='".bkstr($d->namedoc)."',
 				subject='".bkstr($d->subject)."',
+				datedoc='".bkstr($d->datedoc)."',
 				folder='".bkstr($d->folder)."'
 			WHERE valueid=".bkint($d->id)."
 			LIMIT 1

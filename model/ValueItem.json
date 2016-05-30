@@ -26,13 +26,13 @@
       "type": "string",
       "json": "sj"
     },
-    "datedoc": {
-      "type": "int",
-      "json": "dd"
-    },
     "folder": {
       "type": "string",
       "json": "fld"
+    },
+    "datedoc": {
+      "type": "int",
+      "json": "dd"
     },
    	"remove": {
       "type": "int",

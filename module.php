@@ -31,6 +31,17 @@ class UniversityModule extends Ab_Module {
         return $this->_manager;
     }
     
+    public function GetContentName(){
+    	$dir = Abricos::$adress->dir;
+    	if (isset($dir[1])){
+    		switch ($dir[1]){
+    			case 'upload':
+    				return $dir[1];
+    		}
+    	}
+    	return '';
+    }
+    
     public function Bos_IsMenu(){
     	return true;
     }

@@ -63,7 +63,6 @@ Component.entryPoint = function(NS){
         		currArr = '',
         		col = '';
         		
-        	
         	for(var i in compositeObj){
         		col = 'rowspan=' + rowspan;
         		
@@ -111,7 +110,11 @@ Component.entryPoint = function(NS){
             rowSpan: {value: 0}
         },
         CLICKS: {
-        	
+        	'append-show': {
+        		event: function(e){
+        			
+        		}
+        	}
         }
     });
 };

@@ -174,21 +174,22 @@ class University extends AbricosApplication {
     }
     
     public function ActValueAttributeToJSON($d){
+    	$utmf = Abricos::TextParser(true);
+    	
+    	$d->id = intval($d->id);
+    	$d->atrid = intval($d->atrid);
+    	$d->value = $utmf->Parser($d->value);
+    	$d->datedoc = "";
+    	$d->folder = "";
+    	$d->namedoc = "";
+    	$d->nameurl = "";
+    	$d->subject = "";
+    	
     	$res = $this->ActValueAttribute($d);
     	return $this->ResultToJSON('actValueAttribute', $res);
     }
     
     public function ActValueAttribute($d){
-    	$utmf = Abricos::TextParser(true);
-    	 
-    	$d->id = intval($d->id);
-    	$d->folder = $utmf->Parser($d->folder);
-    	$d->namedoc = $utmf->Parser($d->namedoc);
-    	$d->nameurl = $utmf->Parser($d->nameurl);
-    	$d->subject = $utmf->Parser($d->subject);
-    	$d->value = $utmf->Parser($d->value);
-    	$d->atrid = intval($d->atrid);
-    	
 		if($d->id > 0){
 			return UniversityQuery::EditValueAttribute($this->db, $d);
 		} else {

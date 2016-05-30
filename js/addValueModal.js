@@ -64,7 +64,7 @@ Component.entryPoint = function(NS){
         			return this.reqActFiles(valueItem, respondCallback);
         	} else {
         		valueItem.value = tp.gel('value.value').value;
-        		return this.reqActValue(valueItem, respondCallback);
+        			return this.reqActValue(valueItem, respondCallback);
         	}
         },
         reqActFiles: function(valueItem, respondCallback){
@@ -79,9 +79,9 @@ Component.entryPoint = function(NS){
 			xhr.open("post", "/university/upload/", true);
 			xhr.send(form);
 				
-			xhr.onload = function() {
+			xhr.onload = function(){
 				var str = "" + xhr.response,
-					result = str.match(/\$\d\d\d/)[0],
+					result = str.match(/\$\d+/)[0],
 					respond = _self.parseError(result);
 				
 				respondCallback(respond);
@@ -98,7 +98,6 @@ Component.entryPoint = function(NS){
 	        	}, this);
         },
         parseError: function(result){
-        	
 			switch(result){
 				case '$200':
 					this.template.setHTML('modal', '');
