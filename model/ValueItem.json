@@ -31,7 +31,7 @@
       "json": "fld"
     },
     "datedoc": {
-      "type": "int",
+      "type": "string",
       "json": "dd"
     },
    	"remove": {

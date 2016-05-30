@@ -21,6 +21,42 @@ class UniversityQuery {
 		return $db->query_read($sql);
 	}
 	
+	public static function SectionItem(Ab_Database $db, $sectionid){
+		
+		$sql = "
+			SELECT
+					s.sectionid as id,
+					m.name,
+					m.title
+			FROM ".$db->prefix."sys_menu m
+			INNER JOIN ".$db->prefix."un_section s ON m.menuid=s.menuid
+			WHERE s.sectionid=".bkint($sectionid)."
+			LIMIT 1
+		";
+		return $db->query_first($sql);
+	}
+	
+	public static function SectionItemUpload(Ab_Database $db, $attrid){
+		$sql = "
+			SELECT
+					sectionid as sid
+			FROM ".$db->prefix."un_attribute
+			WHERE attributeid=".bkint($attrid)."
+			LIMIT 1
+		";
+		$sectionid = $db->query_first($sql);
+		
+		$sql = "
+			SELECT
+					m.name
+			FROM ".$db->prefix."sys_menu m
+			INNER JOIN ".$db->prefix."un_section s ON m.menuid=s.menuid
+			WHERE s.sectionid=".$sectionid['sid']."
+			LIMIT 1
+		";
+		return $db->query_first($sql);
+	}
+	
 	public static function AttributeList(Ab_Database $db, $d){
 		
 		$where = "sectionid=".bkint($d->sectionid)." AND remove=0";

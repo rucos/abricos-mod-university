@@ -13,13 +13,8 @@ Component.entryPoint = function(NS){
 
     NS.SectionEditorWidget = Y.Base.create('sectionEditorWidget', SYS.AppWidget, [], {
         onInitAppWidget: function(err, appInstance){
-           	var tp = this.template,
-           		sectionName = appInstance.get('currentSection');
+           	var tp = this.template;
            	
-		    	tp.setHTML('panelHead', tp.replace('panelHead', {
-		    		sectionName: sectionName
-		    	}));
-		    	
 		    	this.reloadList();
 		    	
 		    	this.valueList = new NS.ValueListWidget({
@@ -42,9 +37,10 @@ Component.entryPoint = function(NS){
 	        		this.set('waiting', false);
 	        			if(!err){
 	        				this.set('attributeList', result.attributeList);
+	        				this.set('title', result.sectionItem.get('title'))
+	        				this.valueList.set('nameSection', result.sectionItem.get('name'));
 	        					this.renderList();
 	        			}
-	        		
 	        	}, this);
         },
         renderList: function(){
@@ -52,6 +48,7 @@ Component.entryPoint = function(NS){
         		tp = this.template,
         		lst = "",
         		n = 0;
+        	
         	
         	attributeList.each(function(attr){
         			lst += tp.replace('attributeItem', [{
@@ -62,6 +59,10 @@ Component.entryPoint = function(NS){
         	tp.setHTML('attributeList', tp.replace('attributeList', {
         		li: lst
         	}));
+        	
+        	tp.setHTML('panelHead', tp.replace('panelHead', {
+        		sectionName: this.get('title')
+        	}))
         },
         setActive: function(targ){
         	targ.classList.add('active');
@@ -79,7 +80,8 @@ Component.entryPoint = function(NS){
         	component: {value: COMPONENT},
             templateBlockName: {value: 'widget,panelHead,attributeList,attributeItem'},
             sectionid: {value: 0},
-            attributeList: {value: null}
+            attributeList: {value: null},
+            title: {value: ''}
         },
         CLICKS: {
         	close: {

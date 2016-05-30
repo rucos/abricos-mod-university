@@ -83,13 +83,26 @@ class University extends AbricosApplication {
     	return $list;
     }
     
+    public function SectionItem($sectionid){
+    	$d = UniversityQuery::SectionItem($this->db, $sectionid);
+    	$res = $this->models->InstanceClass('SectionItem', $d);
+    	 
+    	return $res;
+    }
+    
     public function AttributeListToJSON($d){
+    	$d->sectionid = intval($d->sectionid);
+    	
     	$res = $this->AttributeList($d);
-    	return $this->ResultToJSON('attributeList', $res);
+    	$section = $this->SectionItem($d->sectionid);
+    	
+    	return $this->ImplodeJSON(
+    			$this->ResultToJSON('attributeList', $res),
+    			$this->ResultToJSON('sectionItem', $section)
+    	);
     }
     
     public function AttributeList($d){
-    	$d->sectionid = intval($d->sectionid);
     	$d->isValue = intval($d->isValue);
     	$d->complexid = intval($d->complexid);
 
@@ -97,10 +110,8 @@ class University extends AbricosApplication {
     	
     	$rows = UniversityQuery::AttributeList($this->db, $d);
 	    	while (($d = $this->db->fetch_array($rows))){
-	    	
 	    		$list->Add($this->models->InstanceClass('AttributeItem', $d));
 	    	}
-	    	
 	    	return $list;
     }
     
@@ -329,6 +340,12 @@ class University extends AbricosApplication {
     	}
     	return $rows;
     }
+    
+    public function SectionItemUpload($attrid){
+    	$menu = UniversityQuery::SectionItemUpload($this->db, $attrid); 
+    	return $menu['name'];
+    }
+    
     
 }
 

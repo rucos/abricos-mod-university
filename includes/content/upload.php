@@ -17,43 +17,54 @@ $resp =  '200';
 $data = new stdClass();
 	$data->id = intval($_POST['id']);
 	$data->atrid = intval($_POST['atrid']);
-	$data->value = "";
 	$data->nameurl = $utmf->Parser($_POST['nameurl']);
 	$data->namedoc = $utmf->Parser($_POST['namedoc']);
 	$data->subject = $utmf->Parser($_POST['subject']);
 	$data->folder = $utmf->Parser($_POST['folder']);
-	$data->datedoc = $_POST['datedoc'];
+	$data->datedoc = $utmf->Parser($_POST['datedoc']);
 	
-	print_r();
-	if(isset($_FILES['file']['tmp_name'])){
-		$modManager->GetUniversity()->ActValueAttribute($data);
+	$file = $_FILES['file']['tmp_name'];
+	
+	if(isset($file)){
+		$error = $_FILES['file']['error'];
+		$name = $_FILES['file']['name'];
+		
+		if($error > 0){
+			$resp = $error;
+		} else {
+			$typeDoc = '';
+			$whitelist = array(".pdf", ".doc", ".docx", ".xls", ".xlsx");
+			
+			foreach($whitelist as $item){
+				if(preg_match("/$item\$/i", $name)) {
+					$typeDoc = $item;
+						break;
+				} 
+			}
+			
+			if($typeDoc !== ''){
+				$menu = $modManager->GetUniversity()->SectionItemUpload($data->atrid);
+					
+				$datedoc = explode('-', $data->datedoc);
+				$dateDocStr = $datedoc[2].".".$datedoc[1].".".$datedoc[0];
+					
+				$uploadfile = "data-edu/".$menu."/".$data->namedoc."_".$dateDocStr.$typeDoc;
+					
+				move_uploaded_file($file, $uploadfile);
+				
+				$data->value = $typeDoc;
+				$modManager->GetUniversity()->ActValueAttribute($data);
+			} else {
+				$resp = '9';
+			}
+		}
 	} else {
-		$resp =  '100';
+		$resp =  '10';
 	}
 	
-// if(!isset($dir[2])){
-// 	return;
-// }
-
-// $idValue = isset($dir[3]) ? $dir[3] : 0;
-
-// if($idValue > 0){
-// 	$act = 'Изменить';
-// } else {
-// 	$act = 'Добавить';
-// }
-
-// $uploadfile = 'data.pdf';
-// // print_r($_POST['folder']);
-// if(!isset($_FILES['file']['tmp_name'])){
-// 	$resp =  '100';
-// } 
-// move_uploaded_file($_FILES['file1']['tmp_name'], $uploadfile);
-
 $brick = Brick::$builder->brick;
 $v = &$brick->param->var;
 
-	
 $brick->content = Brick::ReplaceVarByData($brick->content, array(
 			'respon' => $resp
 		));

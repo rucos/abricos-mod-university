@@ -39,6 +39,10 @@ Component.entryPoint = function(NS){
     			attribute: false,
     			type: 'modelList:SectionList'
     		},
+        	sectionItem: {
+      			attribute: false,
+    			type: 'model:SectionItem'
+    		},
     		attributeList: {
     			args: ['data'],
     			attribute: false,
@@ -92,13 +96,13 @@ Component.entryPoint = function(NS){
         ATTRS: {
         	isLoadAppStructure: {value: true},
         	SectionList: {value: NS.SectionList},
+        	SectionItem: {value: NS.SectionItem},
         	AttributeList: {value: NS.AttributeList},
         	ValueAttributeList: {value: NS.ValueAttributeList},
         	ProgramList: {value: NS.ProgramList},
         	ProgramItem: {value: NS.ProgramItem},
         	ProgramLevelList: {value: NS.ProgramLevelList},
-        	EmployeesList: {value: NS.EmployeesList},
-        	currentSection: {value: ''}
+        	EmployeesList: {value: NS.EmployeesList}
         },
         URLS: {
         	ws: "#app={C#MODNAMEURI}/wspace/ws/",

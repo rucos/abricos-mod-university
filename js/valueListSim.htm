@@ -17,7 +17,7 @@
 <hr>
 
 <!--{row}-->
-<tr>
+<tr {v#cl}>
 	<td>{v#value}</td>
 	<td>
 		<button data-id="{v#id}" data-view="{v#view}" data-click="modal-show" class="btn btn-default btn-xs" data-wait="disable">Править</button>
@@ -38,4 +38,4 @@
 </tr>
 
 <!--{refer}-->
-<a href="/data/section/{v#folder}/{v#namedoc}" target="_blank">{v#nameurl}</a>
+<a href="{v#url}" target="_blank">{v#nameurl}</a>

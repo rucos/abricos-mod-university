@@ -102,8 +102,11 @@ Component.entryPoint = function(NS){
 				case '$200':
 					this.template.setHTML('modal', '');
 						return true;
-				case '$100': 
-					alert('Не верно заполнена форма');
+				case '$9': 
+					alert('Не верный тип файла');
+						break;
+				case '$10': 
+					alert('Укажите документ для загрузки');
 						break;
 			}
 			

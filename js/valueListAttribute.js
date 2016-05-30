@@ -33,23 +33,24 @@ Component.entryPoint = function(NS){
             }
         },
         reloadList: function(){
-        	var tp = this.template,
-        		type = this.get('currentType');
-    	
+        	var type = this.get('currentType');
+        	
 	    	if(type == 'simple'){
-	    		this.renderList(this.valueSimple, type);
+	    		this.renderList(this.valueSimple);
 	    		this.valueComplex.destroy();
 	    	} else {
-	    		this.renderList(this.valueComplex, type);
+	    		this.renderList(this.valueComplex);
 	    		this.valueSimple.destroy();
 	    	}
-	    	
         }, 
         renderList: function(value, type){
-        	var attrid = this.get('currentAttrid');
+        	var attrid = this.get('currentAttrid'),
+	        	type = this.get('currentType'),
+	    		nameSection = this.get('nameSection');
         	
-        	value.set('currentType', type);
         	value.set('currentAttrid', attrid);
+        	value.set('currentType', type);
+        	value.set('nameSection', nameSection);
         	
         	value.reloadList();
         }
@@ -60,7 +61,8 @@ Component.entryPoint = function(NS){
             valueAttributeList: {value: null},
             sectionid: {value: null},
             currentAttrid: {value: null},
-            currentType: {value: null}
+            currentType: {value: null},
+            nameSection: {value: ''}
         }
     });
 };

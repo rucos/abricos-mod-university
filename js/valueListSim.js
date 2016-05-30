@@ -38,17 +38,35 @@ Component.entryPoint = function(NS){
         renderList: function(){
         	var valueList = this.get('valueAttributeList'),
         		tp = this.template,
-        		lst = "";
+        		lst = "",
+        		url = '/data-edu/' + this.get('nameSection') + '/';
         	
 	        	valueList.each(function(val){
-	        		var id = val.get('id'),
-	        			value = val.get('value');
-
-	        		lst += tp.replace('row', {
-	        			id: id,
-	        			actremove: val.get('remove') ? 'Восстановить' : 'Удалить',
-	        			value:  value ? value : tp.replace('refer', val.toJSON())
-	        		});
+	        		var namedoc = val.get('namedoc'),
+	        			value = val.get('value'),
+	        			remove = val.get('remove'),
+	        			objReplace = {
+	        				id: val.get('id')
+	        			};
+	        		
+	        		if(remove){
+	        			objReplace.actremove = 'Восстановить';
+	        			objReplace.cl = 'class="danger"';
+	        			
+	        		} else {
+	        			objReplace.actremove = 'Удалить';
+	        			objReplace.cl = '';
+	        		}
+	        		
+	        		if(namedoc === ''){
+	        			objReplace.value = value;
+	        		} else {
+	        			objReplace.value = tp.replace('refer', {
+	        				nameurl: val.get('nameurl'),
+	        				url: url + val.get('namedoc') + "_" + val.get('datedoc') + value
+	        			});
+	        		}
+	        		lst += tp.replace('row', objReplace);
 	        	}, this);
 	        	
 	        	tp.setHTML('values', tp.replace('table', {
@@ -78,7 +96,8 @@ Component.entryPoint = function(NS){
             templateBlockName: {value: 'widget,table,row,refer'},
             valueAttributeList: {value: null},
             currentAttrid: {value: null},
-            currentType: {value: null}
+            currentType: {value: null},
+            nameSection: {value: ''}
         },
         CLICKS: {
         	"modal-show": {
