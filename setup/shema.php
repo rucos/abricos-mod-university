@@ -66,7 +66,7 @@ if ($updateManager->isInstall('0.1.0')){
 				nameurl TEXT NOT NULL default '' COMMENT 'Название ссылки',
 				namedoc varchar(255) NOT NULL default '' COMMENT 'Название документа',
 				subject varchar(255) default NULL COMMENT 'Название предмета',
-				datedoc int(10) unsigned NOT NULL default 0 COMMENT 'Дата утверждения',
+				datedoc DATE default NULL COMMENT 'Дата утверждения',
 				folder varchar(20) NOT NULL default '' COMMENT 'Название директории',
 				remove tinyint(1) unsigned NOT NULL default 0 COMMENT 'Удален?',
 				PRIMARY KEY (valueid)
