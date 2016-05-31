@@ -145,10 +145,6 @@ class UniversityQuery {
 					relationid,
 					value,
 					nameurl,
-					namedoc,
-					subject,
-					datedoc,
-					folder,
 					remove
 			FROM ".$db->prefix."un_value
 			WHERE attributeid=".bkint($attridd)."
@@ -159,15 +155,11 @@ class UniversityQuery {
 	
 	public static function AppendValueAttribute(Ab_Database $db, $d){
 		$sql = "
-			INSERT INTO ".$db->prefix."un_value(attributeid, value, nameurl, namedoc, subject, datedoc, folder)
+			INSERT INTO ".$db->prefix."un_value(attributeid, value, nameurl)
 			VALUES (
 					".bkint($d->atrid).",
 					'".bkstr($d->value)."',
-					'".bkstr($d->nameurl)."',
-					'".bkstr($d->namedoc)."',
-					'".bkstr($d->subject)."',
-					'".bkstr($d->datedoc)."',
-					'".bkstr($d->folder)."'
+					'".bkstr($d->nameurl)."'
 			)
 		";
 	
@@ -180,11 +172,7 @@ class UniversityQuery {
 			SET
 				attributeid=".bkint($d->atrid).",
 				value='".bkstr($d->value)."',
-				nameurl='".bkstr($d->nameurl)."',
-				namedoc='".bkstr($d->namedoc)."',
-				subject='".bkstr($d->subject)."',
-				datedoc='".bkstr($d->datedoc)."',
-				folder='".bkstr($d->folder)."'
+				nameurl='".bkstr($d->nameurl)."'
 			WHERE valueid=".bkint($d->id)."
 			LIMIT 1
 		";

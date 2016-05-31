@@ -18,22 +18,6 @@
       "type": "string",
       "json": "nu"
     },
-    "namedoc": {
-      "type": "string",
-      "json": "nd"
-    },
-    "subject": {
-      "type": "string",
-      "json": "sj"
-    },
-    "folder": {
-      "type": "string",
-      "json": "fld"
-    },
-    "datedoc": {
-      "type": "string",
-      "json": "dd"
-    },
    	"remove": {
       "type": "int",
       "json": "rm"

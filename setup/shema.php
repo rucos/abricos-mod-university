@@ -62,12 +62,8 @@ if ($updateManager->isInstall('0.1.0')){
 				attributeid int(10) unsigned NOT NULL default 0 COMMENT 'id атрибута',
 				numrow tinyint(2) unsigned NOT NULL default 0 COMMENT 'позиция значения в таблице',
 				relationid int(10) unsigned NOT NULL default 0 COMMENT 'id поля связующей таблицы',
-				value TEXT NOT NULL default '' COMMENT 'Значение атрибута',
+				value TEXT NOT NULL default '' COMMENT 'Значение атрибута/url',
 				nameurl TEXT NOT NULL default '' COMMENT 'Название ссылки',
-				namedoc varchar(255) NOT NULL default '' COMMENT 'Название документа',
-				subject varchar(255) default NULL COMMENT 'Название предмета',
-				datedoc DATE default NULL COMMENT 'Дата утверждения',
-				folder varchar(20) NOT NULL default '' COMMENT 'Название директории',
 				remove tinyint(1) unsigned NOT NULL default 0 COMMENT 'Удален?',
 				PRIMARY KEY (valueid)
 			)".$charset
