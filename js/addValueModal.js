@@ -84,12 +84,11 @@ Component.entryPoint = function(NS){
         		date = '';
         	
         	if(!!nameurl){
-        		date = value.match(/\d+\.\d+\.\d+/)[0].split('.');
-        		
         		arr[3] = nameurl;
-        		arr[4] = value.match(/\w+_/g)[0].slice(0, -1);
-        		arr[5] = date[2] + '-' + date[1] + '-' + date[0];
-        		
+        		value.replace(/(\w+_)(\d+)\.(\d+)\.(\d+)/, function(str, name, day, month, year){
+        			arr[4] = name.slice(0, -1);
+        			arr[5] = year + "-" + month + "-" + day;
+        		});
         	}
         	this.set('valueItem', this.constrData.apply(this, arr));
         	this.fillForm(true);
