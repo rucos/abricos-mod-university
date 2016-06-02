@@ -47,6 +47,8 @@ class University extends AbricosApplication {
 				return $this->RemoveAttributeToJSON($d);
 			case 'valueAttributeList':
 				return $this->ValueAttributeListToJSON($d->data);
+			case 'valueAttributeItem':
+				return $this->ValueAttributeItemToJSON($d->valueid);
 			case 'actValueAttribute':
 				return $this->ActValueAttributeToJSON($d->data);
 			case 'removeValueAttribute':
@@ -170,7 +172,6 @@ class University extends AbricosApplication {
     	}
     	
     	return $list;
-    	
     }
     
     public function RenderModelsValue($quory, $attridd){
@@ -182,6 +183,19 @@ class University extends AbricosApplication {
     		$list->Add($this->models->InstanceClass('ValueAttributeItem', $d));
     	}
     	return $list;
+    }
+    
+    public function ValueAttributeItemToJSON($valueid){
+    	$res = $this->ValueAttributeItem($valueid);
+    	return $this->ResultToJSON('valueAttributeItem', $res);
+    }
+    
+    public function ValueAttributeItem($valueid){
+    	$valueid = intval($valueid);
+    	
+    	$item = UniversityQuery::ValueAttributeItem($this->db, $valueid);
+    	
+    	return $this->models->InstanceClass('ValueAttributeItem', $item);
     }
     
     public function ActValueAttributeToJSON($d){

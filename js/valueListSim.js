@@ -38,11 +38,10 @@ Component.entryPoint = function(NS){
         renderList: function(){
         	var valueList = this.get('valueAttributeList'),
         		tp = this.template,
-        		lst = "",
-        		url = '/data-edu/' + this.get('nameSection') + '/';
+        		lst = "";
         	
 	        	valueList.each(function(val){
-	        		var namedoc = val.get('namedoc'),
+	        		var nameurl = val.get('nameurl'),
 	        			value = val.get('value'),
 	        			remove = val.get('remove'),
 	        			objReplace = {
@@ -52,19 +51,20 @@ Component.entryPoint = function(NS){
 	        		if(remove){
 	        			objReplace.actremove = 'Восстановить';
 	        			objReplace.cl = 'class="danger"';
-	        			
 	        		} else {
 	        			objReplace.actremove = 'Удалить';
 	        			objReplace.cl = '';
 	        		}
 	        		
-	        		if(namedoc === ''){
+	        		if(nameurl === ''){
 	        			objReplace.value = value;
+	        			objReplace.view = 'value';
 	        		} else {
 	        			objReplace.value = tp.replace('refer', {
-	        				nameurl: val.get('nameurl'),
-	        				url: url + val.get('namedoc') + "_" + val.get('datedoc') + value
+	        				nameurl: nameurl,
+	        				url: "/" + value
 	        			});
+	        			objReplace.view = 'file';
 	        		}
 	        		lst += tp.replace('row', objReplace);
 	        	}, this);
@@ -105,10 +105,9 @@ Component.entryPoint = function(NS){
         			var targ = e.target,
         				id = targ.getData('id'),
         				view = targ.getData('view'),
-        				atrid = this.get('currentAttrid'),
-        				valueItem = this.addValueModal.constrData(id, atrid);
+        				atrid = this.get('currentAttrid');
         			
-        			this.addValueModal.showModal(view, valueItem);
+        			this.addValueModal.showModal(id, atrid, view);
         		}
         	},
         	'remove-show': {

@@ -59,6 +59,11 @@ Component.entryPoint = function(NS){
     			attribute: false,
     			type: 'modelList:ValueAttributeList'
     		},
+    		valueAttributeItem: {
+    			args: ['valueid'],
+    			attribute: false,
+    			type: 'model:ValueAttributeItem'
+    		},
     		actValueAttribute: {
     			args: ['data'],
     			attribute: false
@@ -99,6 +104,7 @@ Component.entryPoint = function(NS){
         	SectionItem: {value: NS.SectionItem},
         	AttributeList: {value: NS.AttributeList},
         	ValueAttributeList: {value: NS.ValueAttributeList},
+        	ValueAttributeItem: {value: NS.ValueAttributeItem},
         	ProgramList: {value: NS.ProgramList},
         	ProgramItem: {value: NS.ProgramItem},
         	ProgramLevelList: {value: NS.ProgramLevelList},

@@ -18,10 +18,8 @@ $data = new stdClass();
 	$data->id = intval($_POST['id']);
 	$data->atrid = intval($_POST['atrid']);
 	$data->nameurl = $utmf->Parser($_POST['nameurl']);
-	$data->namedoc = $utmf->Parser($_POST['namedoc']);
-	$data->subject = $utmf->Parser($_POST['subject']);
-	$data->folder = $utmf->Parser($_POST['folder']);
-	$data->datedoc = $utmf->Parser($_POST['datedoc']);
+	$namedoc = $utmf->Parser($_POST['namedoc']);
+	$datedoc = explode('-', $utmf->Parser($_POST['datedoc']));
 	
 	$file = $_FILES['file']['tmp_name'];
 	
@@ -45,14 +43,13 @@ $data = new stdClass();
 			if($typeDoc !== ''){
 				$menu = $modManager->GetUniversity()->SectionItemUpload($data->atrid);
 					
-				$datedoc = explode('-', $data->datedoc);
 				$dateDocStr = $datedoc[2].".".$datedoc[1].".".$datedoc[0];
-					
-				$uploadfile = "data-edu/".$menu."/".$data->namedoc."_".$dateDocStr.$typeDoc;
-					
+				
+				$uploadfile = "data-edu/".$menu."/".$namedoc."_".$dateDocStr.$typeDoc;
+				
 				move_uploaded_file($file, $uploadfile);
 				
-				$data->value = $typeDoc;
+				$data->value = $uploadfile;
 				$modManager->GetUniversity()->ActValueAttribute($data);
 			} else {
 				$resp = '9';

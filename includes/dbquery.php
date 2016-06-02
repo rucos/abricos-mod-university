@@ -153,6 +153,23 @@ class UniversityQuery {
 		return $db->query_read($sql);
 	}
 	
+	public static function ValueAttributeItem(Ab_Database $db, $valueid){
+	
+		$sql = "
+			SELECT
+					valueid as id,
+					relationid,
+					value,
+					nameurl,
+					remove
+			FROM ".$db->prefix."un_value
+			WHERE valueid=".bkint($valueid)."
+			LIMIT 1
+		";
+	
+		return $db->query_first($sql);
+	}
+	
 	public static function AppendValueAttribute(Ab_Database $db, $d){
 		$sql = "
 			INSERT INTO ".$db->prefix."un_value(attributeid, value, nameurl)

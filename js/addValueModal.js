@@ -16,30 +16,29 @@ Component.entryPoint = function(NS){
         onInitAppWidget: function(err, appInstance){
         	
         },
-        showModal: function(view, valueItem){
+        showModal: function(valueid, atrid, view){
+        	this.set('view', view);
+
+        	if(valueid > 0){
+        		this.reqValueAttributeItem(valueid, atrid);
+        	} else {
+            	this.set('valueItem', this.constrData(valueid, atrid));
+            		this.fillForm();
+        	}
+        },
+        fillForm: function(isEdit, click){
         	var tp = this.template,
-        		replaceObj = {
-        			hide: '',
-        			act: 'Добавить',
-        			none: 'block'
-        		};
+        		replace = this.replaceForm(),
+        		arr = [];
         	
-        	if(valueItem.id > 0){
-        		replaceObj.act = 'Изменить';
-        		replaceObj.hide = 'class="hide"';
+        	if(isEdit){
+        		arr[0] = "class='hide'";
+        		arr[1] = "Изменить";
         	}
         	
-        	this.set('valueItem', valueItem);
-        	
-        	tp.setHTML('modal', tp.replace('modalFormAdd', replaceObj));
-        	
-        	this.set('view', view);
-        	this.fillForm();
-        },
-        fillForm: function(){
-        	var tp = this.template,
-        		replace = this.replaceForm();
-        	
+        	if(!click){
+        		tp.setHTML('modal', tp.replace('modalFormAdd', this.constrReplace.apply(null, arr)));
+        	}
 	        	tp.setHTML('modalFormAdd.form', replace);
         },
         replaceForm: function(){
@@ -56,9 +55,7 @@ Component.entryPoint = function(NS){
         	if(view == 'file'){
         		valueItem.nameurl = tp.gel('file.nameurl').value;
         		valueItem.namedoc = tp.gel('file.namedoc').value;
-        		valueItem.subject = tp.gel('file.subject').value;
         		valueItem.datedoc = tp.gel('file.datedoc').value;
-        		valueItem.folder = tp.gel('file.folder').value;
         		valueItem.file = tp.gel('file.exampleInputFile').files[0];
         		
         			return this.reqActFiles(valueItem, respondCallback);
@@ -66,6 +63,36 @@ Component.entryPoint = function(NS){
         		valueItem.value = tp.gel('value.value').value;
         			return this.reqActValue(valueItem, respondCallback);
         	}
+        },
+        reqValueAttributeItem: function(valueid, atrid){
+        	this.set('waiting', true);
+	        	this.get('appInstance').valueAttributeItem(valueid, function(err, result){
+	        		this.set('waiting', false);
+		        		if(!err){
+		        			this.set('valueAttributeItem', result.valueAttributeItem);
+			        		this.renderValueAttributeItem(atrid);
+				        }
+	        	}, this);
+        },
+        renderValueAttributeItem: function(atrid){
+        	var tp = this.template,
+        		valueAttributeItem = this.get('valueAttributeItem'),
+        		id = valueAttributeItem.get('id'),
+        		value = valueAttributeItem.get('value'),
+        		nameurl = valueAttributeItem.get('nameurl'),
+        		arr = [id, atrid, value],
+        		date = '';
+        	
+        	if(!!nameurl){
+        		date = value.match(/\d+\.\d+\.\d+/)[0].split('.');
+        		
+        		arr[3] = nameurl;
+        		arr[4] = value.match(/\w+_/g)[0].slice(0, -1);
+        		arr[5] = date[2] + '-' + date[1] + '-' + date[0];
+        		
+        	}
+        	this.set('valueItem', this.constrData.apply(this, arr));
+        	this.fillForm(true);
         },
         reqActFiles: function(valueItem, respondCallback){
         	var tp = this.template,
@@ -116,18 +143,23 @@ Component.entryPoint = function(NS){
         	return {
         		id: id,
         		atrid: atrid,
-        		value: '',
-        		nameurl: '',
-        		namedoc: '',
-        		subject: '',
-        		datedoc: '',
-        		folder: ''
+        		value: arguments[2] || '',
+        		nameurl: arguments[3] || '',
+        		namedoc: arguments[4] || '',
+        		datedoc: arguments[5] || ''
+        	};
+        },
+        constrReplace: function(hide, act){
+         	return {
+        		hide: hide || '',
+        		act: act || 'Добавить',
+        		none: 'block'
         	};
         },
         unSetActive: function(){
         	var tp = this.template,
         		collect = tp.gel('modalFormAdd.btnView').childNodes,
-        		len = collect.length; 
+        		len = collect.length;
         	
     		for(var i = 0; i < len; i++){
     			collect[i].classList.remove('active');
@@ -138,7 +170,8 @@ Component.entryPoint = function(NS){
         	component: {value: COMPONENT},
             templateBlockName: {value: 'widget,modalFormAdd,value,file'},
             valueItem: {value: null},
-            view: ''
+            view: '',
+            valueAttributeItem: {value: null}
         },
         CLICKS: {
         	'addValue-cancel': {
@@ -160,7 +193,7 @@ Component.entryPoint = function(NS){
         			button.classList.add('active');
         			
         			this.set('view', view);
-        			this.fillForm();
+        			this.fillForm(false, true);
         		}
         	}
         }
