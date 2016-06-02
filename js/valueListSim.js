@@ -62,7 +62,7 @@ Component.entryPoint = function(NS){
 	        		} else {
 	        			objReplace.value = tp.replace('refer', {
 	        				nameurl: nameurl,
-	        				url: "/" + value
+	        				url: value
 	        			});
 	        			objReplace.view = 'file';
 	        		}
