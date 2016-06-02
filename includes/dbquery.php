@@ -143,6 +143,7 @@ class UniversityQuery {
 			SELECT
 					valueid as id,
 					relationid,
+					view,
 					value,
 					nameurl,
 					remove
@@ -159,6 +160,7 @@ class UniversityQuery {
 			SELECT
 					valueid as id,
 					relationid,
+					view,
 					value,
 					nameurl,
 					remove
@@ -172,11 +174,12 @@ class UniversityQuery {
 	
 	public static function AppendValueAttribute(Ab_Database $db, $d){
 		$sql = "
-			INSERT INTO ".$db->prefix."un_value(attributeid, value, nameurl)
+			INSERT INTO ".$db->prefix."un_value(attributeid, value, nameurl, view)
 			VALUES (
 					".bkint($d->atrid).",
 					'".bkstr($d->value)."',
-					'".bkstr($d->nameurl)."'
+					'".bkstr($d->nameurl)."',
+					'".bkstr($d->view)."'
 			)
 		";
 	

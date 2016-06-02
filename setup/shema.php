@@ -62,6 +62,7 @@ if ($updateManager->isInstall('0.1.0')){
 				attributeid int(10) unsigned NOT NULL default 0 COMMENT 'id атрибута',
 				numrow tinyint(2) unsigned NOT NULL default 0 COMMENT 'позиция значения в таблице',
 				relationid int(10) unsigned NOT NULL default 0 COMMENT 'id поля связующей таблицы',
+				view enum('value','url','file') NOT NULL COMMENT 'Вид значения',
 				value TEXT NOT NULL default '' COMMENT 'Значение атрибута/url',
 				nameurl TEXT NOT NULL default '' COMMENT 'Название ссылки',
 				remove tinyint(1) unsigned NOT NULL default 0 COMMENT 'Удален?',

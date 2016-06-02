@@ -51,17 +51,23 @@ Component.entryPoint = function(NS){
         	var valueItem = this.get('valueItem'),
         		view = this.get('view'),
         		tp = this.template;
+
+        	valueItem.view = view;
         	
-        	if(view == 'file'){
-        		valueItem.nameurl = tp.gel('file.nameurl').value;
-        		valueItem.namedoc = tp.gel('file.namedoc').value;
-        		valueItem.datedoc = tp.gel('file.datedoc').value;
-        		valueItem.file = tp.gel('fileInput.inputFile').files[0];
-        		
-        			return this.reqActFiles(valueItem, respondCallback);
-        	} else {
-        		valueItem.value = tp.gel('value.value').value;
-        			return this.reqActValue(valueItem, respondCallback);
+        	switch(view){
+        		case 'file':
+        			valueItem.nameurl = tp.gel('file.nameurl').value;
+            		valueItem.namedoc = tp.gel('file.namedoc').value;
+            		valueItem.datedoc = tp.gel('file.datedoc').value;
+            		valueItem.file = tp.gel('fileInput.inputFile').files[0];
+            			return this.reqActFiles(valueItem, respondCallback);
+        		case 'url':
+            		valueItem.nameurl = tp.gel('url.nameurl').value;
+            		valueItem.value = tp.gel('url.value').value;
+        				return this.reqActValue(valueItem, respondCallback);
+        		case 'value':
+            		valueItem.value = tp.gel('value.value').value;
+            			return this.reqActValue(valueItem, respondCallback);
         	}
         },
         reqValueAttributeItem: function(valueid, atrid){
@@ -104,7 +110,7 @@ Component.entryPoint = function(NS){
         	}
 			xhr.open("post", "/university/upload/", true);
 			xhr.send(form);
-				
+			
 			xhr.onload = function(){
 				var str = "" + xhr.response,
 					result = str.match(/\$\d+/)[0],
@@ -174,7 +180,7 @@ Component.entryPoint = function(NS){
     }, {
         ATTRS: {
         	component: {value: COMPONENT},
-            templateBlockName: {value: 'widget,modalFormAdd,value,file,fileInput,refer'},
+            templateBlockName: {value: 'widget,modalFormAdd,value,file,url,fileInput,refer'},
             valueItem: {value: null},
             view: '',
             valueAttributeItem: {value: null}

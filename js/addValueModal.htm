@@ -13,6 +13,7 @@
 	    		<div {v#hide} data-click="checkView">
 					<div class="btn-group" id="{i#btnView}">
 						<button type="button" class="btn btn-default active" data-view="value">Простое значение</button>
+						<button type="button" class="btn btn-default" data-view="url">Ссылка</button>
 						<button type="button" class="btn btn-default" data-view="file">Файл</button>
 					</div>
 					<hr>
@@ -35,6 +36,16 @@
 <div class="form-group">
 	  <label>Значение</label>
  		<textarea id="{i#value}" class="form-control" rows="5">{v#value}</textarea>
+</div>
+
+<!--{url}-->
+<div class="form-group">
+	<label>Название ссылки</label>
+  		<input id="{i#nameurl}" class="form-control" value="{v#nameurl}">
+</div>
+<div class="form-group">
+  	<label>Cсылка на документ</label>
+  		<input id="{i#value}" class="form-control" value="{v#value}">
 </div>
 
 <!--{file}-->

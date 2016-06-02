@@ -204,7 +204,11 @@ class University extends AbricosApplication {
     	$d->id = intval($d->id);
     	$d->atrid = intval($d->atrid);
     	$d->value = $utmf->Parser($d->value);
-    	$d->nameurl = "";
+    	$d->nameurl = $utmf->Parser($d->nameurl);
+    	$d->view = $utmf->Parser($d->view);
+    	$d->namedoc = "";
+    	$d->datedoc = "";
+    	$d->file = "";
     	
     	$res = $this->ActValueAttribute($d);
     	return $this->ResultToJSON('actValueAttribute', $res);

@@ -41,11 +41,13 @@ Component.entryPoint = function(NS){
         		lst = "";
         	
 	        	valueList.each(function(val){
-	        		var nameurl = val.get('nameurl'),
+	        		var view = val.get('view'),
+	        			nameurl = val.get('nameurl'),
 	        			value = val.get('value'),
 	        			remove = val.get('remove'),
 	        			objReplace = {
-	        				id: val.get('id')
+	        				id: val.get('id'),
+	        				view: view
 	        			};
 	        		
 	        		if(remove){
@@ -56,22 +58,34 @@ Component.entryPoint = function(NS){
 	        			objReplace.cl = '';
 	        		}
 	        		
-	        		if(nameurl === ''){
-	        			objReplace.value = value;
-	        			objReplace.view = 'value';
-	        		} else {
-	        			objReplace.value = tp.replace('refer', {
-	        				nameurl: nameurl,
-	        				url: value
-	        			});
-	        			objReplace.view = 'file';
+	        		switch(view){
+	        			case 'value':
+	            			objReplace.value = value;
+		        			 	break;
+	        			case 'url':
+		        			objReplace.value = this.replaceRefer(nameurl, value);
+		        				break;
+	        			case 'file':
+		        			objReplace.value = this.replaceRefer(nameurl, value, true);
+		        				break;
 	        		}
+	        		
 	        		lst += tp.replace('row', objReplace);
 	        	}, this);
 	        	
 	        	tp.setHTML('values', tp.replace('table', {
 	        		rows: lst
 	        	}));
+        },
+        replaceRefer: function(nameurl, value, isFile){
+        	if(isFile){
+        		value =  '/' + value;
+        	}
+        	
+        	return this.template.replace('refer', {
+    			nameurl: nameurl,
+				value: value
+        	});
         },
         removeShow: function(show, id){
         	this.template.toggleView(show, 'row.removegroup-' + id, 'row.remove-' + id);

@@ -18,6 +18,7 @@ $data = new stdClass();
 	$data->id = intval($_POST['id']);
 	$data->atrid = intval($_POST['atrid']);
 	$data->nameurl = $utmf->Parser($_POST['nameurl']);
+	$data->view = $utmf->Parser($_POST['view']);
 	$namedoc = $utmf->Parser($_POST['namedoc']);
 	$datedoc = explode('-', $utmf->Parser($_POST['datedoc']));
 	

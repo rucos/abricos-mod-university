@@ -10,6 +10,10 @@
       "type": "int",
       "json": "relid"
     },
+    "view": {
+      "type": "string",
+      "json": "vw"
+    },
     "value": {
       "type": "string",
       "json": "val"
