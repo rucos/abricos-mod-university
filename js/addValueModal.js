@@ -56,7 +56,7 @@ Component.entryPoint = function(NS){
         		valueItem.nameurl = tp.gel('file.nameurl').value;
         		valueItem.namedoc = tp.gel('file.namedoc').value;
         		valueItem.datedoc = tp.gel('file.datedoc').value;
-        		valueItem.file = tp.gel('file.exampleInputFile').files[0];
+        		valueItem.file = tp.gel('fileInput.inputFile').files[0];
         		
         			return this.reqActFiles(valueItem, respondCallback);
         	} else {
@@ -145,8 +145,15 @@ Component.entryPoint = function(NS){
         		value: arguments[2] || '',
         		nameurl: arguments[3] || '',
         		namedoc: arguments[4] || '',
-        		datedoc: arguments[5] || ''
+        		datedoc: arguments[5] || '',
+        		file: arguments[2] ? this.renderRef(arguments[2]) : this.template.replace('fileInput')
         	};
+        },
+        renderRef: function(url){
+        	ref = this.template.replace('refer', {
+        		url: url
+        	});
+        	return ref;
         },
         constrReplace: function(hide, act){
          	return {
@@ -167,7 +174,7 @@ Component.entryPoint = function(NS){
     }, {
         ATTRS: {
         	component: {value: COMPONENT},
-            templateBlockName: {value: 'widget,modalFormAdd,value,file'},
+            templateBlockName: {value: 'widget,modalFormAdd,value,file,fileInput,refer'},
             valueItem: {value: null},
             view: '',
             valueAttributeItem: {value: null}
@@ -193,6 +200,13 @@ Component.entryPoint = function(NS){
         			
         			this.set('view', view);
         			this.fillForm(false, true);
+        		}
+        	},
+        	'remove-file': {
+        		event: function(e){
+        			var tp = this.template;
+        			
+        			tp.setHTML('file.file', tp.replace('fileInput'));
         		}
         	}
         }

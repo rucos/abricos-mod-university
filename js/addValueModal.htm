@@ -51,6 +51,16 @@
 	  	<input id="{i#datedoc}" type="date" class="form-control" value="{v#datedoc}">
 	</div>
 	<div class="form-group">
-	    <label for="exampleInputFile">File input</label>
-	    <input type="file" id="{i#exampleInputFile}">
+	    <label for="exampleInputFile">Текущий документ</label>
+		    <div id="{i#file}">
+		    	{v#file}
+		    </div>
 	</div>
+	
+<!--{fileInput}-->
+ <input type="file" id="{i#inputFile}">
+ 
+ <!--{refer}-->
+ <br>
+<a href="/{v#url}" target="_blank">{v#url}</a>
+<button type="button" class="btn btn-danger" data-click="remove-file"><span>&times;</span></button>
