@@ -190,12 +190,16 @@ class University extends AbricosApplication {
     	return $this->ResultToJSON('valueAttributeItem', $res);
     }
     
-    public function ValueAttributeItem($valueid){
+    public function ValueAttributeItem($valueid, $upload = false){
     	$valueid = intval($valueid);
     	
     	$item = UniversityQuery::ValueAttributeItem($this->db, $valueid);
     	
-    	return $this->models->InstanceClass('ValueAttributeItem', $item);
+    	if($upload){
+    		return $item;
+    	} else {
+    		return $this->models->InstanceClass('ValueAttributeItem', $item);
+    	}
     }
     
     public function ActValueAttributeToJSON($d){

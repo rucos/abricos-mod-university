@@ -59,7 +59,7 @@ Component.entryPoint = function(NS){
         			valueItem.nameurl = tp.gel('file.nameurl').value;
             		valueItem.namedoc = tp.gel('file.namedoc').value;
             		valueItem.datedoc = tp.gel('file.datedoc').value;
-            		valueItem.file = tp.gel('fileInput.inputFile').files[0];
+            		valueItem.file = tp.gel('fileInput.inputFile') ? tp.gel('fileInput.inputFile').files[0] : '';
             			return this.reqActFiles(valueItem, respondCallback);
         		case 'url':
             		valueItem.nameurl = tp.gel('url.nameurl').value;
