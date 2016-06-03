@@ -134,11 +134,41 @@ Component.entryPoint = function(NS){
 				case '$200':
 					this.template.setHTML('modal', '');
 						return true;
+				case '$1': 
+					alert('Размер файла превышает допустимое значение UPLOAD_MAX_FILE_SIZE');
+						break;
+				case '$2': 
+					alert('Размер файла превышает допустимое значение MAX_FILE_SIZE');
+						break;
+				case '$3': 
+					alert('Не удалось загрузить часть файла');
+						break;
+				case '$4': 
+					alert('Файл не был загружен');
+						break;
+				case '$6': 
+					alert('Отсутствует временная папка');
+						break;
+				case '$7': 
+					alert('Не удалось записать файл на диск');
+						break;
+				case '$8': 
+					alert('PHP-расширение остановило загрузку файла');
+						break;
 				case '$9': 
 					alert('Не верный тип файла');
 						break;
 				case '$10': 
 					alert('Укажите документ для загрузки');
+						break;
+				case '$11': 
+					alert('Укажите название ссылки на документ');
+						break;
+				case '$12': 
+					alert('Укажите название документа');
+						break;
+				case '$13': 
+					alert('Укажите дату утверждения');
 						break;
 			}
 			

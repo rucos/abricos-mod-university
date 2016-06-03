@@ -20,37 +20,61 @@ class UploadFile{
 	public function __construct($modManager){
 		$this->modManager = $modManager;
 		
-		$utmf = Abricos::TextParser(true);
-		
-		$this->data = new stdClass();
 			$id = intval($_POST['id']);
-			$this->data->id = $id;
-			$this->data->atrid = intval($_POST['atrid']);
-			$this->data->nameurl = $utmf->Parser($_POST['nameurl']);
-			$this->data->view = $utmf->Parser($_POST['view']);
+			$fill = $this->FillDate($id);
 			
-			$this->namedoc = $utmf->Parser($_POST['namedoc']);
-			$this->datedoc = explode('-', $utmf->Parser($_POST['datedoc']));
-
-			
-			if($id > 0){
-				if(isset($_POST['file'])){
-					switch($_POST['file']){
-						case 'undefined':
-							$this->resp = "10";
+			if($fill){
+				if($id > 0){
+					if(isset($_POST['file'])){
+						switch($_POST['file']){
+							case 'undefined':
+								$this->resp = "10";
 								break;
-						case '':
-							$this->RenameFile();
+							case '':
+								$this->RenameFile();
 								break;
+						}
+					} else {
+						$this->CheckFile(true);
 					}
 				} else {
-					$this->CheckFile(true);
+					$this->CheckFile();
 				}
-			} else {
-				$this->CheckFile();
 			}
 	}
 	
+	private function FillDate($id){
+		$utmf = Abricos::TextParser(true);
+		
+		$this->data = new stdClass();
+		$this->data->id = $id;
+		$this->data->atrid = intval($_POST['atrid']);
+			
+		$nameurl = $utmf->Parser($_POST['nameurl']);
+		if($nameurl === ''){
+			$this->resp = '11';
+				return false;
+		}
+		$this->data->nameurl = $nameurl;
+		$this->data->view = $utmf->Parser($_POST['view']);
+			
+		$namedoc = $utmf->Parser($_POST['namedoc']);
+		if($namedoc === ''){
+			$this->resp = '12';
+				return false;
+		}
+		$this->namedoc = $namedoc;
+			
+		$datedoc = $utmf->Parser($_POST['datedoc']);
+			
+		if(!preg_match("/[1-2]\d{3}-[01]\d-[0-3]\d/", $datedoc)){
+			$this->resp = '13';
+				return false;
+		}
+		$this->datedoc = explode('-', $datedoc);
+		
+		return true;
+	}
 	
 	private function RenameFile(){
 		$value = $this->ValueItem();
@@ -69,8 +93,13 @@ class UploadFile{
 	private function CheckFile($remove = false){
 			if(isset($_FILES['file'])){
 				$this->file = $_FILES['file'];
+				$error = $this->file['error'];
 				
-				$this->AppendFile($remove);
+				if($error > 0){
+					$this->resp = $error;
+				} else {
+					$this->AppendFile($remove);
+				}
 			} else {
 				$this->resp = "10";
 			}
@@ -83,30 +112,24 @@ class UploadFile{
 	}
 	
 	private function AppendFile($remove){
-			$error = $this->file['error'];
-			$name = $this->file['name'];
+		$name = $this->file['name'];
+		$typeDoc = $this->CheckTypeFile($name);
 	
-			if($error > 0){
-				$this->resp = $error;
-			} else {
-				$typeDoc = $this->CheckTypeFile($name);
-		
-				if($typeDoc !== ''){
-					
-					if($remove){
-						$this->RemoveFile();
-					}
-					
-					$uploadfile = $this->ParsePathFile($typeDoc);
-					
-					move_uploaded_file($this->file['tmp_name'], $uploadfile);
-	
-					$this->data->value = $uploadfile;
-					
-					$this->ActValue();
-				} else {
-					$this->resp = '9';
+			if($typeDoc !== ''){
+				
+				if($remove){
+					$this->RemoveFile();
 				}
+				
+				$uploadfile = $this->ParsePathFile($typeDoc);
+				
+				move_uploaded_file($this->file['tmp_name'], $uploadfile);
+				
+				$this->data->value = $uploadfile;
+				
+				$this->ActValue();
+			} else {
+				$this->resp = '9';
 			}
 	}
 	
