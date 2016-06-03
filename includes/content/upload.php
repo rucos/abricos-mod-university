@@ -23,7 +23,8 @@ class UploadFile{
 		$utmf = Abricos::TextParser(true);
 		
 		$this->data = new stdClass();
-			$this->data->id = intval($_POST['id']);
+			$id = intval($_POST['id']);
+			$this->data->id = $id;
 			$this->data->atrid = intval($_POST['atrid']);
 			$this->data->nameurl = $utmf->Parser($_POST['nameurl']);
 			$this->data->view = $utmf->Parser($_POST['view']);
@@ -32,13 +33,15 @@ class UploadFile{
 			$this->datedoc = explode('-', $utmf->Parser($_POST['datedoc']));
 
 			
-			if($this->data->id > 0){
+			if($id > 0){
 				if(isset($_POST['file'])){
-					if($_POST['file'] === 'undefined'){
-						$this->resp = "10";
-					} 
-					if($_POST['file'] === ''){
-						$this->RenameFile();
+					switch($_POST['file']){
+						case 'undefined':
+							$this->resp = "10";
+								break;
+						case '':
+							$this->RenameFile();
+								break;
 					}
 				} else {
 					$this->CheckFile(true);
@@ -50,12 +53,11 @@ class UploadFile{
 	
 	
 	private function RenameFile(){
-		$valueItem = $this->ValueItem();
-		$value = $valueItem['value'];
+		$value = $this->ValueItem();
 		
-		preg_match("/.\w{3,4}\$/i", $value, $path);
+		preg_match("/.\w{3,4}\$/i", $value, $typeDoc);
 		
-		$uploadFile = $this->ParsePathFile($path[0]);
+		$uploadFile = $this->ParsePathFile($typeDoc[0]);
 		
 		rename($value, $uploadFile);
 		
@@ -75,9 +77,9 @@ class UploadFile{
 	}
 	
 	private function RemoveFile(){
-		$valueItem = $this->ValueItem();
+		$value = $this->ValueItem();
 		
-		unlink(realpath($valueItem['value']));
+		unlink(realpath($value));
 	}
 	
 	private function AppendFile($remove){
@@ -117,7 +119,8 @@ class UploadFile{
 	}
 	
 	private function ValueItem(){
-		return $this->modManager->GetUniversity()->ValueAttributeItem($this->data->id, true);
+		$value = $this->modManager->GetUniversity()->ValueAttributeItem($this->data->id, true);
+		return $value['value'];
 	}
 	
 	
@@ -135,7 +138,6 @@ class UploadFile{
 				break;
 			}
 		}
-	
 		return $typeDoc;
 	}
 	
