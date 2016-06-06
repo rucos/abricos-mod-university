@@ -18,7 +18,7 @@ Component.entryPoint = function(NS){
         },
         showModal: function(valueid, atrid, view){
         	this.set('view', view);
-
+        	
         	if(valueid > 0){
         		this.reqValueAttributeItem(valueid, atrid);
         	} else {
@@ -120,6 +120,7 @@ Component.entryPoint = function(NS){
 			};
         },
         reqActValue: function(data, respondCallback){
+        	console.log(data);
         	this.set('waiting', true);
 	        	this.get('appInstance').actValueAttribute(data, function(err, result){
 	        		this.set('waiting', false);
@@ -182,7 +183,8 @@ Component.entryPoint = function(NS){
         		nameurl: arguments[3] || '',
         		namedoc: arguments[4] || '',
         		datedoc: arguments[5] || '',
-        		file: arguments[2] ? this.renderRef(arguments[2]) : this.template.replace('fileInput')
+        		file: arguments[2] ? this.renderRef(arguments[2]) : this.template.replace('fileInput'),
+        		numrow: arguments[6] || this.get('numrow')
         	};
         },
         renderRef: function(url){
@@ -213,7 +215,8 @@ Component.entryPoint = function(NS){
             templateBlockName: {value: 'widget,modalFormAdd,value,file,url,fileInput,refer'},
             valueItem: {value: null},
             view: '',
-            valueAttributeItem: {value: null}
+            valueAttributeItem: {value: null},
+            numrow: {value: 0}
         },
         CLICKS: {
         	'addValue-cancel': {

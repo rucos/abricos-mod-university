@@ -49,6 +49,7 @@ class UploadFile{
 		$this->data = new stdClass();
 		$this->data->id = $id;
 		$this->data->atrid = intval($_POST['atrid']);
+		$this->data->numrow = intval($_POST['numrow']);
 			
 		$nameurl = $utmf->Parser($_POST['nameurl']);
 		if($nameurl === ''){
