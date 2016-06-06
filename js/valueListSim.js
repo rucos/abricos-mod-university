@@ -21,22 +21,19 @@ Component.entryPoint = function(NS){
         	this.template.setHTML('values', "");
         },
         reloadList: function(){
-        	var data = {
-        		attrid: this.get('currentAttrid'),
-        		type: this.get('currentType')
-        	};
+        	var attrid = this.get('currentAttrid');
         	
         	this.set('waiting', true);
-	        	this.get('appInstance').valueAttributeList(data, function(err, result){
+	        	this.get('appInstance').valueSimpleList(attrid, function(err, result){
 	        		this.set('waiting', false);
 		        		if(!err){
-		        			this.set('valueAttributeList', result.valueAttributeList);
+		        			this.set('valueSimpleList', result.valueSimpleList);
 		        				this.renderList();
 		        		}
 	        	}, this);
         },
         renderList: function(){
-        	var valueList = this.get('valueAttributeList'),
+        	var valueList = this.get('valueSimpleList'),
         		tp = this.template,
         		lst = "";
         	
@@ -108,7 +105,7 @@ Component.entryPoint = function(NS){
         ATTRS: {
         	component: {value: COMPONENT},
             templateBlockName: {value: 'widget,table,row,refer'},
-            valueAttributeList: {value: null},
+            valueSimpleList: {value: null},
             currentAttrid: {value: null},
             currentType: {value: null},
             nameSection: {value: ''}

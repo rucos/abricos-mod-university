@@ -45,8 +45,6 @@ class University extends AbricosApplication {
 				return $this->ActAttributeToJSON($d->data);
 			case 'removeAttribute':
 				return $this->RemoveAttributeToJSON($d);
-			case 'valueAttributeList':
-				return $this->ValueAttributeListToJSON($d->data);
 			case 'valueAttributeItem':
 				return $this->ValueAttributeItemToJSON($d->valueid);
 			case 'actValueAttribute':
@@ -65,6 +63,10 @@ class University extends AbricosApplication {
 				return $this->EmployeesListToJSON();
 			case 'actEmployees':
 				return $this->ActEmployeesToJSON($d->data);
+			case 'valueComplexList':
+				return $this->ValueComplexListToJSON($d->attrid);
+			case 'valueSimpleList':
+				return $this->ValueSimpleListToJSON($d->attrid);
         }
         return null;
     }
@@ -153,37 +155,37 @@ class University extends AbricosApplication {
     	return UniversityQuery::RemoveAttribute($this->db, $d);
     }
     
-    public function ValueAttributeListToJSON($d){
-    	$res = $this->ValueAttributeList($d);
+    public function ValueSimpleListToJSON($attrid){
+    	$res = $this->ValueSimpleList($attrid);
+    	return $this->ResultToJSON('valueSimpleList', $res);
+    }
+    
+    public function ValueSimpleList($attrid){
+    	$attrid = intval($attrid);
+    	
+		$list = $this->models->InstanceClass('ValueAttributeList');
+		 
+		$rows = UniversityQuery::SimpleValueAttributeList($this->db, $attrid);
+			while (($d = $this->db->fetch_array($rows))){
+				$list->Add($this->models->InstanceClass('ValueAttributeItem', $d));
+			}
+    	return $list;
+    }
+    
+    public function ValueComplexListToJSON($attrid){
+    	$res = $this->ValueComplexList($attrid);
     	return $this->ResultToJSON('valueAttributeList', $res);
     }
     
-    public function ValueAttributeList($d){
-    	$d->attrid = intval($d->attrid);
-    	
-    	switch($d->type){
-    		case 'simple': 
-    			$list = $this->RenderModelsValue('SimpleValueAttributeList', $d->attrid);
-    				break;
-    		case 'complex': 
-    			$list = 'complex';
-    				break;
-    		default: return;
-    	}
-    	
-    	return $list;
+    public function ValueComplexList($attrid){
+    	$attrid = intval($attrid);
+    	 
+//     	$rows = UniversityQuery::ComplexValueAttributeList($this->db, $attrid);
+// 	    	while (($d = $this->db->fetch_array($rows))){
+	    		
+// 	    	}
     }
     
-    public function RenderModelsValue($quory, $attridd){
-    	
-    	$list = $this->models->InstanceClass('ValueAttributeList');
-    	
-    	$rows = UniversityQuery::$quory($this->db, $attridd);
-    	while (($d = $this->db->fetch_array($rows))){
-    		$list->Add($this->models->InstanceClass('ValueAttributeItem', $d));
-    	}
-    	return $list;
-    }
     
     public function ValueAttributeItemToJSON($valueid){
     	$res = $this->ValueAttributeItem($valueid);
@@ -213,6 +215,7 @@ class University extends AbricosApplication {
     	$d->namedoc = "";
     	$d->datedoc = "";
     	$d->file = "";
+    	$d->numrow = intval($d->numrow);
     	
     	$res = $this->ActValueAttribute($d);
     	return $this->ResultToJSON('actValueAttribute', $res);

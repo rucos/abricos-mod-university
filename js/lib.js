@@ -54,8 +54,8 @@ Component.entryPoint = function(NS){
     		removeAttribute: {
     			args: ['compositid', 'isComplex']
     		},
-    		valueAttributeList: {
-    			args: ['data'],
+    		valueSimpleList: {
+    			args: ['attrid'],
     			attribute: false,
     			type: 'modelList:ValueAttributeList'
     		},
@@ -96,6 +96,9 @@ Component.entryPoint = function(NS){
     		},
     		actEmployees: {
     			args: ['data']
+    		},
+    		valueComplexList: {
+    			args: ['attrid']
     		}
         },
         ATTRS: {
