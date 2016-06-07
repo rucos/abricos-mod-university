@@ -1,18 +1,13 @@
 <!--{widget}-->
+<div id="{i#modal}"></div>
 <div id="{i#values}"></div>
 
 <!--{table}-->
-<div class="row">
- 	<div class="col-md-1">
- 		<button type="button" class="btn btn-success" data-click="append-show">+Добавить значение</button>
- 	</div>
-</div>
-<hr>
 <table class="table table-bordered table-hover">
     <thead>
 		{v#th}
     </thead>
-    <tbody>{v#rows}</tbody>
+    <tbody id="{i#tBody}"></tbody>
 </table>
 
 <!--{tr}-->
@@ -21,4 +16,14 @@
 </tr>
 
 <!--{td}-->
-<td {v#span} data-id="{v#id}">{v#value}</td>
+<td {v#span}>{v#value}</td>
+
+<!--{p}-->
+<p>{v#value}</p>
+
+
+<!--{refer}-->
+<a href="{v#value}" target="_blank">{v#nameurl}</a>
+
+<!--{referAdd}-->
+<a href="" data-click="modal-show" data-id="0" data-view="value" data-atrid="{v#id}">{v#nameurl}</a>

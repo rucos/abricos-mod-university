@@ -6,10 +6,6 @@
     "id": {
       "type": "int"
     },
-    "attributeid": {
-      "type": "int",
-      "json": "aid"
-    },
     "relationid": {
       "type": "int",
       "json": "relid"
@@ -29,10 +25,6 @@
    	"remove": {
       "type": "int",
       "json": "rm"
-    },
-    "numrow": {
-      "type": "int",
-      "json": "nr"
     }
   }
 }

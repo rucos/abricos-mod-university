@@ -2,7 +2,7 @@ var Component = new Brick.Component();
 Component.requires = {
     mod: [
         {name: 'sys', files: ['editor.js']},
-        {name: '{C#MODNAME}', files: ['lib.js']}
+        {name: '{C#MODNAME}', files: ['lib.js', 'addValueModal.js']}
     ]
 };
 Component.entryPoint = function(NS){
@@ -13,7 +13,9 @@ Component.entryPoint = function(NS){
 
     NS.ValueListComplexWidget = Y.Base.create('valueListComplexWidget', SYS.AppWidget, [], {
         onInitAppWidget: function(err, appInstance){
-        
+        	this.addValueModal = new NS.AddValueModalWidget({
+                srcNode: this.template.gel('modal')
+    		});
         },
         destroy: function(){
         	this.template.setHTML('values', "");
@@ -25,7 +27,7 @@ Component.entryPoint = function(NS){
 	    		data = lib.dataAttributeList(sectionid, true, complexid);
         	
 		    	this.set('waiting', true);
-		        	this.get('appInstance').attributeList(data, this.renderAttributeList, this);
+		    		lib.attributeList(data, this.renderAttributeList, this);
         },
         renderAttributeList: function(err, result){
         	var compositObj = {};
@@ -79,15 +81,19 @@ Component.entryPoint = function(NS){
         	}
         	
         	tp.setHTML('values', tp.replace('table', {
-        		th: this.renderThead(tdComp, tdSubComp),
-        		rows: "" 
+        		th: this.renderThead(tdComp, tdSubComp)
         	}))
+        		this.reloadListValue();
         },
         tDataReplace: function(id, value, span){
-        	return this.template.replace('td', {
-        		id: id,
+        	var tp= this.template;
+        	
+        	return tp.replace('td', {
         		span: span || "",
-        		value: value
+        		value: tp.replace('referAdd', {
+        			nameurl: value + "(+)",
+        			id: id
+        		})
         	});
         },
         renderThead: function(tdComp, tdSubComp){
@@ -97,12 +103,92 @@ Component.entryPoint = function(NS){
         	return this.template.replace('tr', {
         		td: td
         	});
+        },
+        actRowShow: function(){
+        	var tp = this.template,
+        		numrow = tp.gel('table.tBody').rows.length + 1;
+        	
+        	this.addValueModal.set('numrow', numrow);
+        	
+        	this.addValueModal.showModal.apply(this.addValueModal, arguments);
+        },
+        reloadListValue: function(){
+           	var attrid = this.get('currentAttrid');
+           	
+	    	this.set('waiting', true);
+	        	this.get('appInstance').valueComplexList(attrid, function(err, result){
+	        		var value = result.valueComplexList;
+	        			this.set('waiting', false);
+	        			if(!err){
+	        				if(value){
+		        				this.set('valueComplexList', value);
+	        						this.renderValueList();
+	        				}
+	        			}
+	        	}, this);
+        },
+        renderValueList: function(){
+        	var valueComplexList = this.get('valueComplexList'),
+        		tp = this.template,
+        		tr = "";
+        	
+        	for(var i in valueComplexList){
+            	tr += tp.replace('tr', {
+            		td: this.parseRowValue(valueComplexList[i]) 
+            	});   
+        	}
+        	
+        	tp.setHTML('table.tBody', tr);
+        },
+        parseRowValue: function(objValue){
+        	var tp = this.template,
+        		td = "";
+    			
+        	for(var i in objValue){
+        		var	curObj = objValue[i],
+        			p = "";
+        		
+        		for(var j = 0; j < curObj.length; j++){
+        			var value = "";
+        			
+        			switch(curObj[j].view){
+        				case "value":
+        					value = curObj[j].value;
+        						break;
+        				case "file":
+        					value = this.parseUrl(curObj[j].nameurl, curObj[j].value, true);
+        						break;
+        				case "url":
+        					value = this.parseUrl(curObj[j].nameurl, curObj[j].value, false);
+        						break;
+        			}
+        			
+        			p += tp.replace('p', {
+        				value: value
+        			});
+        		}
+     			td += tp.replace('td', {
+    				span: "",
+    				value: p
+    			});
+        	}
+        	return td;
+        },
+        parseUrl: function(nameurl, value, isFile){
+        	if(isFile){
+        		value =  '/' + value;
+        	}
+        	
+        	return this.template.replace('refer', {
+    			nameurl: nameurl,
+				value: value
+        	});
         }
     }, {
         ATTRS: {
         	component: {value: COMPONENT},
-            templateBlockName: {value: 'widget,table,tr,td'},
-            valueAttributeList: {value: null},
+            templateBlockName: {value: 'widget,table,tr,td,refer,referAdd,p'},
+            valueComplexList: {value: null},
             currentAttrid: {value: null},
             currentType: {value: null},
             sectionid: {value: null},
@@ -110,9 +196,25 @@ Component.entryPoint = function(NS){
             rowSpan: {value: 0}
         },
         CLICKS: {
-        	'append-show': {
+        	'modal-show': {
         		event: function(e){
+        			var targ = e.target,
+        				valueid = targ.getData('id'),
+        				view = targ.getData('view'),
+        				atrid = targ.getData('atrid');
         			
+        			this.actRowShow(valueid, atrid, view);
+        		}
+        	},
+        	addValue: {
+        		event: function(e){
+        			var _self = this;
+        			
+        			this.addValueModal.actValue(function(respond){
+        				if(respond){
+        					_self.reloadListValue();
+        				}
+        			});
         		}
         	}
         }

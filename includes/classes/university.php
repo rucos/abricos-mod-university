@@ -174,16 +174,27 @@ class University extends AbricosApplication {
     
     public function ValueComplexListToJSON($attrid){
     	$res = $this->ValueComplexList($attrid);
-    	return $this->ResultToJSON('valueAttributeList', $res);
+    	return $this->ResultToJSON('valueComplexList', $res);
     }
     
     public function ValueComplexList($attrid){
     	$attrid = intval($attrid);
-    	 
-//     	$rows = UniversityQuery::ComplexValueAttributeList($this->db, $attrid);
-// 	    	while (($d = $this->db->fetch_array($rows))){
-	    		
-// 	    	}
+    	
+    	$dataValue = UniversityQuery::ComplexAttrList($this->db, $attrid);
+
+    	if($dataValue){
+    		$rows = UniversityQuery::ComplexValueAttributeList($this->db, $attrid);
+    		
+    		while ($d = $this->db->fetch_array($rows)){
+    			$num = $d['numrow'];
+    			$atrid = $d['attributeid'];
+    				
+    			array_push($dataValue[$num][$atrid], $d);
+    		}
+    		return $dataValue;
+    	} else {
+    		return false;
+    	}
     }
     
     

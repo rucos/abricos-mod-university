@@ -174,12 +174,13 @@ class UniversityQuery {
 	
 	public static function AppendValueAttribute(Ab_Database $db, $d){
 		$sql = "
-			INSERT INTO ".$db->prefix."un_value(attributeid, value, nameurl, view)
+			INSERT INTO ".$db->prefix."un_value(attributeid, value, nameurl, view, numrow)
 			VALUES (
 					".bkint($d->atrid).",
 					'".bkstr($d->value)."',
 					'".bkstr($d->nameurl)."',
-					'".bkstr($d->view)."'
+					'".bkstr($d->view)."',
+					".bkint($d->numrow)."							
 			)
 		";
 	
@@ -374,6 +375,65 @@ class UniversityQuery {
 			LIMIT 1
 		";
 		return $db->query_write($sql);
+	}
+	
+	public static function ComplexAttrList(Ab_Database $db, $attrid){
+		$sql = "
+				SELECT
+					attributeid as id
+				FROM ".$db->prefix."un_attribute
+				WHERE complexid=".bkint($attrid)."
+		";
+		$rows = $db->query_read($sql);
+		
+		$arrAttrid = array();
+		$strid = "";
+		
+		while ($d = $db->fetch_array($rows)){
+			$arrAttrid[$d['id']] = array();
+			
+			$strid .= $d['id']. ",";
+		}
+		$maxNumRow = UniversityQuery::MaxNumRowValue($db, $strid);
+		
+		if(isset($maxNumRow['max'])){
+			$dataValue = array();
+				for($i = 1; $i <= $maxNumRow['max']; $i++){
+					$dataValue[$i] = $arrAttrid;
+				}
+			return $dataValue;
+		} 
+	}
+	
+	public static function MaxNumRowValue($db, $strid){
+		$strid = substr($strid, 0, -1);
+		
+		$sql = "
+				SELECT
+						MAX(numrow) as max
+				FROM ".$db->prefix."un_value
+				WHERE attributeid IN (".$strid.")
+		";
+		$result = $db->query_first($sql); 
+		
+		return $result;
+	}
+	
+	public static function ComplexValueAttributeList(Ab_Database $db, $attrid){
+		$sql = "
+			SELECT
+					v.valueid as id,
+					a.attributeid,
+					v.view,
+					v.value,
+					v.nameurl,
+					v.remove,
+					v.numrow
+			FROM ".$db->prefix."un_attribute a
+			INNER JOIN ".$db->prefix."un_value v ON a.attributeid=v.attributeid
+			WHERE a.complexid=".bkint($attrid)."
+		";
+		return $db->query_read($sql);
 	}
 }
 

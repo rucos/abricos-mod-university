@@ -120,7 +120,6 @@ Component.entryPoint = function(NS){
 			};
         },
         reqActValue: function(data, respondCallback){
-        	console.log(data);
         	this.set('waiting', true);
 	        	this.get('appInstance').actValueAttribute(data, function(err, result){
 	        		this.set('waiting', false);
