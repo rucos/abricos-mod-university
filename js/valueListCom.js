@@ -92,8 +92,12 @@ Component.entryPoint = function(NS){
         		span: span || "",
         		value: tp.replace('referAdd', {
         			nameurl: value + "(+)",
-        			id: id
-        		})
+        			id: id,
+        			vid: 0,
+        			view: 'value',
+        			numrow: 0
+        		}),
+        		add: ''
         	});
         },
         renderThead: function(tdComp, tdSubComp){
@@ -106,7 +110,11 @@ Component.entryPoint = function(NS){
         },
         actRowShow: function(){
         	var tp = this.template,
+        		numrow = arguments[3];
+        	
+        	if(numrow == 0){
         		numrow = tp.gel('table.tBody').rows.length + 1;
+        	}
         	
         	this.addValueModal.set('numrow', numrow);
         	
@@ -134,16 +142,16 @@ Component.entryPoint = function(NS){
         	
         	for(var i in valueComplexList){
             	tr += tp.replace('tr', {
-            		td: this.parseRowValue(valueComplexList[i]) 
+            		td: this.parseRowValue(valueComplexList[i], i) 
             	});   
         	}
         	
         	tp.setHTML('table.tBody', tr);
         },
-        parseRowValue: function(objValue){
+        parseRowValue: function(objValue, numrow){
         	var tp = this.template,
         		td = "";
-    			
+        	
         	for(var i in objValue){
         		var	curObj = objValue[i],
         			p = "";
@@ -169,7 +177,15 @@ Component.entryPoint = function(NS){
         		}
      			td += tp.replace('td', {
     				span: "",
-    				value: p
+    				value: p,
+    				add: tp.replace('referAdd', {
+            			nameurl: "(+)",
+            			id: i,
+            			vid: 0,
+            			view: 'value',
+            			add: '',
+            			numrow: numrow
+            		})
     			});
         	}
         	return td;
@@ -201,9 +217,10 @@ Component.entryPoint = function(NS){
         			var targ = e.target,
         				valueid = targ.getData('id'),
         				view = targ.getData('view'),
-        				atrid = targ.getData('atrid');
+        				atrid = targ.getData('atrid'),
+        				numrow = targ.getData('numrow');
         			
-        			this.actRowShow(valueid, atrid, view);
+        			this.actRowShow(valueid, atrid, view, numrow);
         		}
         	},
         	addValue: {

@@ -16,7 +16,12 @@
 </tr>
 
 <!--{td}-->
-<td {v#span}>{v#value}</td>
+<td {v#span}>
+{v#value}
+<p>
+{v#add}
+</p>
+</td>
 
 <!--{p}-->
 <p>{v#value}</p>
@@ -26,4 +31,4 @@
 <a href="{v#value}" target="_blank">{v#nameurl}</a>
 
 <!--{referAdd}-->
-<a href="" data-click="modal-show" data-id="0" data-view="value" data-atrid="{v#id}">{v#nameurl}</a>
+<a href="" data-click="modal-show" data-id="{v#vid}" data-view="{v#view}" data-atrid="{v#id}" data-numrow="{v#numrow}">{v#nameurl}</a>
