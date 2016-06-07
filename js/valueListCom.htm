@@ -1,6 +1,8 @@
 <!--{widget}-->
 <div id="{i#modal}"></div>
-<div id="{i#values}"></div>
+<div id="complexValue">
+	<div id="{i#values}"></div>
+</div>
 
 <!--{table}-->
 <table class="table table-bordered table-hover">
@@ -23,8 +25,22 @@
 </p>
 </td>
 
-<!--{p}-->
-<p>{v#value}</p>
+<!--{item}-->
+<div class="show-td-buttons"> 
+{v#value}
+	<div class="btn-group pull-right">
+	    <button class="btn btn-default btn-xs"
+	            data-click="modal-show" data-id="{v#vid}" data-view="{v#view}" data-atrid="{v#id}" data-numrow="{v#numrow}"
+	            title="Редактировать">
+	        <span class="fa fa-pencil"></span>
+	    </button>
+	    <button class="btn btn-default btn-xs"
+	            data-click="remove" data-id="{v#vid}"
+	            title="Удалить">
+	        <i class="fa fa-trash-o"></i>
+	    </button>
+	</div>
+</div>
 
 
 <!--{refer}-->

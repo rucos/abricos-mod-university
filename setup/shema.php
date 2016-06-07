@@ -13,7 +13,7 @@ $db = Abricos::$db;
 $pfx = $db->prefix;
 
 
-if ($updateManager->isInstall('0.1.0')){
+if ($updateManager->isInstall('0.1.2')){
 	
 	Abricos::GetModule('university')->permission->Install();
 		/*

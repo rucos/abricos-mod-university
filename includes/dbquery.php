@@ -412,7 +412,8 @@ class UniversityQuery {
 				SELECT
 						MAX(numrow) as max
 				FROM ".$db->prefix."un_value
-				WHERE attributeid IN (".$strid.")
+				WHERE attributeid IN (".$strid.") 
+						AND remove=0
 		";
 		$result = $db->query_first($sql); 
 		
@@ -431,7 +432,8 @@ class UniversityQuery {
 					v.numrow
 			FROM ".$db->prefix."un_attribute a
 			INNER JOIN ".$db->prefix."un_value v ON a.attributeid=v.attributeid
-			WHERE a.complexid=".bkint($attrid)."
+			WHERE a.complexid=".bkint($attrid)." AND v.remove=0
+					
 		";
 		return $db->query_read($sql);
 	}

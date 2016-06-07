@@ -154,7 +154,7 @@ Component.entryPoint = function(NS){
         	
         	for(var i in objValue){
         		var	curObj = objValue[i],
-        			p = "";
+        			item = "";
         		
         		for(var j = 0; j < curObj.length; j++){
         			var value = "";
@@ -171,13 +171,18 @@ Component.entryPoint = function(NS){
         						break;
         			}
         			
-        			p += tp.replace('p', {
-        				value: value
+        			item += tp.replace('item', {
+        				value: value,
+        				vid: curObj[j].id,
+        				view: curObj[j].view,
+        				id: curObj[j].attributeid,
+        				numrow: i
         			});
         		}
+        		
      			td += tp.replace('td', {
     				span: "",
-    				value: p,
+    				value: item,
     				add: tp.replace('referAdd', {
             			nameurl: "(+)",
             			id: i,
@@ -199,11 +204,25 @@ Component.entryPoint = function(NS){
     			nameurl: nameurl,
 				value: value
         	});
+        },
+        removeValue: function(valueid){
+        	var data = {
+            		valueid: valueid,
+            		remove: 1
+            	};
+        	
+	    	this.set('waiting', true);
+	        	this.get('appInstance').removeValueAttribute(data, function(err, result){
+	        		this.set('waiting', false);
+	        			if(!err){
+	        				this.reloadListValue();
+	        			}
+	        	}, this);
         }
     }, {
         ATTRS: {
         	component: {value: COMPONENT},
-            templateBlockName: {value: 'widget,table,tr,td,refer,referAdd,p'},
+            templateBlockName: {value: 'widget,table,tr,td,refer,referAdd,item'},
             valueComplexList: {value: null},
             currentAttrid: {value: null},
             currentType: {value: null},
@@ -214,13 +233,21 @@ Component.entryPoint = function(NS){
         CLICKS: {
         	'modal-show': {
         		event: function(e){
-        			var targ = e.target,
+        			var targ = e.defineTarget,
         				valueid = targ.getData('id'),
         				view = targ.getData('view'),
         				atrid = targ.getData('atrid'),
         				numrow = targ.getData('numrow');
         			
         			this.actRowShow(valueid, atrid, view, numrow);
+        		}
+        	},
+        	remove: {
+        		event: function(e){
+        			var targ = e.defineTarget,
+        				valueid = targ.getData('id');
+
+        			this.removeValue(valueid);
         		}
         	},
         	addValue: {
