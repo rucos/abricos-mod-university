@@ -125,13 +125,10 @@ Component.entryPoint = function(NS){
            	
 	    	this.set('waiting', true);
 	        	this.get('appInstance').valueComplexList(attrid, function(err, result){
-	        		var value = result.valueComplexList;
 	        			this.set('waiting', false);
 	        			if(!err){
-	        				if(value){
-		        				this.set('valueComplexList', value);
-	        						this.renderValueList();
-	        				}
+	        				this.set('valueComplexList', result.valueComplexList);
+        						this.renderValueList();
 	        			}
 	        	}, this);
         },
@@ -140,10 +137,12 @@ Component.entryPoint = function(NS){
         		tp = this.template,
         		tr = "";
         	
-        	for(var i in valueComplexList){
-            	tr += tp.replace('tr', {
-            		td: this.parseRowValue(valueComplexList[i], i) 
-            	});   
+        	if(valueComplexList){
+               	for(var i in valueComplexList){
+                	tr += tp.replace('tr', {
+                		td: this.parseRowValue(valueComplexList[i], i) 
+                	});   
+            	}
         	}
         	
         	tp.setHTML('table.tBody', tr);
