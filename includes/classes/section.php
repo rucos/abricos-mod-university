@@ -232,6 +232,8 @@ class Section {
 		";
 		$compisteid = $this->AppendUnAttr($rows, true);
 		
+		$this->UpdateUnAttr($compisteid);
+		
 		$rows = "
 			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'Очная форма обучения', 'EduForm', ''),
 			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'Очно-заочная форма обучения', 'EduForm', ''),
@@ -282,6 +284,8 @@ class Section {
 		";
 		$compisteid = $this->AppendUnAttr($rows, true);
 		
+		$this->UpdateUnAttr($compisteid);
+		
 		$rows = "
 			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'за счет бюджетных ассигнований федерального бюджета', 'BudgAmount', ''),
 			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'за счет бюджетов субъектов Российской Федерации', 'BudgAmount', ''),
@@ -311,6 +315,8 @@ class Section {
 			(".$idSection.", ".$complexid.", 0, 'composite', 'Численность обучающихся, чел.', '', '')
 		";
 		$compisteid = $this->AppendUnAttr($rows, true);
+		
+		$this->UpdateUnAttr($compisteid);
 		
 		$rows = "
 			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'переведено в другие образовательные организации', '', ''),
@@ -462,6 +468,8 @@ class Section {
 		";
 		$compisteid = $this->AppendUnAttr($rows, true);
 		
+		$this->UpdateUnAttr($compisteid);
+		
 		$rows = "
 			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет бюджетных ассигнований федерального бюджета', '', ''),
 			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет бюджетных ассигнований бюджетов субъекта Российской Федерации', '', ''),
@@ -482,6 +490,16 @@ class Section {
 		if($ret){
 			return $this->db->insert_id();
 		}
+	}
+	
+	private function UpdateUnAttr($idAttr){
+		$this->db->query_write("
+			UPDATE ".$this->pfx."un_attribute
+			SET 
+				compositeid=".$idAttr."
+			WHERE attributeid=".$idAttr."
+			LIMIT 1
+		");
 	}
 }
 ?>

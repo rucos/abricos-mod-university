@@ -17,7 +17,7 @@ class UniversityModule extends Ab_Module {
 
     public function UniversityModule(){
         UniversityModule::$instance = $this;
-        $this->version = "0.1.2";
+        $this->version = "0.1.3";
         $this->name = "university";
         $this->takelink = "university";
         $this->permission = new UniversityPermission($this);
