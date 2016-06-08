@@ -60,7 +60,6 @@ Component.entryPoint = function(NS){
         		rowspan = this.get('rowSpan'),
         		tdComp = "",
         		tdSubComp = "",
-        		colspan = 0,
         		len = 0,
         		currArr = '',
         		col = '';
@@ -72,17 +71,13 @@ Component.entryPoint = function(NS){
         		
         		if(len > 0){
         			for(var j = 0; j < len; j++){
-            			tdSubComp += this.tDataReplace(currArr[j][0], currArr[j][1]); 
+            			tdSubComp += this.tDataReplace(currArr[j][1], '', currArr[j][0]); 
         			}
         			col = 'colspan=' + len;
         			
-        			tdComp += tp.replace('td', {
-        				span: col,
-        				value: compositeObj[i][0],
-        				add: ''
-        			});
+        			tdComp += this.tDataReplace(compositeObj[i][0], col);
         		} else {
-        			tdComp += this.tDataReplace(i, compositeObj[i][0], col);
+        			tdComp += this.tDataReplace(compositeObj[i][0], col, i);
         		} 
         	}
         	
@@ -91,21 +86,32 @@ Component.entryPoint = function(NS){
         	}))
         		this.reloadListValue();
         },
-        tDataReplace: function(id, value, span){
-        	var tp= this.template;
+        tDataReplace: function(value, span, id, add){
+        	var tp= this.template,
+        		replaceValue = '';
+        	
+        	if(id){
+        		value += "(+)";
+        		replaceValue = this.referAddReplace(value, id);
+        	} else {
+        		replaceValue = value;
+        	}
         	
         	return tp.replace('td', {
         		span: span || "",
-        		value: tp.replace('referAdd', {
-        			nameurl: value + "(+)",
-        			id: id,
-        			vid: 0,
-        			view: 'value',
-        			numrow: 0
-        		}),
-        		add: ''
+        		value: replaceValue,
+        		add: add || ''
         	});
         },
+        referAddReplace: function(value, atrid, numrow, valueid, view){
+        	return this.template.replace('referAdd', {
+    			nameurl: value,
+    			id: atrid,
+    			vid: valueid || 0,
+    			view: view || 'value',
+    			numrow: numrow || 0
+    		})
+        }, 
         renderThead: function(tdComp, tdSubComp){
         	return this.tRowReplace(tdComp) + this.tRowReplace(tdSubComp);
         },
@@ -162,22 +168,8 @@ Component.entryPoint = function(NS){
         			item = "";
         		
         		for(var j = 0; j < curObj.length; j++){
-        			var value = "";
-        			
-        			switch(curObj[j].view){
-        				case "value":
-        					value = curObj[j].value;
-        						break;
-        				case "file":
-        					value = this.parseUrl(curObj[j].nameurl, curObj[j].value, true);
-        						break;
-        				case "url":
-        					value = this.parseUrl(curObj[j].nameurl, curObj[j].value, false);
-        						break;
-        			}
-        			
         			item += tp.replace('item', {
-        				value: value,
+        				value: this.addValueModal.parseValue(curObj[j].view, curObj[j].nameurl, curObj[j].value),
         				vid: curObj[j].id,
         				view: curObj[j].view,
         				id: curObj[j].attributeid,
@@ -188,27 +180,10 @@ Component.entryPoint = function(NS){
      			td += tp.replace('td', {
     				span: "",
     				value: item,
-    				add: tp.replace('referAdd', {
-            			nameurl: "(+)",
-            			id: i,
-            			vid: 0,
-            			view: 'value',
-            			add: '',
-            			numrow: numrow
-            		})
+    				add: this.referAddReplace("(+)", i, numrow)
     			});
         	}
         	return td;
-        },
-        parseUrl: function(nameurl, value, isFile){
-        	if(isFile){
-        		value =  '/' + value;
-        	}
-        	
-        	return this.template.replace('refer', {
-    			nameurl: nameurl,
-				value: value
-        	});
         },
         removeValue: function(valueid){
         	var data = {

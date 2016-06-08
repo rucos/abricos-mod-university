@@ -187,7 +187,7 @@ Component.entryPoint = function(NS){
         	};
         },
         renderRef: function(url){
-        	ref = this.template.replace('refer', {
+        	ref = this.template.replace('referfile', {
         		url: url
         	});
         	return ref;
@@ -207,11 +207,30 @@ Component.entryPoint = function(NS){
     		for(var i = 0; i < len; i++){
     			collect[i].classList.remove('active');
     		}
+        },
+        parseValue: function(view, nameurl, value){
+ 			switch(view){
+				case "value":
+					return value;
+				case "file":
+					return this.parseUrl(nameurl, value, true);
+				case "url":
+					return this.parseUrl(nameurl, value, false);
+			}
+        },
+        parseUrl: function(nameurl, value, isFile){
+        	if(isFile){
+        		value =  '/' + value;
+        	}
+        	return this.template.replace('refer', {
+    			nameurl: nameurl,
+				value: value
+        	});
         }
     }, {
         ATTRS: {
         	component: {value: COMPONENT},
-            templateBlockName: {value: 'widget,modalFormAdd,value,file,url,fileInput,refer'},
+            templateBlockName: {value: 'widget,modalFormAdd,value,file,url,fileInput,referfile,refer'},
             valueItem: {value: null},
             view: '',
             valueAttributeItem: {value: null},
