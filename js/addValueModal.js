@@ -215,7 +215,7 @@ Component.entryPoint = function(NS){
 				case "file":
 					return this.parseUrl(nameurl, value, true);
 				case "url":
-					return this.parseUrl(nameurl, value, false);
+					return this.parseUrl(nameurl, value);
 			}
         },
         parseUrl: function(nameurl, value, isFile){

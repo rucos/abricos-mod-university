@@ -39,33 +39,19 @@ Component.entryPoint = function(NS){
         	
 	        	valueList.each(function(val){
 	        		var view = val.get('view'),
-	        			nameurl = val.get('nameurl'),
-	        			value = val.get('value'),
-	        			remove = val.get('remove'),
 	        			objReplace = {
 	        				id: val.get('id'),
 	        				view: view
 	        			};
 	        		
-	        		if(remove){
+	        		if(val.get('remove')){
 	        			objReplace.actremove = 'Восстановить';
 	        			objReplace.cl = 'class="danger"';
 	        		} else {
 	        			objReplace.actremove = 'Удалить';
 	        			objReplace.cl = '';
 	        		}
-	        		
-	        		switch(view){
-	        			case 'value':
-	            			objReplace.value = value;
-		        			 	break;
-	        			case 'url':
-		        			objReplace.value = this.replaceRefer(nameurl, value);
-		        				break;
-	        			case 'file':
-		        			objReplace.value = this.replaceRefer(nameurl, value, true);
-		        				break;
-	        		}
+	        		objReplace.value = this.addValueModal.parseValue(view, val.get('nameurl'), val.get('value'));
 	        		
 	        		lst += tp.replace('row', objReplace);
 	        	}, this);
@@ -73,16 +59,6 @@ Component.entryPoint = function(NS){
 	        	tp.setHTML('values', tp.replace('table', {
 	        		rows: lst
 	        	}));
-        },
-        replaceRefer: function(nameurl, value, isFile){
-        	if(isFile){
-        		value =  '/' + value;
-        	}
-        	
-        	return this.template.replace('refer', {
-    			nameurl: nameurl,
-				value: value
-        	});
         },
         removeShow: function(show, id){
         	this.template.toggleView(show, 'row.removegroup-' + id, 'row.remove-' + id);
