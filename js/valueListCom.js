@@ -67,7 +67,6 @@ Component.entryPoint = function(NS){
         		
         	for(var i in compositeObj){
         		col = 'rowspan=' + rowspan;
-        		
         		currArr = compositeObj[i][1];
         		len = currArr.length;
         		
@@ -76,8 +75,15 @@ Component.entryPoint = function(NS){
             			tdSubComp += this.tDataReplace(currArr[j][0], currArr[j][1]); 
         			}
         			col = 'colspan=' + len;
-        		}
-        		tdComp += this.tDataReplace(i, compositeObj[i][0], col);
+        			
+        			tdComp += tp.replace('td', {
+        				span: col,
+        				value: compositeObj[i][0],
+        				add: ''
+        			});
+        		} else {
+        			tdComp += this.tDataReplace(i, compositeObj[i][0], col);
+        		} 
         	}
         	
         	tp.setHTML('values', tp.replace('table', {
