@@ -185,6 +185,18 @@ Component.entryPoint = function(NS){
         	}
         	return td;
         },
+        removeAct: function(valueid, show){
+        	var tp = this.template,
+        		remove = "";
+        	
+	        	if(show){
+	        		remove = tp.replace('remove', {
+	    				id: valueid
+	    			})
+	        	}
+	        	
+				tp.setHTML('item.remove-' + valueid, remove);
+        },
         removeValue: function(valueid){
         	var data = {
             		valueid: valueid,
@@ -202,7 +214,7 @@ Component.entryPoint = function(NS){
     }, {
         ATTRS: {
         	component: {value: COMPONENT},
-            templateBlockName: {value: 'widget,table,tr,td,refer,referAdd,item'},
+            templateBlockName: {value: 'widget,table,tr,td,referAdd,item,remove'},
             valueComplexList: {value: null},
             currentAttrid: {value: null},
             currentType: {value: null},
@@ -219,26 +231,39 @@ Component.entryPoint = function(NS){
         				atrid = targ.getData('atrid'),
         				numrow = targ.getData('numrow');
         			
-        			this.actRowShow(valueid, atrid, view, numrow);
+        				this.actRowShow(valueid, atrid, view, numrow);
         		}
         	},
-        	remove: {
+        	'remove-show': {
         		event: function(e){
-        			var targ = e.defineTarget,
-        				valueid = targ.getData('id');
+        			var id = e.defineTarget.getData('id');
+        			
+        				this.removeAct(id, true);
+        		}
+        	},
+        	'remove-hide': {
+        		event: function(e){
+        			var id = e.target.getData('id');
+        			
+        				this.removeAct(id);
+        		}
+        	},
+        	removeValue: {
+        		event: function(e){
+        			var valueid = e.target.getData('id');
 
-        			this.removeValue(valueid);
+        				this.removeValue(valueid);
         		}
         	},
         	addValue: {
         		event: function(e){
         			var _self = this;
         			
-        			this.addValueModal.actValue(function(respond){
-        				if(respond){
-        					_self.reloadListValue();
-        				}
-        			});
+	        			this.addValueModal.actValue(function(respond){
+	        				if(respond){
+	        					_self.reloadListValue();
+	        				}
+	        			});
         		}
         	}
         }

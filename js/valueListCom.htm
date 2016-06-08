@@ -35,12 +35,26 @@
 	        <span class="fa fa-pencil"></span>
 	    </button>
 	    <button class="btn btn-default btn-xs"
-	            data-click="remove" data-id="{v#vid}"
+	            data-click="remove-show" data-id="{v#vid}"
 	            title="Удалить">
 	        <i class="fa fa-trash-o"></i>
 	    </button>
 	</div>
+	<div id="{i#remove}-{v#vid}"></div>
 </div>
 
 <!--{referAdd}-->
 <a href="" data-click="modal-show" data-id="{v#vid}" data-view="{v#view}" data-atrid="{v#id}" data-numrow="{v#numrow}">{v#nameurl}</a>
+
+<!--{remove}-->
+<div class="alert alert-danger">
+    Вы действительно хотите удалить текущее значение?
+    <div class="text-center">
+        <button data-id="{v#id}" data-click="removeValue" data-wait="disable" class="btn btn-danger btn-xs">
+            Удалить
+        </button>
+        <button data-id="{v#id}" data-click="remove-hide" data-wait="disable" class="btn btn-default btn-xs">
+            Отмена
+        </button>
+    </div>
+</div>
