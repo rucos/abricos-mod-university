@@ -47,9 +47,11 @@ Component.entryPoint = function(NS){
 	        		if(val.get('remove')){
 	        			objReplace.actremove = 'Восстановить';
 	        			objReplace.cl = 'class="danger"';
+	        			objReplace.click = 'restoreValue';
 	        		} else {
 	        			objReplace.actremove = 'Удалить';
 	        			objReplace.cl = '';
+	        			objReplace.click = 'remove-show';
 	        		}
 	        		objReplace.value = this.addValueModal.parseValue(view, val.get('nameurl'), val.get('value'));
 	        		
