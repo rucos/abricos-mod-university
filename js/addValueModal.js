@@ -43,22 +43,40 @@ Component.entryPoint = function(NS){
         },
         replaceForm: function(){
         	var valueItem = this.get('valueItem'),
-        		view = this.get('view');
+        		view = this.get('view'),
+        		date = valueItem.datedoc;
+        	
+        	if(date === true){
+        		valueItem.datedoc = "";
+        		valueItem.disabled = 'disabled';
+        		valueItem.active = 'active';
+        	} else {
+           		valueItem.disabled = '';
+        		valueItem.active = '';
+        	}
         	
         	return this.template.replace(view, valueItem);
         },
         actValue: function(respondCallback){
         	var valueItem = this.get('valueItem'),
         		view = this.get('view'),
-        		tp = this.template;
+        		tp = this.template,
+        		date = "";
 
         	valueItem.view = view;
         	
         	switch(view){
         		case 'file':
+        			date = tp.gel('file.datedoc');
+        			
+        			if(date.disabled){
+        				valueItem.datedoc = -1;
+        			} else {
+        				valueItem.datedoc = tp.gel('file.datedoc').value;
+        			}
+        			
         			valueItem.nameurl = tp.gel('file.nameurl').value;
             		valueItem.namedoc = tp.gel('file.namedoc').value;
-            		valueItem.datedoc = tp.gel('file.datedoc').value;
             		valueItem.file = tp.gel('fileInput.inputFile') ? tp.gel('fileInput.inputFile').files[0] : '';
             			return this.reqActFiles(valueItem, respondCallback);
         		case 'url':
@@ -87,14 +105,25 @@ Component.entryPoint = function(NS){
         		value = valueAttributeItem.get('value'),
         		nameurl = valueAttributeItem.get('nameurl'),
         		arr = [id, atrid, value],
-        		date = '';
+        		isWithoutDate = true,
+        		nameDoc = "";
         	
         	if(!!nameurl){
         		arr[3] = nameurl;
-        		value.replace(/(\w+_)(\d+)\.(\d+)\.(\d+)/, function(str, name, day, month, year){
-        			arr[4] = name.slice(0, -1);
+        		
+        		value.replace(/([a-z]+[._])/gi, function(str, value){
+        			nameDoc += value; 
+        		});
+        		arr[4] = nameDoc.slice(0,-1);
+        		
+        		value.replace(/(\d+)\.(\d+)\.(\d+)/, function(str, day, month, year){
+        			isWithoutDate = false;
         			arr[5] = year + "-" + month + "-" + day;
         		});
+        		
+        		if(isWithoutDate){
+        			arr[5] = isWithoutDate;
+        		}
         	}
         	this.set('valueItem', this.constrData.apply(this, arr));
         	this.fillForm(true);
@@ -264,6 +293,21 @@ Component.entryPoint = function(NS){
         			var tp = this.template;
         			
         			tp.setHTML('file.file', tp.replace('fileInput'));
+        		}
+        	},
+        	withOutDate: {
+        		event: function(e){
+        			var tp = this.template,
+        				btn = e.target.getDOMNode(),
+        				active = /active/.test(btn.classList.value);
+        			
+        			if(active){
+        				btn.classList.remove('active');
+        				tp.gel('file.datedoc').disabled = false;
+        			} else {
+        				btn.classList.add('active');
+        				tp.gel('file.datedoc').disabled = true;
+        			}
         		}
         	}
         }

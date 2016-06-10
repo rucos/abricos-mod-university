@@ -67,12 +67,17 @@ class UploadFile{
 		$this->namedoc = $namedoc;
 			
 		$datedoc = $utmf->Parser($_POST['datedoc']);
-			
-		if(!preg_match("/[1-2]\d{3}-[01]\d-[0-3]\d/", $datedoc)){
-			$this->resp = '13';
+		
+		if($datedoc == -1){
+			$this->datedoc = "";
+		} else {
+			if(!preg_match("/[1-2]\d{3}-[01]\d-[0-3]\d/", $datedoc)){
+				$this->resp = '13';
 				return false;
+			}
+			$arrDateDoc = explode('-', $datedoc);
+			$this->datedoc = "_".$arrDateDoc[2].".".$arrDateDoc[1].".".$arrDateDoc[0];
 		}
-		$this->datedoc = explode('-', $datedoc);
 		
 		return true;
 	}
@@ -137,9 +142,7 @@ class UploadFile{
 	private function ParsePathFile($typeDoc){
 		$menu = $this->modManager->GetUniversity()->SectionItemUpload($this->data->atrid);
 		
-		$dateDocStr = $this->datedoc[2].".".$this->datedoc[1].".".$this->datedoc[0];
-		
-		return "data-edu/".$menu."/".$this->namedoc."_".$dateDocStr.$typeDoc;
+		return "data-edu/".$menu."/".$this->namedoc.$this->datedoc.$typeDoc;
 	}
 	
 	private function ValueItem(){

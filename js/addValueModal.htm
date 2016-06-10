@@ -59,7 +59,12 @@
 	</div>
 	<div class="form-group">
 	  <label>Дата утверждения</label>
-	  	<input id="{i#datedoc}" type="date" class="form-control" value="{v#datedoc}">
+	  	<div class="form-inline">
+	  		<div class="form-group">
+	  			<input id="{i#datedoc}" type="date" class="form-control" value="{v#datedoc}" {v#disabled}>
+	  		</div>
+			<button type="button" class="btn btn-default {v#active}" data-click="withOutDate">Без даты</button>
+	  	</div>
 	</div>
 	<div class="form-group">
 	    <label for="exampleInputFile">Текущий документ</label>
@@ -74,7 +79,7 @@
  <!--{referfile}-->
  <br>
 <a href="/{v#url}" target="_blank">{v#url}</a>
-<button type="button" class="btn btn-danger" data-click="remove-file"><span>&times;</span></button>
+<button type="button" class="btn btn-danger btn-sm" data-click="remove-file"><span>&times;</span></button>
 
 <!--{refer}-->
 <a href="{v#value}" target="_blank">{v#nameurl}</a>
