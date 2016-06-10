@@ -157,7 +157,7 @@ class UploadFile{
 	
 	private function CheckTypeFile($name){
 		$typeDoc = "";
-		$whitelist = array(".pdf", ".doc", ".docx", ".xls", ".xlsx");
+		$whitelist = array(".pdf", ".doc", ".docx", ".xls", ".xlsx", ".odt", ".ods");
 	
 		foreach($whitelist as $item){
 			if(preg_match("/$item\$/i", $name)) {
