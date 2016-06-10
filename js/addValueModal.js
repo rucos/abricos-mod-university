@@ -106,15 +106,23 @@ Component.entryPoint = function(NS){
         		nameurl = valueAttributeItem.get('nameurl'),
         		arr = [id, atrid, value],
         		isWithoutDate = true,
-        		nameDoc = "";
+        		nameDocWord = "",
+        		nameDocDigital = "";
         	
         	if(!!nameurl){
         		arr[3] = nameurl;
         		
-        		value.replace(/([a-z]+[._])/gi, function(str, value){
-        			nameDoc += value; 
+        		value.replace(/([a-z]+[._])(\d+[._])?/g, function(str, w, d){
+        			if(d){
+        				nameDocDigital += d;
+        			}
+        			nameDocWord += w;
         		});
-        		arr[4] = nameDoc.slice(0,-1);
+        		
+        		if(nameDocDigital){
+        			nameDocWord += nameDocDigital;
+        		}
+        		arr[4] = nameDocWord.slice(0,-1);
         		
         		value.replace(/(\d+)\.(\d+)\.(\d+)/, function(str, day, month, year){
         			isWithoutDate = false;
