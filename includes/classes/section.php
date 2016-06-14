@@ -222,7 +222,7 @@ class Section {
 		$complexid = $this->AppendUnAttr($rows, true);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Образовательная программа', '', 'program'),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Образовательная программа', 'EduCode', 'program'),
 			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о реализуемых уровнях образования', 'EduLevel', '')
 		";
 		$this->AppendUnAttr($rows);
@@ -254,10 +254,7 @@ class Section {
 		$complexid = $this->AppendUnAttr($rows, true);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Образовательная программа', '', 'program'),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Уровень образования', 'EduLavel', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Код специальности, направления подготовки', 'EduCode', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация об описании образовательной программы', 'OOP_main', ''),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Образовательная программа', 'OOP_main', 'program'),
 			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация об учебном плане', 'education_plan', ''),
 			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация об аннотации к рабочим программам дисциплин (по каждой дисциплине в составе образовательной программы)', 'education_annotation', ''),
 			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о календарном учебном графике', 'education_shedule', ''),
