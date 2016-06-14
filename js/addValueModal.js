@@ -105,33 +105,26 @@ Component.entryPoint = function(NS){
         		value = valueAttributeItem.get('value'),
         		nameurl = valueAttributeItem.get('nameurl'),
         		arr = [id, atrid, value],
-        		isWithoutDate = true,
-        		nameDocWord = "",
-        		nameDocDigital = "";
+        		date = "",
+        		nameDoc = "";
         	
         	if(!!nameurl){
         		arr[3] = nameurl;
         		
-        		value.replace(/([a-z]+[._])(\d+[._])?/g, function(str, w, d){
-        			if(d){
-        				nameDocDigital += d;
-        			}
-        			nameDocWord += w;
+           		value.replace(/(\d+)\.(\d+)\.(\d+)\.(\w{3,4})/, function(str, day, month, year){
+           			date += str;
+           			
+           			arr[5] = year + "-" + month + "-" + day;
         		});
-        		
-        		if(nameDocDigital){
-        			nameDocWord += nameDocDigital;
-        		}
-        		arr[4] = nameDocWord.slice(0,-1);
-        		
-        		value.replace(/(\d+)\.(\d+)\.(\d+)/, function(str, day, month, year){
-        			isWithoutDate = false;
-        			arr[5] = year + "-" + month + "-" + day;
-        		});
-        		
-        		if(isWithoutDate){
-        			arr[5] = isWithoutDate;
-        		}
+           		
+           		if(date){
+           			value = value.replace(date, "");
+           		} else {
+           			arr[5] = true;
+           		}
+           		nameDoc = value.match(/\w+[._]/g)[0]; 
+           		
+           		arr[4] = nameDoc.slice(0, -1);
         	}
         	this.set('valueItem', this.constrData.apply(this, arr));
         	this.fillForm(true);

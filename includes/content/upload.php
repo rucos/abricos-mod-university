@@ -60,9 +60,9 @@ class UploadFile{
 		$this->data->view = $utmf->Parser($_POST['view']);
 			
 		$namedoc = $utmf->Parser($_POST['namedoc']);
-		if($namedoc === ''){
+		if(!preg_match("/\w+/", $namedoc)){
 			$this->resp = '12';
-				return false;
+			return false;
 		}
 		$this->namedoc = $namedoc;
 			
