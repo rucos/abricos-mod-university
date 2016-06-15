@@ -226,7 +226,6 @@ class UniversityQuery {
     	$programid = mysql_insert_id();
     	
    		UniversityQuery::AppendEduForm($db, $d->eduLevel, $programid);
-
 	}
 	
 	public static function ProgramList(Ab_Database $db){
@@ -269,69 +268,47 @@ class UniversityQuery {
 		
 		$sql = "
 			SELECT
-					edulevelid as id,
-					level,
-					eduform,
-					educount
-			FROM ".$db->prefix."un_edulevel
-			WHERE programid=".bkint($programid)."
+					f.eduformid as id,
+					l.level,
+					f.eduform,
+					f.educount
+			FROM ".$db->prefix."un_edulevel l
+			INNER JOIN ".$db->prefix."un_eduform f ON f.edulevelid=l.edulevelid
+			WHERE l.programid=".bkint($programid)."
 		";
 		return $db->query_read($sql);
 	}
 	
 	public static function EditProgram(Ab_Database $db, $d){
-		$sql = "
-			UPDATE ".$db->prefix."un_program
-			SET
-				code='".bkstr($d->code)."',
-				name='".bkstr($d->name)."'
-			WHERE programid=".bkint($d->programid)."
-			LIMIT 1
-		";
-		$db->query_write($sql);
-		
-		$sql = "
-			DELETE 
-			FROM ".$db->prefix."un_edulevel
-			WHERE programid=".bkint($d->programid)."
-		";
-		$db->query_write($sql);
-		
-		UniversityQuery::AppendEduForm($db, $d->eduLevel, $d->programid);
+
 		
 	}
 	
 	private function AppendEduForm($db, $eduLevel, $programid){
 		
-		$insert = "";
-			
-		foreach($eduLevel as $level => $eduForm){
-			$pos = $eduForm / 1;
-		
-			if($pos !== 0){
-				$level++;
-				for($i = 1; $i <= 3; $i++){
-					$educount = $eduForm[$i - 1];
-		
-					if($educount > 0){
-						$insert .= "(".$programid.",".$level.",".$i.",".$educount."),";
-					}
-				}
-			}
+		foreach ($eduLevel as $key => $value){
+				$sql = "
+					INSERT INTO ".$db->prefix."un_edulevel(programid, level)
+					VALUES (
+							".$programid.",
+							".($key + 1)."
+					)
+				";
+				$db->query_write($sql);
+				$edulevelid = mysql_insert_id();
+				
+				$insertForm = "
+					(".$edulevelid.", 1, ".$value[0]."),
+					(".$edulevelid.", 2, ".$value[1]."),
+					(".$edulevelid.", 3, ".$value[2].")
+				";
+				
+				$sql = "
+					INSERT INTO ".$db->prefix."un_eduform(edulevelid, eduform, educount)
+					VALUES ".$insertForm."
+				";
+				$db->query_write($sql);
 		}
-		
-		if($insert !== ""){
-			$insert = substr($insert, 0, -1);
-		
-			$sql = "
-		    		INSERT INTO ".$db->prefix."un_edulevel(programid, level, eduform, educount)
-		    		VALUES ".$insert."
-		    	";
-			$db->query_write($sql);
-		} else {
-			return false;
-		}
-		
 	}
 	
 	public static function EmployeesList(Ab_Database $db){
@@ -407,7 +384,7 @@ class UniversityQuery {
 					$dataValue[$i] = $arrAttrid;
 				}
 			return $dataValue;
-		} 
+		}
 	}
 	
 	public static function MaxNumRowValue($db, $strid){

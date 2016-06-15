@@ -264,12 +264,24 @@ class University extends AbricosApplication {
     	$d->code = $utmf->Parser($d->code);
     	$d->name = $utmf->Parser($d->name);
     	
-    	if($d->programid > 0){
-    		return UniversityQuery::EditProgram($this->db, $d);
-    	} else {
-    		return UniversityQuery::AppendProgram($this->db, $d);
+    	$arr = array();
+    	foreach ($d->eduLevel as $key => $value){
+    		$level = intval($value);
+    		if($level){
+    			$arr[$key] = $utmf->Parser($value);
+    		}
     	}
     	
+    	if(count($arr)){
+    		$d->eduLevel = $arr;
+    			if($d->programid > 0){
+    		    	return UniversityQuery::EditProgram($this->db, $d);
+    		    } else {
+    		    	return UniversityQuery::AppendProgram($this->db, $d);
+    		    }
+    	} else {
+    		return false;
+    	}
     }
     
     public function ProgramListToJSON(){
@@ -306,7 +318,6 @@ class University extends AbricosApplication {
     	$item = $this->ProgramItem($programid);
     	$level = $this->ProgramLevelList($programid);
     	
-    	
     	return $this->ImplodeJSON(
     			$this->ResultToJSON('programItem', $item),
     			$this->ResultToJSON('programLevelList', $level)
@@ -314,21 +325,22 @@ class University extends AbricosApplication {
     }
     
     public function ProgramItem($programid){
+    	
     	$rows = UniversityQuery::ProgramItem($this->db, $programid);
     	
     	return $this->models->InstanceClass('ProgramItem', $rows);
     }
     
     public function ProgramLevelList($programid){
-    	
     	$list = $this->models->InstanceClass('ProgramLevelList');
     	
     	$rows = UniversityQuery::ProgramLevelList($this->db, $programid);
     	
-    	while (($d = $this->db->fetch_array($rows))){
-    		$list->Add($this->models->InstanceClass('ProgramLevelItem', $d));
+    	while ($d = $this->db->fetch_array($rows)){
+    		if($d['educount'] > 0){
+    			$list->Add($this->models->InstanceClass('ProgramLevelItem', $d));
+    		}
     	}
-    	
     	return $list;
     }
     

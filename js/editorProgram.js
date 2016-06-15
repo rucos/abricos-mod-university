@@ -18,7 +18,7 @@ Component.entryPoint = function(NS){
         	if(programid > 0){
         		this.editShow(programid);
         	} else {
-        		this.reloadPanel();
+        		this.reloadPanel(true);
         	}
         },
         editShow: function(programid){
@@ -32,7 +32,7 @@ Component.entryPoint = function(NS){
 	        			}
 	        	}, this);
         },
-        reloadPanel: function(){
+        reloadPanel: function(add){
         	var tp = this.template,
         		lst = "",
         		programItem = this.get('programItem'),
@@ -42,7 +42,7 @@ Component.entryPoint = function(NS){
         			act: 'Добавить'
         		};
         	
-        	if(programItem){
+        	if(!add){
         		replaceObj.code = programItem.get('code');
         		replaceObj.name = programItem.get('name');
         		replaceObj.act = "Изменить";
@@ -50,44 +50,44 @@ Component.entryPoint = function(NS){
         	
         	tp.setHTML('panel', tp.replace('panel', replaceObj));
         	
-        	if(programItem){//workaround
         		this.renderProgramLevelList();
-        	}
         },
-        renderProgramLevelList: function(){
+        renderProgramLevelList: function(add){
         	var tp = this.template,
         		programLevelList = this.get('programLevelList');
         	
-        	programLevelList.each(function(level){
-        		var obj = level.toJSON(),
-        			lvl = '',
-        			form = 0;
-        		
-        		switch(obj.level){
-        			case 'бакалавриат академический':
-        				lvl = 'panel.akad';
-        					break;
-        			case 'бакалавриат прикладной':
-        				lvl = 'panel.prik';
-        					break;
-        			case 'специалитет':
-        				lvl = 'panel.spec';
-        					break;
-        		}
-        		
-        		switch(obj.eduform){
-	    			case 'очная':
-	    				form = 1;
-	    					break;
-	    			case 'очно-заочная':
-	    				form = 2;
-	    					break;
-	    			case 'заочная':
-	    				form = 3;
-	    					break;
-	    		}
-        		this.template.gel(lvl).cells[form].firstChild.checked = true;
-        	}, this);
+        	if(programLevelList){
+        		programLevelList.each(function(level){
+	        		var obj = level.toJSON(),
+	        			lvl = '',
+	        			form = 0;
+	        		
+	        		switch(obj.level){
+	        			case 'бакалавриат академический':
+	        				lvl = 'panel.akad';
+	        					break;
+	        			case 'бакалавриат прикладной':
+	        				lvl = 'panel.prik';
+	        					break;
+	        			case 'специалитет':
+	        				lvl = 'panel.spec';
+	        					break;
+	        		}
+	        		
+	        		switch(obj.eduform){
+		    			case 'очная':
+		    				form = 1;
+		    					break;
+		    			case 'очно-заочная':
+		    				form = 2;
+		    					break;
+		    			case 'заочная':
+		    				form = 3;
+		    					break;
+		    		}
+	        			this.template.gel(lvl).cells[form].firstChild.checked = true;	        			
+	        	}, this);
+        	}
         },
         renderPanel: function(){
         	var tp = this.template,
@@ -126,7 +126,11 @@ Component.entryPoint = function(NS){
         	this.set('waiting', true);
 	        	this.get('appInstance').actProgram(data, function(err, result){
 	        		this.set('waiting', false);
-	        			this.go('program.view');
+	        			if(result.actProgram !== false){
+	        				this.go('program.view');	
+	        			} else {
+	        				alert( 'Укажите срок обучения' );
+	        			}
 	        	}, this);
         }
     }, {
