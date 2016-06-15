@@ -175,7 +175,7 @@ class Section {
 		
 		$rows = "
 			(".$idSection.", ".$complexid.", 0, 'composite', 'Наименования структурных подразделений (органов управления)', 'Name', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о руководителях структурных подразделений', 'Fio', 'employees'),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о руководителях структурных подразделений', 'Fio', ''),
 			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о местах нахождения структурных подразделений', 'AddressStr', ''),
 			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация об адресах официальных сайтов в сети Интернет структурных подразделений', 'Site', ''),
 			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация об адресах электронной почты структурных подразделений', 'E-mail', ''),
@@ -222,8 +222,8 @@ class Section {
 		$complexid = $this->AppendUnAttr($rows, true);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Образовательная программа', 'EduCode', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о реализуемых уровнях образования', 'EduLevel', '')
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Образовательная программа', 'EduCode', 'program', 'code,name'),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о реализуемых уровнях образования', 'EduLevel', 'edulevel', 'level')
 		";
 		$this->AppendUnAttr($rows);
 		
@@ -235,9 +235,9 @@ class Section {
 		$this->UpdateUnAttr($compisteid);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'Очная форма обучения', 'EduForm', ''),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'Очно-заочная форма обучения', 'EduForm', ''),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'Заочная форма обучения', 'EduForm', '')
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'Очная форма обучения', 'EduForm', 'eduform', 'educount'),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'Очно-заочная форма обучения', 'EduForm', 'eduform', 'educount'),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'Заочная форма обучения', 'EduForm', 'eduform', 'educount')
 		";
 		$this->AppendUnAttr($rows);
 		

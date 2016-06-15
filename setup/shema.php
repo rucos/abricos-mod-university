@@ -13,7 +13,7 @@ $db = Abricos::$db;
 $pfx = $db->prefix;
 
 
-if ($updateManager->isInstall('0.1.3')){
+if ($updateManager->isInstall('0.1.4')){
 	
 	Abricos::GetModule('university')->permission->Install();
 		/*
@@ -45,6 +45,7 @@ if ($updateManager->isInstall('0.1.3')){
 				nameattribute TEXT NOT NULL default '' COMMENT 'Название атрибута',
 				applyattribute varchar(255) NOT NULL default '' COMMENT 'Применяемый атрибут',
 				tablename varchar(50) NOT NULL default '' COMMENT 'Связующая таблица',
+				fieldname varchar(50) NOT NULL default '' COMMENT 'Поля связующей таблицы',
 				locate tinyint(1) unsigned NOT NULL default 1 COMMENT 'Показывать?',
 				remove tinyint(1) unsigned NOT NULL default 0 COMMENT 'Удален?',
 				PRIMARY KEY (attributeid)
@@ -95,16 +96,29 @@ if ($updateManager->isInstall('0.1.3')){
 				edulevelid int(10) unsigned NOT NULL auto_increment,
 				programid int(10) unsigned NOT NULL default 0 COMMENT 'id направления',
 				level enum('бакалавриат академический','бакалавриат прикладной','специалитет') NOT NULL COMMENT 'уровень образования',
-				eduform enum('очная','очно-заочная','заочная') NOT NULL COMMENT 'формы обучения',
-				educount tinyint(1) unsigned NOT NULL default 0 COMMENT 'Срок обучения',
 				PRIMARY KEY (edulevelid),
-				UNIQUE KEY level (programid,level,eduform)
+				UNIQUE KEY level (programid,level)
 			)".$charset
 		);
 		
 		/*
 		 *
-		* 6. Сотрудники
+		 * 6. Формы обучения
+		 *
+		 * */
+		$db->query_write("
+			CREATE TABLE IF NOT EXISTS ".$pfx."un_eduform(
+				eduformid int(10) unsigned NOT NULL auto_increment,
+				edulevelid int(10) unsigned NOT NULL default 0 COMMENT 'id уровня образования',
+				eduform enum('очная','очно-заочная','заочная') NOT NULL COMMENT 'формы обучения',
+				educount tinyint(1) unsigned NOT NULL default 0 COMMENT 'Срок обучения',
+				PRIMARY KEY (eduformid)
+			)".$charset
+		);
+		
+		/*
+		 *
+		* 7. Сотрудники
 		*
 		* */
 		$db->query_write("
