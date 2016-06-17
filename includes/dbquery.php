@@ -225,6 +225,34 @@ class UniversityQuery {
 		$db->query_write($sql);
     	$programid = mysql_insert_id();
     	
+// 		    	$sql = "
+// 					SELECT 
+// 		    			MAX(programid) as m
+// 		    		FROM ".$db->prefix."un_program
+// 		    	";
+// 		    	$numrow = $db->query_first($sql);
+		    	
+// 		    	$sql = "
+// 					SELECT 
+// 		    			attributeid as id
+// 		    		FROM ".$db->prefix."un_attribute
+// 		    		WHERE tablename='program'
+// 				";
+// 		    	$rows = $db->query_read($sql);
+// 		    	$insert = "";
+		    	
+// 		    	while ($dd = $db->fetch_array($rows)){
+// 		    		$insert .= "(".$dd['id'].",".$numrow['m'].",".$programid."),"; 
+// 		    	}
+		    	
+// 		    	$insert = substr($insert, 0, -1);
+		    	
+// 		    	$sql = "
+// 					INSERT INTO ".$db->prefix."un_value(attributeid, numrow, relationid)
+// 					VALUES ".$insert."
+// 				";
+// 		    	$db->query_write($sql);
+    	
    		UniversityQuery::AppendEduForm($db, $d->eduLevel, $programid);
 	}
 	
@@ -270,8 +298,9 @@ class UniversityQuery {
 			SELECT
 					f.eduformid as id,
 					l.level,
-					f.eduform,
-					f.educount
+					f.och,
+					f.ochzaoch,
+					f.zaoch
 			FROM ".$db->prefix."un_edulevel l
 			INNER JOIN ".$db->prefix."un_eduform f ON f.edulevelid=l.edulevelid
 			WHERE l.programid=".bkint($programid)."
@@ -284,7 +313,7 @@ class UniversityQuery {
 		
 	}
 	
-	private function AppendEduForm($db, $eduLevel, $programid){
+	private function AppendEduForm($db, $eduLevel, $programid, $numrow){
 		
 		foreach ($eduLevel as $key => $value){
 				$sql = "
@@ -297,17 +326,12 @@ class UniversityQuery {
 				$db->query_write($sql);
 				$edulevelid = mysql_insert_id();
 				
-				$insertForm = "
-					(".$edulevelid.", 1, ".$value[0]."),
-					(".$edulevelid.", 2, ".$value[1]."),
-					(".$edulevelid.", 3, ".$value[2].")
-				";
-				
 				$sql = "
-					INSERT INTO ".$db->prefix."un_eduform(edulevelid, eduform, educount)
-					VALUES ".$insertForm."
+					INSERT INTO ".$db->prefix."un_eduform(edulevelid, och, ochzaoch, zaoch)
+					VALUES (".$edulevelid.", ".bkint($value[0]).", ".bkint($value[1]).", ".bkint($value[2]).")
 				";
 				$db->query_write($sql);
+				
 		}
 	}
 	

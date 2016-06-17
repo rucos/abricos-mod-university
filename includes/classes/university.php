@@ -336,10 +336,13 @@ class University extends AbricosApplication {
     	
     	$rows = UniversityQuery::ProgramLevelList($this->db, $programid);
     	
+    	$resp = array();
     	while ($d = $this->db->fetch_array($rows)){
-    		if($d['educount'] > 0){
-    			$list->Add($this->models->InstanceClass('ProgramLevelItem', $d));
-    		}
+    		$resp['id'] = $d['id'];
+    		$resp['level'] = $d['level'];
+    		$resp['eduform'] = $d['och'].$d['ochzaoch'].$d['zaoch'];
+    		
+    		$list->Add($this->models->InstanceClass('ProgramLevelItem', $resp));
     	}
     	return $list;
     }

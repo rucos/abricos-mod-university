@@ -52,7 +52,7 @@ Component.entryPoint = function(NS){
         	
         		this.renderProgramLevelList();
         },
-        renderProgramLevelList: function(add){
+        renderProgramLevelList: function(){
         	var tp = this.template,
         		programLevelList = this.get('programLevelList');
         	
@@ -60,7 +60,7 @@ Component.entryPoint = function(NS){
         		programLevelList.each(function(level){
 	        		var obj = level.toJSON(),
 	        			lvl = '',
-	        			form = 0;
+	        			tp = this.template;
 	        		
 	        		switch(obj.level){
 	        			case 'бакалавриат академический':
@@ -74,18 +74,11 @@ Component.entryPoint = function(NS){
 	        					break;
 	        		}
 	        		
-	        		switch(obj.eduform){
-		    			case 'очная':
-		    				form = 1;
-		    					break;
-		    			case 'очно-заочная':
-		    				form = 2;
-		    					break;
-		    			case 'заочная':
-		    				form = 3;
-		    					break;
-		    		}
-	        			this.template.gel(lvl).cells[form].firstChild.checked = true;	        			
+	        		for(var i = 0; i <= 2; i++){
+	        			if(obj.eduform[i] > 0){
+	        				tp.gel(lvl).cells[i + 1].firstChild.checked = true;	  
+	        			}
+	        		}
 	        	}, this);
         	}
         },

@@ -45,7 +45,7 @@ if ($updateManager->isInstall('0.1.4')){
 				nameattribute TEXT NOT NULL default '' COMMENT 'Название атрибута',
 				applyattribute varchar(255) NOT NULL default '' COMMENT 'Применяемый атрибут',
 				tablename varchar(50) NOT NULL default '' COMMENT 'Связующая таблица',
-				fieldname varchar(50) NOT NULL default '' COMMENT 'Поля связующей таблицы',
+				fieldname varchar(255) NOT NULL default '' COMMENT 'Поля связующей таблицы',
 				locate tinyint(1) unsigned NOT NULL default 1 COMMENT 'Показывать?',
 				remove tinyint(1) unsigned NOT NULL default 0 COMMENT 'Удален?',
 				PRIMARY KEY (attributeid)
@@ -110,8 +110,9 @@ if ($updateManager->isInstall('0.1.4')){
 			CREATE TABLE IF NOT EXISTS ".$pfx."un_eduform(
 				eduformid int(10) unsigned NOT NULL auto_increment,
 				edulevelid int(10) unsigned NOT NULL default 0 COMMENT 'id уровня образования',
-				eduform enum('очная','очно-заочная','заочная') NOT NULL COMMENT 'формы обучения',
-				educount tinyint(1) unsigned NOT NULL default 0 COMMENT 'Срок обучения',
+				och tinyint(1) unsigned NOT NULL default 0 COMMENT 'Срок обучения очная форма',
+				ochzaoch tinyint(1) unsigned NOT NULL default 0 COMMENT 'Срок обучения очно-заочная форма',
+				zaoch tinyint(1) unsigned NOT NULL default 0 COMMENT 'Срок обучения заочная форма',
 				PRIMARY KEY (eduformid)
 			)".$charset
 		);
