@@ -235,9 +235,9 @@ class Section {
 		$this->UpdateUnAttr($compisteid);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'Очная форма обучения', 'EduForm', 'eduform', 'educount'),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'Очно-заочная форма обучения', 'EduForm', 'eduform', 'educount'),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'Заочная форма обучения', 'EduForm', 'eduform', 'educount')
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'Очная форма обучения', 'EduForm', 'eduform', 'och'),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'Очно-заочная форма обучения', 'EduForm', 'eduform', 'ochzaoch'),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'Заочная форма обучения', 'EduForm', 'eduform', 'zaoch')
 		";
 		$this->AppendUnAttr($rows);
 		
@@ -273,7 +273,7 @@ class Section {
 		
 		$rows = "
 			(".$idSection.", ".$complexid.", 0, 'composite', 'Наименование специальности/направления подготовки', 'EduCode', 'program', 'code,name'),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Форма обучения', 'EduForm', '', '')
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Форма обучения', 'EduForm', 'eduform', '')
 		";
 		$this->AppendUnAttr($rows);
 		
@@ -305,7 +305,7 @@ class Section {
 		
 		$rows = "
 			(".$idSection.", ".$complexid.", 0, 'composite', 'Наименование специальности/направления подготовки', 'EduCode', 'program', 'code,name'),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Форма обучения', 'EduForm', '', '')
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Форма обучения', 'EduForm', 'eduform', '')
 		";
 		$this->AppendUnAttr($rows);
 		

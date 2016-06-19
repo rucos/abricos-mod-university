@@ -188,6 +188,11 @@ class University extends AbricosApplication {
     		while ($d = $this->db->fetch_array($rows)){
     			$num = $d['numrow'];
     			$atrid = $d['attributeid'];
+    			$fieldname = $d['fieldname'];
+    			
+    			if($fieldname !== ''){
+    				$d['value'] = UniversityQuery::ValueOfLinkTable($this->db, $d['tablename'], $fieldname, $d['relationid'], $d['value']); 
+    			}
     				
     			array_push($dataValue[$num][$atrid], $d);
     		}
