@@ -225,63 +225,60 @@ class UniversityQuery {
 		$db->query_write($sql);
     	$programid = mysql_insert_id();
     	
-		    	$sql = "
-					SELECT 
-		    			MAX(programid) as m
-		    		FROM ".$db->prefix."un_program
-		    	";
-		    	$numrow = $db->query_first($sql);
+    	$sql = "
+			SELECT 
+    			MAX(programid) as m
+    		FROM ".$db->prefix."un_program
+    	";
+    	$numrow = $db->query_first($sql);
 		    	
-		    	$sql = "
-					SELECT 
-		    			attributeid as id
-		    		FROM ".$db->prefix."un_attribute
-		    		WHERE tablename='program'
-				";
-		    	$rows = $db->query_read($sql);
-		    	$insert = "";
+		UniversityQuery::InsertComplexValue($db, "tablename='program'", $numrow['m'], $programid, 0, "programid");
+		
+		UniversityQuery::InsertComplexValue($db, "tablename='eduform' AND fieldname=''", $numrow['m'], $programid, 0, false);
 		    	
-		    	while ($dd = $db->fetch_array($rows)){
-		    		$insert .= "(".$dd['id'].",".$numrow['m'].",".$programid.",".'"programid"'."),"; 
-		    	}
-		    	
-		    	$insert = substr($insert, 0, -1);
-		    	
-		    	$sql = "
-					INSERT INTO ".$db->prefix."un_value(attributeid, numrow, relationid, value)
-					VALUES ".$insert."
-				";
-		    	$db->query_write($sql);
-		    	
-		    	$sql = "
-					SELECT
-		    			attributeid as id
-		    		FROM ".$db->prefix."un_attribute
-		    		WHERE tablename='eduform' AND fieldname=''
-				";
-		    	$rows = $db->query_read($sql);
-		    	$insert = "";
-		    	
-		    	$form = array(
-		    			'очная',
-		    			'очно-заочная',
-		    			'заочная'
-		    	);
-		    	
-		    	while ($dd = $db->fetch_array($rows)){
-		    		foreach ($form as $value){
-		    			$insert .= "(".$dd['id'].",".$numrow['m'].",".$programid.",'".$value."'),";
-		    		}
-		    	}
-		    	$insert = substr($insert, 0, -1);
-		    	
-		    	$sql = "
-					INSERT INTO ".$db->prefix."un_value(attributeid, numrow, relationid, value)
-					VALUES ".$insert."
-				";
-		    	$db->query_write($sql);
-    	
    		UniversityQuery::AppendEduForm($db, $d->eduLevel, $programid, $numrow['m']);
+	}
+	
+	/*
+	 * Добавление направлений в таблицу un_value 
+	 * 
+	 */
+	public static function InsertComplexValue(Ab_Database $db, $where, $numrow, $relationid, $mainid, $value){
+		
+		$sql = "
+				SELECT
+	    			attributeid as id
+	    		FROM ".$db->prefix."un_attribute
+	    		WHERE ".$where."
+		";
+		$rows = $db->query_read($sql);
+		$insert = "";
+		
+		if(!$value){
+			$formEdu = array(
+					'очная',
+					'очно-заочная',
+					'заочная'
+			);
+			
+			while ($dd = $db->fetch_array($rows)){
+				foreach ($formEdu as $form){
+					$insert .= "(".$dd['id'].",".$numrow.",".$relationid.",".$mainid.",'".$form."'),";
+				}
+			}
+		} else {
+			while ($dd = $db->fetch_array($rows)){
+				$insert .= "(".$dd['id'].",".$numrow.",".$relationid.",".$mainid.",'".$value."'),";
+			}
+		}
+		$insert = substr($insert, 0, -1);
+		 
+		$sql = "
+			INSERT INTO ".$db->prefix."un_value(attributeid, numrow, relationid, mainid, value)
+			VALUES ".$insert."
+		";
+		$db->query_write($sql);
+		
 	}
 	
 	public static function ProgramList(Ab_Database $db){
@@ -385,54 +382,17 @@ class UniversityQuery {
 				$db->query_write($sql);
 				$edulevelid = mysql_insert_id();
 				
-				$sql = "
-					SELECT 
-		    			attributeid as id
-		    		FROM ".$db->prefix."un_attribute
-		    		WHERE tablename='edulevel'
-				";
-		    	$rows = $db->query_read($sql);
-		    	$insert = "";
-		    	
-		    	while ($dd = $db->fetch_array($rows)){
-		    		$insert .= "(".$dd['id'].",".$numrow.",".$edulevelid.",".$programid.",".'"edulevelid"'."),"; 
-		    	}
-		    	
-		    	$insert = substr($insert, 0, -1);
-		    	
-		    	$sql = "
-					INSERT INTO ".$db->prefix."un_value(attributeid, numrow, relationid, mainid, value)
-					VALUES ".$insert."
-				";
-		    	$db->query_write($sql);
+				UniversityQuery::InsertComplexValue($db, "tablename='edulevel'", $numrow, $edulevelid, $programid, "edulevelid");
 				
 		    	$sql = "
 					INSERT INTO ".$db->prefix."un_eduform(edulevelid, och, ochzaoch, zaoch)
-					VALUES (".$edulevelid.", ".bkint($value[0]).", ".bkint($value[1]).", ".bkint($value[2]).")
+					VALUES (".$edulevelid.",".bkint($value[0]).",".bkint($value[1]).",".bkint($value[2]).")
 				";
 		    	$db->query_write($sql);
 		    	$formid = mysql_insert_id();
 		    	
-		    	$sql = "
-					SELECT
-		    			attributeid as id
-		    		FROM ".$db->prefix."un_attribute
-		    		WHERE tablename='eduform'  AND fieldname<>''
-				";
-		    	$rows = $db->query_read($sql);
-		    	$insert = "";
-		    	 
-		    	while ($dd = $db->fetch_array($rows)){
-		    		$insert .= "(".$dd['id'].",".$numrow.",".$formid.",".$programid.",".'"eduformid"'."),";
-		    	}
-		    	 
-		    	$insert = substr($insert, 0, -1);
-		    	 
-		    	$sql = "
-					INSERT INTO ".$db->prefix."un_value(attributeid, numrow, relationid, mainid, value)
-					VALUES ".$insert."
-				";
-		    	$db->query_write($sql);
+		    	UniversityQuery::InsertComplexValue($db, "tablename='eduform'  AND fieldname<>''", $numrow, $formid, $programid, "eduformid");
+		    	
 		}
 	}
 	
