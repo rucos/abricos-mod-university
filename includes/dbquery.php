@@ -252,6 +252,34 @@ class UniversityQuery {
 					VALUES ".$insert."
 				";
 		    	$db->query_write($sql);
+		    	
+		    	$sql = "
+					SELECT
+		    			attributeid as id
+		    		FROM ".$db->prefix."un_attribute
+		    		WHERE tablename='eduform' AND fieldname=''
+				";
+		    	$rows = $db->query_read($sql);
+		    	$insert = "";
+		    	
+		    	$form = array(
+		    			'очная',
+		    			'очно-заочная',
+		    			'заочная'
+		    	);
+		    	
+		    	while ($dd = $db->fetch_array($rows)){
+		    		foreach ($form as $value){
+		    			$insert .= "(".$dd['id'].",".$numrow['m'].",".$programid.",'".$value."'),";
+		    		}
+		    	}
+		    	$insert = substr($insert, 0, -1);
+		    	
+		    	$sql = "
+					INSERT INTO ".$db->prefix."un_value(attributeid, numrow, relationid, value)
+					VALUES ".$insert."
+				";
+		    	$db->query_write($sql);
     	
    		UniversityQuery::AppendEduForm($db, $d->eduLevel, $programid, $numrow['m']);
 	}
@@ -309,12 +337,43 @@ class UniversityQuery {
 	}
 	
 	public static function EditProgram(Ab_Database $db, $d){
+		$sql = "
+			UPDATE ".$db->prefix."un_program
+			SET
+				code='".bkstr($d->code)."',
+				name='".bkstr($d->name)."'
+			WHERE programid=".bkint($d->programid)."
+			LIMIT 1
+		";
+		$db->query_write($sql);
 
+		$sql = "
+			DELETE lvl,form
+				FROM ".$db->prefix."un_edulevel lvl
+				INNER JOIN ".$db->prefix."un_eduform form
+			WHERE lvl.programid=".bkint($d->programid)." AND lvl.edulevelid=form.edulevelid
+		";
+		$db->query_write($sql);
 		
+		$sql = "
+			DELETE FROM ".$db->prefix."un_value
+			WHERE mainid=".bkint($d->programid)."
+		";
+		$db->query_write($sql);
+		
+		$sql = "
+			SELECT
+    			numrow
+    		FROM ".$db->prefix."un_value
+    		WHERE value='programid' AND relationid=".bkint($d->programid)."
+    		LIMIT 1
+		";
+		$numrow = $db->query_first($sql);
+		
+		UniversityQuery::AppendEduForm($db, $d->eduLevel, $d->programid, $numrow['numrow']);
 	}
 	
 	private function AppendEduForm($db, $eduLevel, $programid, $numrow){
-		
 		foreach ($eduLevel as $key => $value){
 				$sql = "
 					INSERT INTO ".$db->prefix."un_edulevel(programid, level)
@@ -336,23 +395,17 @@ class UniversityQuery {
 		    	$insert = "";
 		    	
 		    	while ($dd = $db->fetch_array($rows)){
-		    		$insert .= "(".$dd['id'].",".$numrow.",".$edulevelid.",".'"edulevelid"'."),"; 
+		    		$insert .= "(".$dd['id'].",".$numrow.",".$edulevelid.",".$programid.",".'"edulevelid"'."),"; 
 		    	}
 		    	
 		    	$insert = substr($insert, 0, -1);
 		    	
 		    	$sql = "
-					INSERT INTO ".$db->prefix."un_value(attributeid, numrow, relationid, value)
+					INSERT INTO ".$db->prefix."un_value(attributeid, numrow, relationid, mainid, value)
 					VALUES ".$insert."
 				";
 		    	$db->query_write($sql);
 				
-		    	/*
-		    	 * och zaoch проверять fieldname у атрибута
-		    	 * 
-		    	 * заносить значние если не 0
-		    	 * 
-		    	 * */
 		    	$sql = "
 					INSERT INTO ".$db->prefix."un_eduform(edulevelid, och, ochzaoch, zaoch)
 					VALUES (".$edulevelid.", ".bkint($value[0]).", ".bkint($value[1]).", ".bkint($value[2]).")
@@ -370,45 +423,17 @@ class UniversityQuery {
 		    	$insert = "";
 		    	 
 		    	while ($dd = $db->fetch_array($rows)){
-		    		$insert .= "(".$dd['id'].",".$numrow.",".$formid.",".'"eduformid"'."),";
+		    		$insert .= "(".$dd['id'].",".$numrow.",".$formid.",".$programid.",".'"eduformid"'."),";
 		    	}
 		    	 
 		    	$insert = substr($insert, 0, -1);
 		    	 
 		    	$sql = "
-					INSERT INTO ".$db->prefix."un_value(attributeid, numrow, relationid, value)
+					INSERT INTO ".$db->prefix."un_value(attributeid, numrow, relationid, mainid, value)
 					VALUES ".$insert."
 				";
 		    	$db->query_write($sql);
 		}
-		
-				$sql = "
-					SELECT
-		    			attributeid as id
-		    		FROM ".$db->prefix."un_attribute
-		    		WHERE tablename='eduform' AND fieldname=''
-				";
-				$rows = $db->query_read($sql);
-				$insert = "";
-				
-				$form = array(
-						'очная',
-						'очно-заочная',
-						'заочная'
-				);
-				
-				while ($dd = $db->fetch_array($rows)){
-					foreach ($form as $value){
-						$insert .= "(".$dd['id'].",".$numrow.", 0,'".$value."'),";
-					}
-				}
-				$insert = substr($insert, 0, -1);
-				
-				$sql = "
-					INSERT INTO ".$db->prefix."un_value(attributeid, numrow, relationid, value)
-					VALUES ".$insert."
-				";
-				$db->query_write($sql);
 	}
 	
 	public static function EmployeesList(Ab_Database $db){

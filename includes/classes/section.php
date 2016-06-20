@@ -49,6 +49,11 @@ class Section {
 		$this->FillSection();
 	}
 	
+	/*
+	 * 
+	 * Добавление директории data-edu
+	 * 
+	 * */
 	private function FillSection(){
 		mkdir($this->docroot."/data-edu", 0700);
 		
