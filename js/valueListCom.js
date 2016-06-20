@@ -58,12 +58,13 @@ Component.entryPoint = function(NS){
         	var tp = this.template,
         		compositeObj = this.get('compositeObj'),
         		rowspan = this.get('rowSpan'),
+        		insert = this.get('insert'),
         		tdComp = "",
         		tdSubComp = "",
         		len = 0,
         		currArr = '',
         		col = '';
-        		
+        	
         	for(var i in compositeObj){
         		col = 'rowspan=' + rowspan;
         		currArr = compositeObj[i][1];
@@ -71,14 +72,14 @@ Component.entryPoint = function(NS){
         		
         		if(len > 0){
         			for(var j = 0; j < len; j++){
-            			tdSubComp += this.tDataReplace(currArr[j][1], '', currArr[j][0]); 
+            			tdSubComp += this.tdReplace(currArr[j][1], '', insert, currArr[j][0]);
         			}
         			col = 'colspan=' + len;
         			
-        			tdComp += this.tDataReplace(compositeObj[i][0], col);
+        			tdComp += this.tdReplace(compositeObj[i][0], col, insert);
         		} else {
-        			tdComp += this.tDataReplace(compositeObj[i][0], col, i);
-        		} 
+        			tdComp += this.tdReplace(compositeObj[i][0], col, insert, i);
+        		}
         	}
         	
         	tp.setHTML('values', tp.replace('table', {
@@ -86,26 +87,16 @@ Component.entryPoint = function(NS){
         	}))
         		this.reloadListValue();
         },
-        tDataReplace: function(value, span, id, add){
-        	var tp= this.template,
-        		replaceValue = '';
-        	
-        	if(id){
-        		value += "(+)";
-        		replaceValue = this.referAddReplace(value, id);
-        	} else {
-        		replaceValue = value;
-        	}
-        	
-        	return tp.replace('td', {
-        		span: span || "",
-        		value: replaceValue,
-        		add: add || ''
+        tdReplace: function(value, span, insert, id){
+        	return this.template.replace('td', {
+        		span: span,
+        		value: insert == 1 || !id ? value : this.referAddReplace(value, id),
+        		add: ''
         	});
         },
         referAddReplace: function(value, atrid, numrow, valueid, view){
         	return this.template.replace('referAdd', {
-    			nameurl: value,
+    			nameurl: value + "(+)",
     			id: atrid,
     			vid: valueid || 0,
     			view: view || 'value',
@@ -220,7 +211,8 @@ Component.entryPoint = function(NS){
             currentType: {value: null},
             sectionid: {value: null},
             compositeObj: {value: null},
-            rowSpan: {value: 0}
+            rowSpan: {value: 0},
+            insert: {value: 0}
         },
         CLICKS: {
         	'modal-show': {

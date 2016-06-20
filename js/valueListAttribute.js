@@ -46,11 +46,13 @@ Component.entryPoint = function(NS){
         renderList: function(value, type){
         	var attrid = this.get('currentAttrid'),
 	        	type = this.get('currentType'),
-	    		nameSection = this.get('nameSection');
+	    		nameSection = this.get('nameSection'),
+	    		insert = this.get('insert');
         	
         	value.set('currentAttrid', attrid);
         	value.set('currentType', type);
         	value.set('nameSection', nameSection);
+        	value.set('insert', insert);
         	
         	value.reloadList();
         }
@@ -62,7 +64,8 @@ Component.entryPoint = function(NS){
             sectionid: {value: null},
             currentAttrid: {value: null},
             currentType: {value: null},
-            nameSection: {value: ''}
+            nameSection: {value: ''},
+            insert: {value: 0}
         }
     });
 };

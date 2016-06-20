@@ -145,46 +145,46 @@ class Section {
 	
 	private function FillCommonSection($idSection){
 		$rows = "
-			(".$idSection.", 0, 0, 'simple', 'Дата создания образовательной организации', 'RegDate', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Информация о месте нахождения образовательной организации', 'Address', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Информация о месте нахождения филиалов образовательной организации', 'AddressFil', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Информация о режиме и графике работы образовательной организации', 'WorkTime', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Информация о контактных телефонах образовательной организации', 'Telephone', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Информация об адресах электронной почты образовательной организации', 'E-mail', '', '')
+			(".$idSection.", 0, 0, 'simple', 'Дата создания образовательной организации', 'RegDate', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Информация о месте нахождения образовательной организации', 'Address', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Информация о месте нахождения филиалов образовательной организации', 'AddressFil', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Информация о режиме и графике работы образовательной организации', 'WorkTime', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Информация о контактных телефонах образовательной организации', 'Telephone', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Информация об адресах электронной почты образовательной организации', 'E-mail', '', '', 0)
 		";
 		$this->AppendUnAttr($rows);
 		
 		$rows = "
-			(".$idSection.", 0, 0, 'complex', 'Информация об учредителе (учредителях) образовательной организации', 'http://obrnadzor.gov.ru/microformats/UchredLaw', '', '')
+			(".$idSection.", 0, 0, 'complex', 'Информация об учредителе (учредителях) образовательной организации', 'http://obrnadzor.gov.ru/microformats/UchredLaw', '', '', 2)
 		";
 		
 		$complexid = $this->AppendUnAttr($rows, true);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Наименование учредителя', 'Name', '', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Фамилия, имя, отчество руководителя', 'Fio', '', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Юридический адрес', 'AddressStr', '', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Контактный телефон', 'tel', '', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Адрес сайта', 'url', '', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Адрес электронной почты', 'E-mail', '', '')
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Наименование учредителя', 'Name', '', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Фамилия, имя, отчество руководителя', 'Fio', '', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Юридический адрес', 'AddressStr', '', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Контактный телефон', 'tel', '', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Адрес сайта', 'url', '', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Адрес электронной почты', 'E-mail', '', '', 0)
 		";
 		$this->AppendUnAttr($rows);
 	}
 	
 	private function FillStructSection($idSection){
 		$rows = "
-			(".$idSection.", 0, 0, 'complex', 'Структура университета', '', '', '')
+			(".$idSection.", 0, 0, 'complex', 'Структура университета', '', '', '', 2)
 		";
 
 		$complexid = $this->AppendUnAttr($rows, true);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Наименования структурных подразделений (органов управления)', 'Name', '', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о руководителях структурных подразделений', 'Fio', '', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о местах нахождения структурных подразделений', 'AddressStr', '', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация об адресах официальных сайтов в сети Интернет структурных подразделений', 'Site', '', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация об адресах электронной почты структурных подразделений', 'E-mail', '', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Сведения о наличии положений о структурных подразделениях (об органах управления) с приложением копий указанных положений', 'DivisionClause_DocLink', '', '')
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Наименования структурных подразделений (органов управления)', 'Name', '', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о руководителях структурных подразделений', 'Fio', '', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о местах нахождения структурных подразделений', 'AddressStr', '', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация об адресах официальных сайтов в сети Интернет структурных подразделений', 'Site', '', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация об адресах электронной почты структурных подразделений', 'E-mail', '', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Сведения о наличии положений о структурных подразделениях (об органах управления) с приложением копий указанных положений', 'DivisionClause_DocLink', '', '', 0)
 		";
 		$this->AppendUnAttr($rows);
 	}
@@ -192,140 +192,140 @@ class Section {
 	private function FillDocumentSection($idSection){
 
 		$rows = "
-			(".$idSection.", 0, 0, 'simple', 'Копия устава образовательной организации', 'Ustav_DocLink', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Копия лицензии на осуществление образовательной деятельности', 'License_DocLink', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Копия свидетельства о государственной аккредитации', 'Accreditation_DocLink', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Копия локального нормативного акта, регламентирующего правила приема обучающихся', 'Priem_DocLink', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Копия локального нормативного акта, регламентирующего режим занятий обучающихся', 'Mode_DocLink', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Копия локального нормативного акта, регламентирующего формы, периодичность и порядок текущего контроля успеваемости и промежуточной аттестации обучающихся', 'Tek_kontrol_DocLink', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Копия локального нормативного акта, регламентирующего порядок и основания перевода, отчисления и восстановления обучающихся', 'Perevod_DocLink', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Копия локального нормативного акта, регламентирующего порядок оформления возникновения, приостановления и прекращения отношений между образовательной организацией и обучающимися и (или) родителями (законными представителями) несовершеннолетних обучающихся', 'Voz_DocLink', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Копия плана финансово-хозяйственной деятельности образовательной организации, утвержденного в установленном законодательством Российской Федерации порядке, или бюджетных смет образовательной организации', 'FinPlan_DocLink', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Копия правил внутреннего распорядка обучающихся', 'LocalActStud', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Копия правил внутреннего трудового распорядка', 'LocalActOrder', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Копия коллективного договора', 'LocalActCollec', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Копия локального нормативного акта, регламентирующего размер платы за пользование жилым помещением и коммунальные услуги в общежитии', 'LocalActObSt', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Отчет о результатах самообследования', 'ReportEdu_DocLink', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Документ о порядке оказания платных образовательных услуг, в том числе образец договора об оказании платных образовательных услуг, документ об утверждении стоимости обучения по каждой образовательной программе', 'PaidEdu_DocLink', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Предписания органов, осуществляющих государственный контроль (надзор) в сфере образования', 'Prescription_DocLink', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Отчеты об исполнении предписаний органов, осуществляющих государственный контроль (надзор) в сфере образования', 'Prescription_Otchet_DocLink', '', '')
+			(".$idSection.", 0, 0, 'simple', 'Копия устава образовательной организации', 'Ustav_DocLink', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Копия лицензии на осуществление образовательной деятельности', 'License_DocLink', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Копия свидетельства о государственной аккредитации', 'Accreditation_DocLink', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Копия локального нормативного акта, регламентирующего правила приема обучающихся', 'Priem_DocLink', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Копия локального нормативного акта, регламентирующего режим занятий обучающихся', 'Mode_DocLink', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Копия локального нормативного акта, регламентирующего формы, периодичность и порядок текущего контроля успеваемости и промежуточной аттестации обучающихся', 'Tek_kontrol_DocLink', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Копия локального нормативного акта, регламентирующего порядок и основания перевода, отчисления и восстановления обучающихся', 'Perevod_DocLink', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Копия локального нормативного акта, регламентирующего порядок оформления возникновения, приостановления и прекращения отношений между образовательной организацией и обучающимися и (или) родителями (законными представителями) несовершеннолетних обучающихся', 'Voz_DocLink', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Копия плана финансово-хозяйственной деятельности образовательной организации, утвержденного в установленном законодательством Российской Федерации порядке, или бюджетных смет образовательной организации', 'FinPlan_DocLink', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Копия правил внутреннего распорядка обучающихся', 'LocalActStud', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Копия правил внутреннего трудового распорядка', 'LocalActOrder', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Копия коллективного договора', 'LocalActCollec', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Копия локального нормативного акта, регламентирующего размер платы за пользование жилым помещением и коммунальные услуги в общежитии', 'LocalActObSt', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Отчет о результатах самообследования', 'ReportEdu_DocLink', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Документ о порядке оказания платных образовательных услуг, в том числе образец договора об оказании платных образовательных услуг, документ об утверждении стоимости обучения по каждой образовательной программе', 'PaidEdu_DocLink', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Предписания органов, осуществляющих государственный контроль (надзор) в сфере образования', 'Prescription_DocLink', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Отчеты об исполнении предписаний органов, осуществляющих государственный контроль (надзор) в сфере образования', 'Prescription_Otchet_DocLink', '', '', 0)
 		";
 		$this->AppendUnAttr($rows);
 	}
 	
 	private function FillEducationSection($idSection){
 		$rows = "
-			(".$idSection.", 0, 0, 'simple', 'Информация о языках, на которых осуществляется образование (обучение)', 'language', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Информация о направлениях и результатах научной (научно-исследовательской) деятельности и научно-исследовательской базе для ее осуществления', 'http://obrnadzor.gov.ru/microformats/NIR', '', '')
+			(".$idSection.", 0, 0, 'simple', 'Информация о языках, на которых осуществляется образование (обучение)', 'language', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Информация о направлениях и результатах научной (научно-исследовательской) деятельности и научно-исследовательской базе для ее осуществления', 'http://obrnadzor.gov.ru/microformats/NIR', '', '', 0)
 		";
 		$this->AppendUnAttr($rows);
 		
 		$rows = "
-			(".$idSection.", 0, 0, 'complex', 'Перечень направлений', '', '', '')
+			(".$idSection.", 0, 0, 'complex', 'Перечень направлений', '', '', '', 1)
 		";
 		
 		$complexid = $this->AppendUnAttr($rows, true);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Образовательная программа', 'EduCode', 'program', 'code,name'),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о реализуемых уровнях образования', 'EduLevel', 'edulevel', 'level')
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Образовательная программа', 'EduCode', 'program', 'code,name', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о реализуемых уровнях образования', 'EduLevel', 'edulevel', 'level', 0)
 		";
 		$this->AppendUnAttr($rows);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о нормативных сроках обучения', 'LearningTerm', '', '')
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о нормативных сроках обучения', 'LearningTerm', '', '', 0)
 		";
 		$compisteid = $this->AppendUnAttr($rows, true);
 		
 		$this->UpdateUnAttr($compisteid);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'Очная форма обучения', 'EduForm', 'eduform', 'och'),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'Очно-заочная форма обучения', 'EduForm', 'eduform', 'ochzaoch'),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'Заочная форма обучения', 'EduForm', 'eduform', 'zaoch')
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'Очная форма обучения', 'EduForm', 'eduform', 'och', 0),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'Очно-заочная форма обучения', 'EduForm', 'eduform', 'ochzaoch', 0),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'Заочная форма обучения', 'EduForm', 'eduform', 'zaoch', 0)
 		";
 		$this->AppendUnAttr($rows);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о сроке действия государственной аккредитации образовательной программы', 'DateEnd', '', '')
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о сроке действия государственной аккредитации образовательной программы', 'DateEnd', '', '', 0)
 		";
 		$this->AppendUnAttr($rows);
 		
 		
 		$rows = "
-			(".$idSection.", 0, 0, 'complex', 'Образование', '', '', '')
+			(".$idSection.", 0, 0, 'complex', 'Образование', '', '', '', 1)
 		";
 		
 		$complexid = $this->AppendUnAttr($rows, true);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Образовательная программа', 'EduCode', 'program', 'code,name'),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Описание образовательной программы', 'OOP_main', '', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация об учебном плане', 'education_plan', '', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация об аннотации к рабочим программам дисциплин (по каждой дисциплине в составе образовательной программы)', 'education_annotation', '', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о календарном учебном графике', 'education_shedule', '', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о методических и об иных документах, разработанных образовательной организацией для обеспечения образовательного процесса', 'methodology', '', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о практиках, предусмотренных соответствующей образовательной программой', 'EduPr', '', '')
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Образовательная программа', 'EduCode', 'program', 'code,name', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Описание образовательной программы', 'OOP_main', '', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация об учебном плане', 'education_plan', '', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация об аннотации к рабочим программам дисциплин (по каждой дисциплине в составе образовательной программы)', 'education_annotation', '', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о календарном учебном графике', 'education_shedule', '', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о методических и об иных документах, разработанных образовательной организацией для обеспечения образовательного процесса', 'methodology', '', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о практиках, предусмотренных соответствующей образовательной программой', 'EduPr', '', '', 0)
 		";
 		
 		$this->AppendUnAttr($rows);
 		
 		$rows = "
-			(".$idSection.", 0, 0, 'complex', 'Информация о численности обучающихся по реализуемым образовательным программам и результаты приема', '', '', '')
+			(".$idSection.", 0, 0, 'complex', 'Информация о численности обучающихся по реализуемым образовательным программам и результаты приема', '', '', '', 1)
 		";
 		
 		$complexid = $this->AppendUnAttr($rows, true);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Наименование специальности/направления подготовки', 'EduCode', 'program', 'code,name'),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Форма обучения', 'EduForm', 'eduform', '')
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Наименование специальности/направления подготовки', 'EduCode', 'program', 'code,name', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Форма обучения', 'EduForm', 'eduform', '', 0)
 		";
 		$this->AppendUnAttr($rows);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Численность обучающихся, чел.', '', '', '')
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Численность обучающихся, чел.', '', '', '', 0)
 		";
 		$compisteid = $this->AppendUnAttr($rows, true);
 		
 		$this->UpdateUnAttr($compisteid);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'за счет бюджетных ассигнований федерального бюджета', 'BudgAmount', '', ''),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'за счет бюджетов субъектов Российской Федерации', 'BudgAmount', '', ''),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'за счет местных бюджетов', 'BudgAmount', '', ''),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'за счет средств физических и (или) юридических лиц', 'PaidAmount', '', '')
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'за счет бюджетных ассигнований федерального бюджета', 'BudgAmount', '', '', 0),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'за счет бюджетов субъектов Российской Федерации', 'BudgAmount', '', '', 0),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'за счет местных бюджетов', 'BudgAmount', '', '', 0),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'за счет средств физических и (или) юридических лиц', 'PaidAmount', '', '', 0)
 		";
 		$this->AppendUnAttr($rows);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Средняя сумма набранных баллов по всем вступительным испытаниям', '', '', '')
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Средняя сумма набранных баллов по всем вступительным испытаниям', '', '', '', 0)
 		";
 		$this->AppendUnAttr($rows);
 		
 		$rows = "
-			(".$idSection.", 0, 0, 'complex', 'Информация о результатах перевода, восстановления и отчисления', 'http://obrnadzor.gov.ru/microformats/Perevod', '', '')
+			(".$idSection.", 0, 0, 'complex', 'Информация о результатах перевода, восстановления и отчисления', 'http://obrnadzor.gov.ru/microformats/Perevod', '', '', 1)
 		";
 		
 		$complexid = $this->AppendUnAttr($rows, true);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Наименование специальности/направления подготовки', 'EduCode', 'program', 'code,name'),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Форма обучения', 'EduForm', 'eduform', '')
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Наименование специальности/направления подготовки', 'EduCode', 'program', 'code,name', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Форма обучения', 'EduForm', 'eduform', '', 0)
 		";
 		$this->AppendUnAttr($rows);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Численность обучающихся, чел.', '', '', '')
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Численность обучающихся, чел.', '', '', '', 0)
 		";
 		$compisteid = $this->AppendUnAttr($rows, true);
 		
 		$this->UpdateUnAttr($compisteid);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'переведено в другие образовательные организации', '', '', ''),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'переведено из других образовательных организаций', '', '', ''),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'восстановлено', '', '', ''),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'отчислено', '', '', '')
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'переведено в другие образовательные организации', '', '', '', 0),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'переведено из других образовательных организаций', '', '', '', 0),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'восстановлено', '', '', '', 0),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'отчислено', '', '', '', 0)
 		";
 		$this->AppendUnAttr($rows);
 	}
@@ -333,14 +333,14 @@ class Section {
 	private function FillEduStandartsSection($idSection){
 		
 		$rows = "
-			(".$idSection.", 0, 0, 'complex', 'Образовательные стандарты', '', '', '')
+			(".$idSection.", 0, 0, 'complex', 'Образовательные стандарты', '', '', '', 1)
 		";
 	
 		$complexid = $this->AppendUnAttr($rows, true);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Наименование специальности/направления подготовки', 'EduCode', 'program', 'code,name'),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Копии федеральных государственных образовательных стандартов', 'EduStandartDoc', '', '')
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Наименование специальности/направления подготовки', 'EduCode', 'program', 'code,name', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Копии федеральных государственных образовательных стандартов', 'EduStandartDoc', '', '', 0)
 		";
 		$this->AppendUnAttr($rows);
 	}
@@ -348,66 +348,66 @@ class Section {
 	private function FillEmployeesSection($idSection){
 		
 		$rows = "
-			(".$idSection.", 0, 0, 'complex', 'Руководство', '', '', '')
+			(".$idSection.", 0, 0, 'complex', 'Руководство', '', '', '', 2)
 		";
 		
 		$complexid = $this->AppendUnAttr($rows, true);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Ф.И.О. руководителя образовательной организации', 'fio', 'employees', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Должность руководителя образовательной организации', 'Post', '', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Контактные телефоны руководителя образовательной организации', 'Telephone', '', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Адреса электронной почты руководителя образовательной организации', 'e-mail', '', '')
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Ф.И.О. руководителя образовательной организации', 'fio', 'employees', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Должность руководителя образовательной организации', 'Post', '', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Контактные телефоны руководителя образовательной организации', 'Telephone', '', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Адреса электронной почты руководителя образовательной организации', 'e-mail', '', '', 0)
 		";
 		
 		$this->AppendUnAttr($rows);
 		
 		$rows = "
-			(".$idSection.", 0, 0, 'complex', 'Заместители руководителя', '', '', '')
+			(".$idSection.", 0, 0, 'complex', 'Заместители руководителя', '', '', '', 2)
 		";
 		
 		$complexid = $this->AppendUnAttr($rows, true);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Ф.И.О. заместителей руководителя образовательной организации', 'fio', 'employees', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Должность заместителей руководителя образовательной организации', 'Post', '', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Контактные телефоны заместителей руководителя образовательной организации', 'Telephone', '', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Адреса электронной почты заместителей руководителя образовательной организации', 'e-mail', '', '')
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Ф.И.О. заместителей руководителя образовательной организации', 'fio', 'employees', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Должность заместителей руководителя образовательной организации', 'Post', '', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Контактные телефоны заместителей руководителя образовательной организации', 'Telephone', '', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Адреса электронной почты заместителей руководителя образовательной организации', 'e-mail', '', '', 0)
 		";
 		
 		$this->AppendUnAttr($rows);
 		
 		$rows = "
-			(".$idSection.", 0, 0, 'complex', 'Руководители филиалов', '', '', '')
+			(".$idSection.", 0, 0, 'complex', 'Руководители филиалов', '', '', '', 2)
 		";
 		
 		$complexid = $this->AppendUnAttr($rows, true);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Ф.И.О. руководителей филиалов образовательной организации', 'fio', 'employees', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Должность руководителей филиалов образовательной организации', 'Post', '', ''),
-			(".$idSection.", ".$complexid.", 0,'composite', 'Контактные телефоны руководителей филиалов образовательной организации', 'Telephone', '', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Адреса электронной почты руководителей филиалов образовательной организации', 'e-mail', '', '')
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Ф.И.О. руководителей филиалов образовательной организации', 'fio', 'employees', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Должность руководителей филиалов образовательной организации', 'Post', '', '', 0),
+			(".$idSection.", ".$complexid.", 0,'composite', 'Контактные телефоны руководителей филиалов образовательной организации', 'Telephone', '', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Адреса электронной почты руководителей филиалов образовательной организации', 'e-mail', '', '', 0)
 		";
 		
 		$this->AppendUnAttr($rows);
 		
 		$rows = "
-			(".$idSection.", 0, 0, 'complex', 'Преподаватели', '', '', '')
+			(".$idSection.", 0, 0, 'complex', 'Преподаватели', '', '', '', 2)
 		";
 		
 		$complexid = $this->AppendUnAttr($rows, true);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Ф.И.О. педагогического работника образовательной организации', 'fio', 'employees', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Занимаемая должность (должности) педагогического работника', 'Post', '', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Преподаваемые педагогическим работником дисциплины', 'TeachingDiscipline', '', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Ученая степень педагогического работника', 'Degree', '', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Ученое звание педагогического работника', 'AcademStat', '', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Наименование направления подготовки и (или) специальности педагогического работника', 'EmployeeQualification', '', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Данные о повышении квалификации и (или) профессиональной переподготовке педагогического работника', 'ProfDevelopment', '', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Общий стаж работы педагогического работника', 'GenExperience', '', ''),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Стаж работы педагогического работника по специальности', 'SpecExperience', '', '')
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Ф.И.О. педагогического работника образовательной организации', 'fio', 'employees', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Занимаемая должность (должности) педагогического работника', 'Post', '', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Преподаваемые педагогическим работником дисциплины', 'TeachingDiscipline', '', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Ученая степень педагогического работника', 'Degree', '', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Ученое звание педагогического работника', 'AcademStat', '', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Наименование направления подготовки и (или) специальности педагогического работника', 'EmployeeQualification', '', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Данные о повышении квалификации и (или) профессиональной переподготовке педагогического работника', 'ProfDevelopment', '', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Общий стаж работы педагогического работника', 'GenExperience', '', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Стаж работы педагогического работника по специальности', 'SpecExperience', '', '', 0)
 		";
 		
 		$this->AppendUnAttr($rows);
@@ -415,78 +415,76 @@ class Section {
 	
 	private function FillObjectsSection($idSection){
 		$rows = "
-			(".$idSection.", 0, 0, 'simple', 'Сведения о наличии оборудованных учебных кабинетов', 'PurposeKab', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Сведения о наличии объектов для проведения практических занятий', 'PurposePrac', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Сведения о наличии библиотек', 'PurposeLibr', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Сведения о наличии объектов спорта', 'PurposeSport', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Сведения о наличии средств обучения и воспитания', 'PurposeSport', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Сведения об условиях питания и охраны здоровья обучающихся', 'Meals', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Сведения о доступе к информационным системам и информационно-телекоммуникационным сетям', 'ComNet', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Сведения об электронных образовательных ресурсах', 'ERList', '', '')
+			(".$idSection.", 0, 0, 'simple', 'Сведения о наличии оборудованных учебных кабинетов', 'PurposeKab', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Сведения о наличии объектов для проведения практических занятий', 'PurposePrac', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Сведения о наличии библиотек', 'PurposeLibr', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Сведения о наличии объектов спорта', 'PurposeSport', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Сведения о наличии средств обучения и воспитания', 'PurposeSport', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Сведения об условиях питания и охраны здоровья обучающихся', 'Meals', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Сведения о доступе к информационным системам и информационно-телекоммуникационным сетям', 'ComNet', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Сведения об электронных образовательных ресурсах', 'ERList', '', '', 0)
 		";
 		$this->AppendUnAttr($rows);
 	}
 	
 	private function FillGrantsSection($idSection){
 		$rows = "
-			(".$idSection.", 0, 0, 'simple', 'Информация о наличии и условиях предоставления стипендий, в том числе локальные нормативные акты', 'http://obrnadzor.gov.ru/microformats/Grant', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Информация о наличии общежития, интерната', 'HostelInfo', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Информация о количестве жилых помещений в общежитии, интернате для иногородних обучающихся', 'HostelNum', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Копия локального нормативного акта, регламентирующего размер платы за пользование жилым помещением и коммунальные услуги в общежитии', 'LocalActObSt', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Информация об иных видах материальной поддержки обучающихся', 'Support', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Информация о трудоустройстве выпускников', 'GraduateJob', '', '')
+			(".$idSection.", 0, 0, 'simple', 'Информация о наличии и условиях предоставления стипендий, в том числе локальные нормативные акты', 'http://obrnadzor.gov.ru/microformats/Grant', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Информация о наличии общежития, интерната', 'HostelInfo', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Информация о количестве жилых помещений в общежитии, интернате для иногородних обучающихся', 'HostelNum', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Копия локального нормативного акта, регламентирующего размер платы за пользование жилым помещением и коммунальные услуги в общежитии', 'LocalActObSt', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Информация об иных видах материальной поддержки обучающихся', 'Support', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Информация о трудоустройстве выпускников', 'GraduateJob', '', '', 0)
 		";
 		$this->AppendUnAttr($rows);
 	}
 	
 	private function FillPaidEduSection($idSection){
 		$rows = "
-			(".$idSection.", 0, 0, 'simple', 'Документ о порядке оказания платных образовательных услуг, в том числе образец договора об оказании платных образовательных услуг, документ об утверждении стоимости обучения', 'PaidEdu_DocLink', '', '')
+			(".$idSection.", 0, 0, 'simple', 'Документ о порядке оказания платных образовательных услуг, в том числе образец договора об оказании платных образовательных услуг, документ об утверждении стоимости обучения', 'PaidEdu_DocLink', '', '', 0)
 		";
 		$this->AppendUnAttr($rows);
 	}
 	
 	private function FillBudgetSection($idSection){
 		$rows = "
-			(".$idSection.", 0, 0, 'simple', 'Информация об объеме образовательной деятельности, финансовое обеспечение которой осуществляется за счет бюджетных ассигнований федерального бюджета, бюджетов субъектов Российской Федерации, местных бюджетов, по договорам об образовании за счет средств физических и (или) юридических лиц', 'http://obrnadzor.gov.ru/microformats/Volume', '', ''),
-			(".$idSection.", 0, 0, 'simple', 'Информация о поступлении и расходовании финансовых и материальных средств', 'http://obrnadzor.gov.ru/microformats/FinRec', '', '')
+			(".$idSection.", 0, 0, 'simple', 'Информация об объеме образовательной деятельности, финансовое обеспечение которой осуществляется за счет бюджетных ассигнований федерального бюджета, бюджетов субъектов Российской Федерации, местных бюджетов, по договорам об образовании за счет средств физических и (или) юридических лиц', 'http://obrnadzor.gov.ru/microformats/Volume', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Информация о поступлении и расходовании финансовых и материальных средств', 'http://obrnadzor.gov.ru/microformats/FinRec', '', '', 0)
 		";
 		$this->AppendUnAttr($rows);
 	}
 	
 	private function FillVacantSection($idSection){
 		$rows = "
-			(".$idSection.", 0, 0, 'complex', 'Информация о количестве вакантных мест для приема (перевода) по каждой образовательной программе, специальности, направлению подготовки', 'http://obrnadzor.gov.ru/microformats/Vacant', '', '')
+			(".$idSection.", 0, 0, 'complex', 'Информация о количестве вакантных мест для приема (перевода) по каждой образовательной программе, специальности, направлению подготовки', 'http://obrnadzor.gov.ru/microformats/Vacant', '', '', 1)
 		";
 		
 		$complexid = $this->AppendUnAttr($rows, true);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Наименование образовательной программы, специальности, направления подготовки', '', 'program', 'code,name')
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Наименование образовательной программы, специальности, направления подготовки', '', 'program', 'code,name', 0)
 		";
 		$this->AppendUnAttr($rows);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Количество вакантных мест для приема (перевода)', '', '', '')
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Количество вакантных мест для приема (перевода)', '', '', '', 0)
 		";
 		$compisteid = $this->AppendUnAttr($rows, true);
 		
 		$this->UpdateUnAttr($compisteid);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет бюджетных ассигнований федерального бюджета', '', '', ''),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет бюджетных ассигнований бюджетов субъекта Российской Федерации', '', '', ''),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет бюджетных ассигнований местных бюджетов', '', '', ''),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет средств физических и (или) юридических лиц', '', '', '')
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет бюджетных ассигнований федерального бюджета', '', '', '', 0),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет бюджетных ассигнований бюджетов субъекта Российской Федерации', '', '', '', 0),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет бюджетных ассигнований местных бюджетов', '', '', '', 0),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет средств физических и (или) юридических лиц', '', '', '', 0)
 		";
 		$this->AppendUnAttr($rows);
-		
-		
 	}
 	
 	private function AppendUnAttr($rows, $ret = false){
 		$this->db->query_write("
-			INSERT INTO ".$this->pfx."un_attribute(sectionid, complexid, compositeid, typeattribute, nameattribute, applyattribute, tablename, fieldname)
+			INSERT INTO ".$this->pfx."un_attribute(sectionid, complexid, compositeid, typeattribute, nameattribute, applyattribute, tablename, fieldname, insertrow)
 			VALUES ".$rows."
 		");
 		

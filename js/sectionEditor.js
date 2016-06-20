@@ -93,13 +93,15 @@ Component.entryPoint = function(NS){
         		event: function(e){
         			var targ = e.target,
         				attrid = targ.getData('id'),
-        				type = targ.getData('type');
+        				type = targ.getData('type'),
+        				insert = targ.getData('insert');
         			
         			this.unSetActive();
         			this.setActive(targ.getDOMNode());
         			
         			this.valueList.set('currentAttrid', attrid);
         			this.valueList.set('currentType', type);
+        			this.valueList.set('insert', insert);
         			this.valueList.reloadList();
         		}
         	}

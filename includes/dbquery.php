@@ -78,6 +78,7 @@ class UniversityQuery {
 					nameattribute,
 					applyattribute,
 					tablename,
+					insertrow,
 					locate
 			FROM ".$db->prefix."un_attribute
 			WHERE ".$where."
