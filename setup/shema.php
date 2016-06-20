@@ -13,7 +13,7 @@ $db = Abricos::$db;
 $pfx = $db->prefix;
 
 
-if ($updateManager->isInstall('0.1.4')){
+if ($updateManager->isInstall('0.1.5')){
 	
 	Abricos::GetModule('university')->permission->Install();
 		/*
@@ -63,6 +63,7 @@ if ($updateManager->isInstall('0.1.4')){
 				attributeid int(10) unsigned NOT NULL default 0 COMMENT 'id атрибута',
 				numrow tinyint(2) unsigned NOT NULL default 0 COMMENT 'позиция значения в таблице',
 				relationid int(10) unsigned NOT NULL default 0 COMMENT 'id поля связующей таблицы',
+				mainid int(10) unsigned NOT NULL default 0 COMMENT 'id ключевго поля главной таблицы',
 				view enum('value','url','file') NOT NULL COMMENT 'Вид значения',
 				value TEXT NOT NULL default '' COMMENT 'Значение атрибута/url',
 				nameurl TEXT NOT NULL default '' COMMENT 'Название ссылки',
