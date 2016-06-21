@@ -233,10 +233,19 @@ class UniversityQuery {
     	";
     	$numrow = $db->query_first($sql);
 		    	
-		UniversityQuery::InsertComplexValue($db, "tablename='program'", $numrow['m'], $programid, 0, "programid");
+		UniversityQuery::InsertComplexValue($db, "tablename='program' AND fieldname<>''", $numrow['m'], $programid, 0, "programid");
 		
-		UniversityQuery::InsertComplexValue($db, "tablename='eduform' AND fieldname=''", $numrow['m'], $programid, 0, false);
-		    	
+		$formEdu = array(
+				'очная',
+				'очно-заочная',
+				'заочная'
+		);
+		
+		foreach ($formEdu as $form){
+			UniversityQuery::InsertComplexValue($db, "tablename='program' AND fieldname=''", $numrow['m'], $programid, 0, $form);
+			UniversityQuery::InsertComplexValue($db, "tablename='eduform' AND fieldname=''", $numrow['m'], 0, $programid, 0);
+		}
+		
    		UniversityQuery::AppendEduForm($db, $d->eduLevel, $programid, $numrow['m']);
 	}
 	
@@ -255,22 +264,8 @@ class UniversityQuery {
 		$rows = $db->query_read($sql);
 		$insert = "";
 		
-		if(!$value){
-			$formEdu = array(
-					'очная',
-					'очно-заочная',
-					'заочная'
-			);
-			
-			while ($dd = $db->fetch_array($rows)){
-				foreach ($formEdu as $form){
-					$insert .= "(".$dd['id'].",".$numrow.",".$relationid.",".$mainid.",'".$form."'),";
-				}
-			}
-		} else {
-			while ($dd = $db->fetch_array($rows)){
-				$insert .= "(".$dd['id'].",".$numrow.",".$relationid.",".$mainid.",'".$value."'),";
-			}
+		while ($dd = $db->fetch_array($rows)){
+			$insert .= "(".$dd['id'].",".$numrow.",".$relationid.",".$mainid.",'".$value."'),";
 		}
 		$insert = substr($insert, 0, -1);
 		 
@@ -383,7 +378,9 @@ class UniversityQuery {
 				$db->query_write($sql);
 				$edulevelid = mysql_insert_id();
 				
-				UniversityQuery::InsertComplexValue($db, "tablename='edulevel'", $numrow, $edulevelid, $programid, "edulevelid");
+				UniversityQuery::InsertComplexValue($db, "tablename='edulevel' AND fieldname<>''", $numrow, $edulevelid, $programid, "edulevelid");
+				
+				UniversityQuery::InsertComplexValue($db, "tablename='edulevel' AND fieldname=''", $numrow, 0, $programid, 0);
 				
 		    	$sql = "
 					INSERT INTO ".$db->prefix."un_eduform(edulevelid, och, ochzaoch, zaoch)
@@ -496,6 +493,7 @@ class UniversityQuery {
 					a.tablename,
 					a.fieldname,
 					v.relationid,
+					v.mainid,
 					v.view,
 					v.value,
 					v.nameurl,

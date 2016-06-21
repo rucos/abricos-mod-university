@@ -247,7 +247,7 @@ class Section {
 		$this->AppendUnAttr($rows);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о сроке действия государственной аккредитации образовательной программы', 'DateEnd', '', '', 0)
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о сроке действия государственной аккредитации образовательной программы', 'DateEnd', 'edulevel', '', 0)
 		";
 		$this->AppendUnAttr($rows);
 		
@@ -278,7 +278,7 @@ class Section {
 		
 		$rows = "
 			(".$idSection.", ".$complexid.", 0, 'composite', 'Наименование специальности/направления подготовки', 'EduCode', 'program', 'code,name', 0),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Форма обучения', 'EduForm', 'eduform', '', 0)
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Форма обучения', 'EduForm', 'program', '', 0)
 		";
 		$this->AppendUnAttr($rows);
 		
@@ -290,15 +290,15 @@ class Section {
 		$this->UpdateUnAttr($compisteid);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'за счет бюджетных ассигнований федерального бюджета', 'BudgAmount', '', '', 0),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'за счет бюджетов субъектов Российской Федерации', 'BudgAmount', '', '', 0),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'за счет местных бюджетов', 'BudgAmount', '', '', 0),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'за счет средств физических и (или) юридических лиц', 'PaidAmount', '', '', 0)
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'за счет бюджетных ассигнований федерального бюджета', 'BudgAmount', 'eduform', '', 0),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'за счет бюджетов субъектов Российской Федерации', 'BudgAmount', 'eduform', '', 0),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'за счет местных бюджетов', 'BudgAmount', 'eduform', '', 0),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'за счет средств физических и (или) юридических лиц', 'PaidAmount', 'eduform', '', 0)
 		";
 		$this->AppendUnAttr($rows);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Средняя сумма набранных баллов по всем вступительным испытаниям', '', '', '', 0)
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Средняя сумма набранных баллов по всем вступительным испытаниям', '', 'eduform', '', 0)
 		";
 		$this->AppendUnAttr($rows);
 		
@@ -310,7 +310,7 @@ class Section {
 		
 		$rows = "
 			(".$idSection.", ".$complexid.", 0, 'composite', 'Наименование специальности/направления подготовки', 'EduCode', 'program', 'code,name', 0),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Форма обучения', 'EduForm', 'eduform', '', 0)
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Форма обучения', 'EduForm', 'program', '', 0)
 		";
 		$this->AppendUnAttr($rows);
 		
@@ -322,10 +322,10 @@ class Section {
 		$this->UpdateUnAttr($compisteid);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'переведено в другие образовательные организации', '', '', '', 0),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'переведено из других образовательных организаций', '', '', '', 0),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'восстановлено', '', '', '', 0),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'отчислено', '', '', '', 0)
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'переведено в другие образовательные организации', '', 'eduform', '', 0),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'переведено из других образовательных организаций', '', 'eduform', '', 0),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'восстановлено', '', 'eduform', '', 0),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'отчислено', '', 'eduform', '', 0)
 		";
 		$this->AppendUnAttr($rows);
 	}
