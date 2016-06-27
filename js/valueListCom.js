@@ -72,13 +72,13 @@ Component.entryPoint = function(NS){
         		
         		if(len > 0){
         			for(var j = 0; j < len; j++){
-            			tdSubComp += this.tdReplace(currArr[j][1], '', insert, currArr[j][0]);
+            			tdSubComp += this.tdReplace(currArr[j][1], '', currArr[j][0]);
         			}
         			col = 'colspan=' + len;
         			
-        			tdComp += this.tdReplace(compositeObj[i][0], col, insert);
+        			tdComp += this.tdReplace(compositeObj[i][0], col);
         		} else {
-        			tdComp += this.tdReplace(compositeObj[i][0], col, insert, i);
+        			tdComp += this.tdReplace(compositeObj[i][0], col, i);
         		}
         	}
         	
@@ -87,12 +87,14 @@ Component.entryPoint = function(NS){
         	}))
         		this.reloadListValue();
         },
-        tdReplace: function(value, span, insert, id){
-        	return this.template.replace('td', {
-        		span: span,
-        		value: insert == 1 || !id ? value : this.referAddReplace(value, id),
-        		add: ''
-        	});
+        tdReplace: function(value, span, id){
+        	var insert = this.get('insert');
+        	
+	        	return this.template.replace('td', {
+	        		span: span,
+	        		value: insert != 2 || !id ? value : this.referAddReplace(value, id),
+	        		add: ''
+	        	});
         },
         referAddReplace: function(value, atrid, numrow, valueid, view){
         	return this.template.replace('referAdd', {
