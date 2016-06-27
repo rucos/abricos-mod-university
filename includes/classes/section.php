@@ -253,7 +253,7 @@ class Section {
 		
 		
 		$rows = "
-			(".$idSection.", 0, 0, 'complex', 'Образование', '', '', '', 1)
+			(".$idSection.", 0, 0, 'complex', 'Образование', '', '', '', 3)
 		";
 		
 		$complexid = $this->AppendUnAttr($rows, true);
@@ -333,7 +333,7 @@ class Section {
 	private function FillEduStandartsSection($idSection){
 		
 		$rows = "
-			(".$idSection.", 0, 0, 'complex', 'Образовательные стандарты', '', '', '', 1)
+			(".$idSection.", 0, 0, 'complex', 'Образовательные стандарты', '', '', '', 3)
 		";
 	
 		$complexid = $this->AppendUnAttr($rows, true);
@@ -474,10 +474,10 @@ class Section {
 		$this->UpdateUnAttr($compisteid);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет бюджетных ассигнований федерального бюджета', '', '', '', 0),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет бюджетных ассигнований бюджетов субъекта Российской Федерации', '', '', '', 0),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет бюджетных ассигнований местных бюджетов', '', '', '', 0),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет средств физических и (или) юридических лиц', '', '', '', 0)
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет бюджетных ассигнований федерального бюджета', '', 'vakant', '', 0),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет бюджетных ассигнований бюджетов субъекта Российской Федерации', '', 'vakant', '', 0),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет бюджетных ассигнований местных бюджетов', '', 'vakant', '', 0),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет средств физических и (или) юридических лиц', '', 'vakant', '', 0)
 		";
 		$this->AppendUnAttr($rows);
 	}
