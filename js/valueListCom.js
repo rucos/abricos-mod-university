@@ -207,13 +207,18 @@ Component.entryPoint = function(NS){
         },
         parseRowValue: function(objValue, numrow){
         	var tp = this.template,
-        		td = "";
+        		td = "", isRelation, curObj, item;
         		
         	for(var i in objValue){
-        		var	curObj = objValue[i],
-        			item = "";
+        		curObj = objValue[i];
+        		isRelation = false;
+        		item = "";
         		
         		for(var j = 0; j < curObj.length; j++){
+        			if(curObj[j].relationid > 0){
+        				isRelation = true;
+        			}
+        			
         			item += tp.replace('item', {
         				value: this.addValueModal.parseValue(curObj[j].view, curObj[j].nameurl, curObj[j].value),
         				btnGroup: this.parseButtonGroup(curObj[j])
@@ -223,7 +228,7 @@ Component.entryPoint = function(NS){
      			td += tp.replace('td', {
     				span: "",
     				value: item,
-    				add: this.referAddReplace("", i, numrow)
+    				add: isRelation ? "" : this.referAddReplace("", i, numrow)
     			});
         	}
         	
