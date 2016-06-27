@@ -10,6 +10,10 @@
       "type": "int",
       "json": "relid"
     },
+    "mainid": {
+      "type": "int",
+      "json": "mid"
+    },
     "view": {
       "type": "string",
       "json": "vw"

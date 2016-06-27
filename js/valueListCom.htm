@@ -19,29 +19,33 @@
 
 <!--{td}-->
 <td {v#span}>
+<div class="show-td-buttons">
 {v#value}
-<p>
 {v#add}
-</p>
+</div>
 </td>
 
 <!--{item}-->
 <div class="show-td-buttons"> 
 {v#value}
-	<div class="btn-group pull-right">
-	    <button class="btn btn-default btn-xs"
-	            data-click="modal-show" data-id="{v#vid}" data-view="{v#view}" data-atrid="{v#id}" data-numrow="{v#numrow}"
-	            title="Редактировать">
-	        <span class="fa fa-pencil"></span>
-	    </button>
-	    <button class="btn btn-default btn-xs"
-	            data-click="remove-show" data-id="{v#vid}"
-	            title="Удалить">
-	        <i class="fa fa-trash-o"></i>
-	    </button>
-	</div>
-	<div id="{i#remove}-{v#vid}"></div>
+{v#btnGroup}
 </div>
+
+<!--{btnGroup}-->
+<div class="btn-group pull-right">
+    <button class="btn btn-default btn-xs"
+            data-click="modal-show" data-id="{v#vid}" data-view="{v#view}" data-atrid="{v#id}" data-numrow="{v#numrow}"
+            title="Редактировать">
+        <span class="fa fa-pencil"></span>
+    </button>
+    <button class="btn btn-default btn-xs"
+            data-click="remove-show" data-id="{v#vid}"
+            title="Удалить">
+        <i class="fa fa-trash-o"></i>
+    </button>
+</div>
+<div id="{i#remove}-{v#vid}"></div>
+
 
 <!--{referAdd}-->
 <a href="" data-click="modal-show" data-id="{v#vid}" data-view="{v#view}" data-atrid="{v#id}" data-numrow="{v#numrow}">{v#nameurl}</a>

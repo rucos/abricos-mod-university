@@ -54,7 +54,7 @@ Component.entryPoint = function(NS){
     				this.renderList();
     			}
         },
-        renderList: function(){
+        renderList: function(){//Заполнение tHead
         	var tp = this.template,
         		compositeObj = this.get('compositeObj'),
         		rowspan = this.get('rowSpan'),
@@ -128,32 +128,85 @@ Component.entryPoint = function(NS){
            	
 	    	this.set('waiting', true);
 	        	this.get('appInstance').valueComplexList(attrid, function(err, result){
+	        		var insert = this.get('insert');//тип таблицы
+	        		
 	        			this.set('waiting', false);
 	        			if(!err){
 	        				this.set('valueComplexList', result.valueComplexList);
-        						this.renderValueList();
+	        					if(insert == 1){
+	        						this.renderAutoValueList();
+	        					} else {
+	        						this.renderValueList();
+	        					}
 	        			}
 	        	}, this);
         },
-        renderValueList: function(){
+        renderAutoValueList: function(){//Заполнение tBody авто таблицы
+        	var valueComplexList = this.get('valueComplexList'),
+    			tp = this.template,
+    			curArray = "",
+    			tr = "",
+    			td,
+    			isSpan = "",
+    			rowspan = "";
+    		
+       
+        	for(var i in valueComplexList){
+        		rowspan = "rowspan=" + this.determineSpan(valueComplexList[i]);
+        		
+        		isSpan = true;
+        		
+	        		for(var z = 0; z < 3; z++){
+	        			td = "";
+	        			
+	            		for(var j in valueComplexList[i]){
+	            			curArray = valueComplexList[i][j];
+		            			if(curArray[z]){
+		            				td += tp.replace('td', {
+		            					span: isSpan ? rowspan : "",
+		            					value: curArray[z].value,
+		            					add: this.parseButtonGroup(curArray[z])
+		            				});
+		            				
+		            				isSpan = false;
+		            			}
+	            		}
+	            		tr += tp.replace('tr', {
+	            			td: td
+	            		});
+	        		}
+        	}
+        	tp.setHTML('table.tBody', tr);
+        },
+        determineSpan: function(obj){
+        	var cnt = 0;
+        	
+        	for(var i in obj){
+        		if(cnt == 1){
+        			return obj[i].length;
+        		} else {
+        			cnt++;
+        		}
+        	}
+        },
+        renderValueList: function(){//Заполнение tBody ручной таблицы
         	var valueComplexList = this.get('valueComplexList'),
         		tp = this.template,
         		tr = "";
         	
         	if(valueComplexList){
                	for(var i in valueComplexList){
-                	tr += tp.replace('tr', {
-                		td: this.parseRowValue(valueComplexList[i], i) 
-                	});   
+	                	tr += tp.replace('tr', {
+	                		td: this.parseRowValue(valueComplexList[i], i) 
+	                	});
             	}
         	}
-        	
         	tp.setHTML('table.tBody', tr);
         },
         parseRowValue: function(objValue, numrow){
         	var tp = this.template,
         		td = "";
-        	
+        		
         	for(var i in objValue){
         		var	curObj = objValue[i],
         			item = "";
@@ -161,20 +214,30 @@ Component.entryPoint = function(NS){
         		for(var j = 0; j < curObj.length; j++){
         			item += tp.replace('item', {
         				value: this.addValueModal.parseValue(curObj[j].view, curObj[j].nameurl, curObj[j].value),
-        				vid: curObj[j].id,
-        				view: curObj[j].view,
-        				id: curObj[j].attributeid,
-        				numrow: i
+        				btnGroup: this.parseButtonGroup(curObj[j])
         			});
         		}
         		
      			td += tp.replace('td', {
     				span: "",
     				value: item,
-    				add: this.referAddReplace("(+)", i, numrow)
+    				add: this.referAddReplace("", i, numrow)
     			});
         	}
+        	
         	return td;
+        },
+        parseButtonGroup: function(obj){
+        	if(obj.relationid > 0){
+        		return "";
+        	} else {
+            	return this.template.replace('btnGroup', {
+            		vid: obj.id,
+            		view: obj.view,
+            		id: obj.attributeid,
+            		numrow: obj.numrow
+            	});
+        	}
         },
         removeAct: function(valueid, show){
         	var tp = this.template,
@@ -186,7 +249,7 @@ Component.entryPoint = function(NS){
 	    			})
 	        	}
 	        	
-				tp.setHTML('item.remove-' + valueid, remove);
+				tp.setHTML('btnGroup.remove-' + valueid, remove);
         },
         removeValue: function(valueid){
         	var data = {
@@ -205,7 +268,7 @@ Component.entryPoint = function(NS){
     }, {
         ATTRS: {
         	component: {value: COMPONENT},
-            templateBlockName: {value: 'widget,table,tr,td,referAdd,item,remove'},
+            templateBlockName: {value: 'widget,table,tr,td,referAdd,item,remove,btnGroup'},
             valueComplexList: {value: null},
             currentAttrid: {value: null},
             currentType: {value: null},

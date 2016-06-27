@@ -121,6 +121,18 @@ class UniversityQuery {
 		$db->query_write($sql);
 	}
 	
+	public static function AttributeItem(Ab_Database $db, $attrid){
+		$sql = "
+				SELECT
+					insertrow as ins
+				FROM ".$db->prefix."un_attribute
+				WHERE attributeid=".bkint($attrid)."
+				LIMIT 1
+		";
+		$result = $db->query_first($sql); 
+		return $result['ins'];
+	}
+	
 	public static function RemoveAttribute(Ab_Database $db, $d){
 		$where = "attributeid=".bkint($d->compositid);
 		
@@ -234,6 +246,7 @@ class UniversityQuery {
     	$numrow = $db->query_first($sql);
 		    	
 		UniversityQuery::InsertComplexValue($db, "tablename='program' AND fieldname<>''", $numrow['m'], $programid, 0, "programid");
+		UniversityQuery::InsertComplexValue($db, "tablename='vakant'", $numrow['m'], 0, $programid, 0);
 		
 		$formEdu = array(
 				'очная',
@@ -242,7 +255,7 @@ class UniversityQuery {
 		);
 		
 		foreach ($formEdu as $form){
-			UniversityQuery::InsertComplexValue($db, "tablename='program' AND fieldname=''", $numrow['m'], $programid, 0, $form);
+			UniversityQuery::InsertComplexValue($db, "tablename='program' AND fieldname=''", $numrow['m'], $programid, $programid, $form);
 			UniversityQuery::InsertComplexValue($db, "tablename='eduform' AND fieldname=''", $numrow['m'], 0, $programid, 0);
 		}
 		
@@ -274,7 +287,6 @@ class UniversityQuery {
 			VALUES ".$insert."
 		";
 		$db->query_write($sql);
-		
 	}
 	
 	public static function ProgramList(Ab_Database $db){
@@ -380,7 +392,7 @@ class UniversityQuery {
 				
 				UniversityQuery::InsertComplexValue($db, "tablename='edulevel' AND fieldname<>''", $numrow, $edulevelid, $programid, "edulevelid");
 				
-				UniversityQuery::InsertComplexValue($db, "tablename='edulevel' AND fieldname=''", $numrow, 0, $programid, 0);
+				UniversityQuery::InsertComplexValue($db, "tablename='edulevel' AND fieldname=''", $numrow, 0, $edulevelid, 0);
 				
 		    	$sql = "
 					INSERT INTO ".$db->prefix."un_eduform(edulevelid, och, ochzaoch, zaoch)
@@ -389,7 +401,7 @@ class UniversityQuery {
 		    	$db->query_write($sql);
 		    	$formid = mysql_insert_id();
 		    	
-		    	UniversityQuery::InsertComplexValue($db, "tablename='eduform'  AND fieldname<>''", $numrow, $formid, $programid, "eduformid");
+		    	UniversityQuery::InsertComplexValue($db, "tablename='eduform'  AND fieldname<>''", $numrow, $formid, $edulevelid, "eduformid");
 		    	
 		}
 	}
@@ -437,7 +449,7 @@ class UniversityQuery {
 		return $db->query_write($sql);
 	}
 	
-	public static function ComplexAttrList(Ab_Database $db, $attrid){
+	public static function ComplexAttrListAll(Ab_Database $db, $attrid){
 		$sql = "
 				SELECT
 					attributeid as id
@@ -449,30 +461,44 @@ class UniversityQuery {
 					FROM ".$db->prefix."un_attribute
 					WHERE complexid=".bkint($attrid)." AND typeattribute=4
 		";
-		$rows = $db->query_read($sql);
+		return $db->query_read($sql);
+	}
+	
+	public static function ComplexAttrItem(Ab_Database $db, $attrid, $tableName, $fieldname){
 		
-		$arrAttrid = array();
-		$strid = "";
+		$where = "complexid=".bkint($attrid)." AND tablename='".bkstr($tableName)."' AND fieldname='".bkstr($fieldname)."'";
 		
-		while ($d = $db->fetch_array($rows)){
-			$arrAttrid[$d['id']] = array();
-			
-			$strid .= $d['id']. ",";
-		}
-		$maxNumRow = UniversityQuery::MaxNumRowValue($db, $strid);
+		$sql = "
+				SELECT
+					attributeid as id
+				FROM ".$db->prefix."un_attribute
+				WHERE ".$where."
+				LIMIT 1
+		";
+		$res = $db->query_first($sql);
+		return $res['id'];
+	}
+	
+	public static function CompositAttrItem(Ab_Database $db, $attrid, $idlst){
+	
+		$sql = "
+				SELECT
+					attributeid as id
+				FROM ".$db->prefix."un_attribute
+				WHERE complexid=".bkint($attrid)." AND attributeid NOT IN (".$idlst.") AND tablename <> ''
+		";
+		$result = $db->query_read($sql);
 		
-		if(isset($maxNumRow['max'])){
-			$dataValue = array();
-				for($i = 1; $i <= $maxNumRow['max']; $i++){
-					$dataValue[$i] = $arrAttrid;
-				}
-			return $dataValue;
-		}
+		$respond = "";
+	    while ($d = $this->db->fetch_array($result)){
+	    	$respond .= $d['id'].",";
+    	}
+    	$respond = substr($respond, 0, -1);
+    	
+		return $respond;
 	}
 	
 	public static function MaxNumRowValue($db, $strid){
-		$strid = substr($strid, 0, -1);
-		
 		$sql = "
 				SELECT
 						MAX(numrow) as max
@@ -485,7 +511,9 @@ class UniversityQuery {
 		return $result;
 	}
 	
-	public static function ComplexValueAttributeList(Ab_Database $db, $attrid){
+	public static function ComplexValueAttributeList(Ab_Database $db, $attrList){
+		$where = "v.attributeid IN (".$attrList.") AND v.remove=0";
+		
 		$sql = "
 			SELECT
 					v.valueid as id,
@@ -501,8 +529,7 @@ class UniversityQuery {
 					v.numrow
 			FROM ".$db->prefix."un_attribute a
 			INNER JOIN ".$db->prefix."un_value v ON a.attributeid=v.attributeid
-			WHERE a.complexid=".bkint($attrid)." AND v.remove=0
-					
+			WHERE ".$where."
 		";
 		return $db->query_read($sql);
 	}
