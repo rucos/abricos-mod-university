@@ -297,16 +297,16 @@ class University extends AbricosApplication {
     	$d->code = $utmf->Parser($d->code);
     	$d->name = $utmf->Parser($d->name);
     	
-    	$arr = array();
+    	$isNotEmpty = false;
     	foreach ($d->eduLevel as $key => $value){
     		$level = intval($value);
     		if($level){
-    			$arr[$key] = $utmf->Parser($value);
+    			$isNotEmpty = true;
+    				break;
     		}
     	}
     	
-    	if(count($arr)){
-    		$d->eduLevel = $arr;
+    	if($isNotEmpty){
     			if($d->programid > 0){
     		    	return UniversityQuery::EditProgram($this->db, $d);
     		    } else {

@@ -242,6 +242,7 @@ class UniversityQuery {
 			SELECT 
     			MAX(programid) as m
     		FROM ".$db->prefix."un_program
+    		WHERE remove=0
     	";
     	$numrow = $db->query_first($sql);
 		    	
@@ -351,40 +352,41 @@ class UniversityQuery {
 			LIMIT 1
 		";
 		$db->query_write($sql);
-
-		$sql = "
-			DELETE lvl,form
-				FROM ".$db->prefix."un_edulevel lvl
-				INNER JOIN ".$db->prefix."un_eduform form
-			WHERE lvl.programid=".bkint($d->programid)." AND lvl.edulevelid=form.edulevelid
-		";
-		$db->query_write($sql);
 		
-		$sql = "
-			DELETE FROM ".$db->prefix."un_value
-			WHERE mainid=".bkint($d->programid)."
-		";
-		$db->query_write($sql);
-		
-		$sql = "
-			SELECT
-    			numrow
-    		FROM ".$db->prefix."un_value
-    		WHERE value='programid' AND relationid=".bkint($d->programid)."
-    		LIMIT 1
-		";
-		$numrow = $db->query_first($sql);
-		
-		UniversityQuery::AppendEduForm($db, $d->eduLevel, $d->programid, $numrow['numrow']);
+		foreach ($d->eduLevel as $key => $value){
+			$remove = intval($value) ? 1 : 0;
+				$sql = "
+						UPDATE ".$db->prefix."un_edulevel
+						SET
+							remove=".bkint($remove)."
+						WHERE programid=".bkint($d->programid)." AND level=".bkint($key + 1)."
+						
+					";
+				$db->query_write($sql);
+				
+				$sql = "
+						UPDATE ".$db->prefix."un_eduform f
+						INNER JOIN ".$db->prefix."un_edulevel l ON l.edulevelid=f.edulevelid
+							SET
+								f.och=".bkint($value[0]).",
+								f.ochzaoch=".bkint($value[1]).",
+								f.zaoch=".bkint($value[2])."
+						WHERE l.programid=".bkint($d->programid)." AND l.level=".bkint($key + 1)."
+					";
+				$db->query_write($sql);
+		}
 	}
 	
 	private function AppendEduForm($db, $eduLevel, $programid, $numrow){
 		foreach ($eduLevel as $key => $value){
+			$remove = intval($value) ? 1 : 0;
+			
 				$sql = "
-					INSERT INTO ".$db->prefix."un_edulevel(programid, level)
+					INSERT INTO ".$db->prefix."un_edulevel(programid, level, remove)
 					VALUES (
 							".$programid.",
-							".($key + 1)."
+							".bkint($key + 1).",
+							 ".$remove."
 					)
 				";
 				$db->query_write($sql);

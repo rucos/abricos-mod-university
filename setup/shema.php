@@ -98,6 +98,7 @@ if ($updateManager->isInstall('0.1.5')){
 				edulevelid int(10) unsigned NOT NULL auto_increment,
 				programid int(10) unsigned NOT NULL default 0 COMMENT 'id направления',
 				level enum('бакалавриат академический','бакалавриат прикладной','специалитет') NOT NULL COMMENT 'уровень образования',
+				remove tinyint(1) unsigned NOT NULL default 0 COMMENT 'Удален?',
 				PRIMARY KEY (edulevelid),
 				UNIQUE KEY level (programid,level)
 			)".$charset
