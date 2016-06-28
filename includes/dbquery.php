@@ -242,7 +242,6 @@ class UniversityQuery {
 			SELECT 
     			MAX(programid) as m
     		FROM ".$db->prefix."un_program
-    		WHERE remove=0
     	";
     	$numrow = $db->query_first($sql);
 		    	
@@ -267,7 +266,7 @@ class UniversityQuery {
 	 * Добавление направлений в таблицу un_value 
 	 * 
 	 */
-	public static function InsertComplexValue(Ab_Database $db, $where, $numrow, $relationid, $mainid, $value){
+	public static function InsertComplexValue(Ab_Database $db, $where, $numrow, $relationid, $mainid, $value, $remove = 0){
 		
 		$sql = "
 				SELECT
@@ -279,12 +278,12 @@ class UniversityQuery {
 		$insert = "";
 		
 		while ($dd = $db->fetch_array($rows)){
-			$insert .= "(".$dd['id'].",".$numrow.",".$relationid.",".$mainid.",'".$value."'),";
+			$insert .= "(".$dd['id'].",".$numrow.",".$relationid.",".$mainid.",'".$value."', ".$remove."),";
 		}
 		$insert = substr($insert, 0, -1);
 		 
 		$sql = "
-			INSERT INTO ".$db->prefix."un_value(attributeid, numrow, relationid, mainid, value)
+			INSERT INTO ".$db->prefix."un_value(attributeid, numrow, relationid, mainid, value, remove)
 			VALUES ".$insert."
 		";
 		$db->query_write($sql);
@@ -304,11 +303,13 @@ class UniversityQuery {
 	
 	public static function RemoveProgram(Ab_Database $db, $d){
 		$sql = "
-			UPDATE ".$db->prefix."un_program
+			UPDATE ".$db->prefix."un_program p, ".$db->prefix."un_value v
+			INNER JOIN ".$db->prefix."un_attribute a ON a.attributeid=v.attributeid
 			SET
-				remove=".bkint($d->remove)."
-			WHERE programid=".bkint($d->programid)."
-			LIMIT 1
+				p.remove=".bkint($d->remove).",
+				v.remove=".bkint($d->remove)."
+			WHERE p.programid=".bkint($d->programid)."
+					AND (a.tablename='program' AND a.fieldname='code,name' AND v.relationid=".bkint($d->programid).")
 		";
 		return $db->query_write($sql);
 	}
@@ -354,24 +355,35 @@ class UniversityQuery {
 		$db->query_write($sql);
 		
 		foreach ($d->eduLevel as $key => $value){
-			$remove = intval($value) ? 1 : 0;
+			$sql = "
+				SELECT
+						edulevelid as id
+				FROM ".$db->prefix."un_edulevel
+				WHERE programid=".bkint($d->programid)." AND level=".bkint($key + 1)."
+			";
+				$lvl = $db->query_first($sql);
+				
+			$remove = intval($value) ? 0 : 1;
 				$sql = "
-						UPDATE ".$db->prefix."un_edulevel
+						UPDATE ".$db->prefix."un_edulevel l, ".$db->prefix."un_value v
+						INNER JOIN ".$db->prefix."un_attribute a ON a.attributeid=v.attributeid
 						SET
-							remove=".bkint($remove)."
-						WHERE programid=".bkint($d->programid)." AND level=".bkint($key + 1)."
-						
+							l.remove=".bkint($remove).",
+							v.remove=".bkint($remove)."
+						WHERE l.edulevelid = ".$lvl['id']." 
+								AND ((a.tablename='edulevel' AND a.fieldname<>'' AND v.relationid=".$lvl['id'].")
+										OR (a.tablename='edulevel' AND a.fieldname='' AND v.mainid=".$lvl['id'].")
+											OR (a.tablename='eduform' AND a.fieldname<>'' AND v.mainid=".$lvl['id']."))
 					";
 				$db->query_write($sql);
 				
 				$sql = "
-						UPDATE ".$db->prefix."un_eduform f
-						INNER JOIN ".$db->prefix."un_edulevel l ON l.edulevelid=f.edulevelid
+						UPDATE ".$db->prefix."un_eduform
 							SET
-								f.och=".bkint($value[0]).",
-								f.ochzaoch=".bkint($value[1]).",
-								f.zaoch=".bkint($value[2])."
-						WHERE l.programid=".bkint($d->programid)." AND l.level=".bkint($key + 1)."
+								och=".bkint($value[0]).",
+								ochzaoch=".bkint($value[1]).",
+								zaoch=".bkint($value[2])."
+						WHERE edulevelid = ".bkint($lvl['id'])."
 					";
 				$db->query_write($sql);
 		}
@@ -379,7 +391,7 @@ class UniversityQuery {
 	
 	private function AppendEduForm($db, $eduLevel, $programid, $numrow){
 		foreach ($eduLevel as $key => $value){
-			$remove = intval($value) ? 1 : 0;
+			$remove = intval($value) ? 0 : 1;
 			
 				$sql = "
 					INSERT INTO ".$db->prefix."un_edulevel(programid, level, remove)
@@ -392,9 +404,9 @@ class UniversityQuery {
 				$db->query_write($sql);
 				$edulevelid = mysql_insert_id();
 				
-				UniversityQuery::InsertComplexValue($db, "tablename='edulevel' AND fieldname<>''", $numrow, $edulevelid, $programid, "edulevelid");
+				UniversityQuery::InsertComplexValue($db, "tablename='edulevel' AND fieldname<>''", $numrow, $edulevelid, $programid, "edulevelid", $remove);
 				
-				UniversityQuery::InsertComplexValue($db, "tablename='edulevel' AND fieldname=''", $numrow, 0, $edulevelid, 0);
+				UniversityQuery::InsertComplexValue($db, "tablename='edulevel' AND fieldname=''", $numrow, 0, $edulevelid, 0, $remove);
 				
 		    	$sql = "
 					INSERT INTO ".$db->prefix."un_eduform(edulevelid, och, ochzaoch, zaoch)
@@ -403,8 +415,7 @@ class UniversityQuery {
 		    	$db->query_write($sql);
 		    	$formid = mysql_insert_id();
 		    	
-		    	UniversityQuery::InsertComplexValue($db, "tablename='eduform'  AND fieldname<>''", $numrow, $formid, $edulevelid, "eduformid");
-		    	
+		    	UniversityQuery::InsertComplexValue($db, "tablename='eduform'  AND fieldname<>''", $numrow, $formid, $edulevelid, "eduformid", $remove);
 		}
 	}
 	
@@ -506,7 +517,6 @@ class UniversityQuery {
 						MAX(numrow) as max
 				FROM ".$db->prefix."un_value
 				WHERE attributeid IN (".$strid.") 
-						AND remove=0
 		";
 		$result = $db->query_first($sql); 
 		
@@ -550,14 +560,15 @@ class UniversityQuery {
 		$sql = "
 			SELECT $fields				
 			FROM ".$db->prefix."$tableName
-			WHERE ".$idFieldName."=".$relationId."
+			WHERE ".$idFieldName."=".bkint($relationId)."
 			LIMIT 1
 		";
 		$result = $db->query_first($sql);
+		
 		$respValue = "";
-		foreach($result as $value){
-			$respValue .= $value." ";
-		}
+			foreach($result as $value){
+				$respValue .= $value." ";
+			}
 		return $respValue;
 	}
 }

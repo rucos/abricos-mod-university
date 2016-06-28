@@ -225,8 +225,10 @@ class University extends AbricosApplication {
     				if($fieldname !== ''){
     					$val['value'] = UniversityQuery::ValueOfLinkTable($this->db, $val['tablename'], $fieldname, $val['relationid'], $val['value']);
     				}
-    				
-    				array_push($dataValue[$num][$atrid], $val);
+			    	
+    				if($val['remove'] == 0){
+    					array_push($dataValue[$num][$atrid], $val);
+    				}
     			}
     			return $dataValue;
     }
