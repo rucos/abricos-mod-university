@@ -263,7 +263,7 @@ class UniversityQuery {
 	}
 	
 	/*
-	 * Добавление направлений в таблицу un_value 
+	 * Добавление авто значений в таблицу un_value 
 	 * 
 	 */
 	public static function InsertComplexValue(Ab_Database $db, $where, $numrow, $relationid, $mainid, $value, $remove = 0){
@@ -301,17 +301,43 @@ class UniversityQuery {
 		return $db->query_read($sql);
 	}
 	
+	/*
+	 * Удаление учебной программы
+	 * 
+	 * Обновление значений в таблице un_value по текущему programid 
+	 * 
+	 * */
+	
 	public static function RemoveProgram(Ab_Database $db, $d){
+		$remove = bkint($d->remove);
+		$programid = bkint($d->programid);
+		
 		$sql = "
 			UPDATE ".$db->prefix."un_program p, ".$db->prefix."un_value v
 			INNER JOIN ".$db->prefix."un_attribute a ON a.attributeid=v.attributeid
 			SET
-				p.remove=".bkint($d->remove).",
-				v.remove=".bkint($d->remove)."
-			WHERE p.programid=".bkint($d->programid)."
-					AND (a.tablename='program' AND a.fieldname='code,name' AND v.relationid=".bkint($d->programid).")
+				p.remove=".$remove.",
+				v.remove=".$remove."
+			WHERE p.programid=".$programid."
+					AND ((a.tablename='program' AND a.fieldname IN ('code,name','') AND v.relationid=".$programid.")
+							OR (a.tablename='vakant' AND v.mainid=".$programid.")
+									OR (a.tablename='eduform' AND a.fieldname='' AND v.mainid=".$programid."))
 		";
-		return $db->query_write($sql);
+		$db->query_write($sql);
+		
+
+		$sql = "
+			UPDATE ".$db->prefix."un_value v
+			INNER JOIN ".$db->prefix."un_attribute a ON a.attributeid=v.attributeid
+			INNER JOIN ".$db->prefix."un_edulevel l
+			SET
+				v.remove=".$remove."
+			WHERE l.programid=".$programid." AND l.remove=0
+					AND ((a.tablename='edulevel' AND a.fieldname<>'' AND v.relationid=l.edulevelid)
+							OR (a.tablename='edulevel' AND a.fieldname='' AND v.mainid=l.edulevelid)
+								OR (a.tablename='eduform' AND a.fieldname<>'' AND v.mainid=l.edulevelid))
+		";
+		$db->query_write($sql);
 	}
 	
 	public static function ProgramItem(Ab_Database $db, $programid){
@@ -343,6 +369,12 @@ class UniversityQuery {
 		return $db->query_read($sql);
 	}
 	
+	/*
+	 * Редактирование учебной программы
+	 *
+	 * Обновление значений в таблице un_value по текущему programid, edulevelid
+	 *
+	 * */
 	public static function EditProgram(Ab_Database $db, $d){
 		$sql = "
 			UPDATE ".$db->prefix."un_program
@@ -389,6 +421,12 @@ class UniversityQuery {
 		}
 	}
 	
+	/*
+	 * Добавление форм обучения
+	 *
+	 * Обновление значений в таблице un_value по текущему programid, edulevelid
+	 *
+	 * */
 	private function AppendEduForm($db, $eduLevel, $programid, $numrow){
 		foreach ($eduLevel as $key => $value){
 			$remove = intval($value) ? 0 : 1;
