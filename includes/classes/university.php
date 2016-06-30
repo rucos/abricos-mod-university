@@ -218,17 +218,19 @@ class University extends AbricosApplication {
     			}
     			
     			foreach ($arrayValue as $val){
+    				if($val['remove'] == 1){
+    					continue;
+    				}
+    				
     				$num = $val['numrow'];
     				$atrid = $val['attributeid'];
     				$fieldname = $val['fieldname'];
-    					
+    				
     				if($fieldname !== ''){
     					$val['value'] = UniversityQuery::ValueOfLinkTable($this->db, $val['tablename'], $fieldname, $val['relationid'], $val['value']);
     				}
 			    	
-    				if($val['remove'] == 0){
-    					array_push($dataValue[$num][$atrid], $val);
-    				}
+					array_push($dataValue[$num][$atrid], $val);
     			}
     			return $dataValue;
     }
@@ -262,6 +264,7 @@ class University extends AbricosApplication {
     	$d->datedoc = "";
     	$d->file = "";
     	$d->numrow = intval($d->numrow);
+    	$d->mainid = intval($d->mainid);
     	
     	$res = $this->ActValueAttribute($d);
     	return $this->ResultToJSON('actValueAttribute', $res);

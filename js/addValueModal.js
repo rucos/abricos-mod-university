@@ -213,7 +213,8 @@ Component.entryPoint = function(NS){
         		namedoc: arguments[4] || '',
         		datedoc: arguments[5] || '',
         		file: arguments[2] ? this.renderRef(arguments[2]) : this.template.replace('fileInput'),
-        		numrow: arguments[6] || this.get('numrow')
+        		numrow: arguments[6] || this.get('numrow'),
+        		mainid: this.get('mainid')
         	};
         },
         renderRef: function(url){
@@ -264,7 +265,8 @@ Component.entryPoint = function(NS){
             valueItem: {value: null},
             view: '',
             valueAttributeItem: {value: null},
-            numrow: {value: 0}
+            numrow: {value: 0},
+            mainid: {value: 0}
         },
         CLICKS: {
         	'addValue-cancel': {

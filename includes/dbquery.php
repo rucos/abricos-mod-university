@@ -187,13 +187,14 @@ class UniversityQuery {
 	
 	public static function AppendValueAttribute(Ab_Database $db, $d){
 		$sql = "
-			INSERT INTO ".$db->prefix."un_value(attributeid, value, nameurl, view, numrow)
+			INSERT INTO ".$db->prefix."un_value(attributeid, value, nameurl, view, numrow, mainid)
 			VALUES (
 					".bkint($d->atrid).",
 					'".bkstr($d->value)."',
 					'".bkstr($d->nameurl)."',
 					'".bkstr($d->view)."',
-					".bkint($d->numrow)."							
+					".bkint($d->numrow).",
+					".bkint($d->mainid)."
 			)
 		";
 	
@@ -321,7 +322,8 @@ class UniversityQuery {
 			WHERE p.programid=".$programid."
 					AND ((a.tablename='program' AND a.fieldname IN ('code,name','') AND v.relationid=".$programid.")
 							OR (a.tablename='vakant' AND v.mainid=".$programid.")
-									OR (a.tablename='eduform' AND a.fieldname='' AND v.mainid=".$programid."))
+									OR (a.tablename='eduform' AND a.fieldname='' AND v.mainid=".$programid.")
+											OR (a.tablename='educode' AND v.mainid=".$programid."))
 		";
 		$db->query_write($sql);
 		

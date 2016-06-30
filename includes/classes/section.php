@@ -215,12 +215,6 @@ class Section {
 	
 	private function FillEducationSection($idSection){
 		$rows = "
-			(".$idSection.", 0, 0, 'simple', 'Информация о языках, на которых осуществляется образование (обучение)', 'language', '', '', 0),
-			(".$idSection.", 0, 0, 'simple', 'Информация о направлениях и результатах научной (научно-исследовательской) деятельности и научно-исследовательской базе для ее осуществления', 'http://obrnadzor.gov.ru/microformats/NIR', '', '', 0)
-		";
-		$this->AppendUnAttr($rows);
-		
-		$rows = "
 			(".$idSection.", 0, 0, 'complex', 'Перечень направлений', '', '', '', 1)
 		";
 		
@@ -260,12 +254,12 @@ class Section {
 		
 		$rows = "
 			(".$idSection.", ".$complexid.", 0, 'composite', 'Образовательная программа', 'EduCode', 'program', 'code,name', 0),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Описание образовательной программы', 'OOP_main', '', '', 0),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация об учебном плане', 'education_plan', '', '', 0),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация об аннотации к рабочим программам дисциплин (по каждой дисциплине в составе образовательной программы)', 'education_annotation', '', '', 0),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о календарном учебном графике', 'education_shedule', '', '', 0),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о методических и об иных документах, разработанных образовательной организацией для обеспечения образовательного процесса', 'methodology', '', '', 0),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о практиках, предусмотренных соответствующей образовательной программой', 'EduPr', '', '', 0)
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Описание образовательной программы', 'OOP_main', 'educode', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация об учебном плане', 'education_plan', 'educode', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация об аннотации к рабочим программам дисциплин (по каждой дисциплине в составе образовательной программы)', 'education_annotation', 'educode', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о календарном учебном графике', 'education_shedule', 'educode', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о методических и об иных документах, разработанных образовательной организацией для обеспечения образовательного процесса', 'methodology', 'educode', '', 0),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о практиках, предусмотренных соответствующей образовательной программой', 'EduPr', 'educode', '', 0)
 		";
 		
 		$this->AppendUnAttr($rows);
@@ -328,6 +322,12 @@ class Section {
 			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'отчислено', '', 'eduform', '', 0)
 		";
 		$this->AppendUnAttr($rows);
+		
+		$rows = "
+			(".$idSection.", 0, 0, 'simple', 'Информация о языках, на которых осуществляется образование (обучение)', 'language', '', '', 0),
+			(".$idSection.", 0, 0, 'simple', 'Информация о направлениях и результатах научной (научно-исследовательской) деятельности и научно-исследовательской базе для ее осуществления', 'http://obrnadzor.gov.ru/microformats/NIR', '', '', 0)
+		";
+		$this->AppendUnAttr($rows);
 	}
 	
 	private function FillEduStandartsSection($idSection){
@@ -340,7 +340,7 @@ class Section {
 		
 		$rows = "
 			(".$idSection.", ".$complexid.", 0, 'composite', 'Наименование специальности/направления подготовки', 'EduCode', 'program', 'code,name', 0),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Копии федеральных государственных образовательных стандартов', 'EduStandartDoc', '', '', 0)
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Копии федеральных государственных образовательных стандартов', 'EduStandartDoc', 'educode', '', 0)
 		";
 		$this->AppendUnAttr($rows);
 	}

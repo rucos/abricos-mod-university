@@ -96,13 +96,14 @@ Component.entryPoint = function(NS){
 	        		add: ''
 	        	});
         },
-        referAddReplace: function(value, atrid, numrow, valueid, view){
+        referAddReplace: function(value, atrid, numrow, mainid, valueid, view){
         	return this.template.replace('referAdd', {
     			nameurl: value + "(+)",
     			id: atrid,
-    			vid: valueid || 0,
-    			view: view || 'value',
-    			numrow: numrow || 0
+    			vid: 0,
+    			view: 'value',
+    			numrow: numrow || 0,
+    			mainid: mainid || 0
     		})
         }, 
         renderThead: function(tdComp, tdSubComp){
@@ -115,13 +116,15 @@ Component.entryPoint = function(NS){
         },
         actRowShow: function(){
         	var tp = this.template,
-        		numrow = arguments[3];
+        		numrow = arguments[3],
+        		mainid = arguments[4];
         	
         	if(numrow == 0){
         		numrow = tp.gel('table.tBody').rows.length + 1;
         	}
         	
         	this.addValueModal.set('numrow', numrow);
+        	this.addValueModal.set('mainid', mainid);
         	
         	this.addValueModal.showModal.apply(this.addValueModal, arguments);
         },
@@ -207,7 +210,8 @@ Component.entryPoint = function(NS){
         },
         parseRowValue: function(objValue, numrow){
         	var tp = this.template,
-        		td = "", isRelation, curObj, item;
+        		td = "", isRelation, curObj, item,
+        		curRelationid = 0;
         		
         	for(var i in objValue){
         		curObj = objValue[i];
@@ -216,6 +220,7 @@ Component.entryPoint = function(NS){
         		
         		for(var j = 0; j < curObj.length; j++){
         			if(curObj[j].relationid > 0){
+        				curRelationid = curObj[j].relationid;
         				isRelation = true;
         			}
         			
@@ -228,7 +233,7 @@ Component.entryPoint = function(NS){
      			td += tp.replace('td', {
     				span: "",
     				value: item,
-    				add: isRelation ? "" : this.referAddReplace("", i, numrow)
+    				add: isRelation ? "" : this.referAddReplace("", i, numrow, curRelationid)
     			});
         	}
         	
@@ -291,9 +296,10 @@ Component.entryPoint = function(NS){
         				valueid = targ.getData('id'),
         				view = targ.getData('view'),
         				atrid = targ.getData('atrid'),
-        				numrow = targ.getData('numrow');
+        				numrow = targ.getData('numrow'),
+        				mainid = targ.getData('mainid');
         			
-        				this.actRowShow(valueid, atrid, view, numrow);
+        				this.actRowShow(valueid, atrid, view, numrow, mainid);
         		}
         	},
         	'remove-show': {

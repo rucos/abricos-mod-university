@@ -50,6 +50,7 @@ class UploadFile{
 		$this->data->id = $id;
 		$this->data->atrid = intval($_POST['atrid']);
 		$this->data->numrow = intval($_POST['numrow']);
+		$this->data->mainid = intval($_POST['mainid']);
 			
 		$nameurl = $utmf->Parser($_POST['nameurl']);
 		if($nameurl === ''){
@@ -78,7 +79,7 @@ class UploadFile{
 			$arrDateDoc = explode('-', $datedoc);
 			$this->datedoc = "_".$arrDateDoc[2].".".$arrDateDoc[1].".".$arrDateDoc[0];
 		}
-		
+
 		return true;
 	}
 	
