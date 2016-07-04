@@ -247,7 +247,7 @@ class Section {
 		
 		
 		$rows = "
-			(".$idSection.", 0, 0, 'complex', 'Образование', '', '', '', 3)
+			(".$idSection.", 0, 0, 'complex', 'Образование', '', '', '', 1)
 		";
 		
 		$complexid = $this->AppendUnAttr($rows, true);
@@ -333,7 +333,7 @@ class Section {
 	private function FillEduStandartsSection($idSection){
 		
 		$rows = "
-			(".$idSection.", 0, 0, 'complex', 'Образовательные стандарты', '', '', '', 3)
+			(".$idSection.", 0, 0, 'complex', 'Образовательные стандарты', '', '', '', 1)
 		";
 	
 		$complexid = $this->AppendUnAttr($rows, true);
