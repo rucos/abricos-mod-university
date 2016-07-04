@@ -214,7 +214,7 @@ Component.entryPoint = function(NS){
         		datedoc: arguments[5] || '',
         		file: arguments[2] ? this.renderRef(arguments[2]) : this.template.replace('fileInput'),
         		numrow: arguments[6] || this.get('numrow'),
-        		mainid: this.get('mainid')
+        		mainid: this.get('mainid') || 0
         	};
         },
         renderRef: function(url){
