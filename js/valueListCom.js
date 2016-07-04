@@ -163,7 +163,6 @@ Component.entryPoint = function(NS){
         		
 	        		for(var z = 0; z < 3; z++){
 	        			td = "";
-	        			
 	            		for(var j in valueComplexList[i]){
 	            			curArray = valueComplexList[i][j];
 		            			if(curArray[z]){
@@ -197,46 +196,52 @@ Component.entryPoint = function(NS){
         renderValueList: function(){//Заполнение tBody ручной таблицы
         	var valueComplexList = this.get('valueComplexList'),
         		tp = this.template,
-        		tr = "";
+        		tr = "",
+        		td = "",
+        		regEx = /show-td-buttons/i;
         	
         	if(valueComplexList){
                	for(var i in valueComplexList){
+               		td = this.parseRowValue(valueComplexList[i], i);
+               		
+               		if(regEx.test(td)){
 	                	tr += tp.replace('tr', {
-	                		td: this.parseRowValue(valueComplexList[i], i) 
+	                		td: td
 	                	});
+               		}
             	}
         	}
         	tp.setHTML('table.tBody', tr);
         },
         parseRowValue: function(objValue, numrow){
         	var tp = this.template,
-        		td = "", isRelation, curObj, item,
-        		curRelationid = 0;
-        		
+        		td = "", 
+        		isRelation, 
+        		curObj, 
+        		curRelationid = 0,
+        		curLen = 0;
+
         	for(var i in objValue){
         		curObj = objValue[i];
         		isRelation = false;
-        		item = "";
         		
-        		for(var j = 0; j < curObj.length; j++){
+        		for(var j = 0, item = ""; j < curObj.length; j++){
         			if(curObj[j].relationid > 0){
         				curRelationid = curObj[j].relationid;
         				isRelation = true;
         			}
-        			
         			item += tp.replace('item', {
         				value: this.addValueModal.parseValue(curObj[j].view, curObj[j].nameurl, curObj[j].value),
         				btnGroup: this.parseButtonGroup(curObj[j])
         			});
         		}
-        		
      			td += tp.replace('td', {
     				span: "",
     				value: item,
     				add: isRelation ? "" : this.referAddReplace("", i, numrow, curRelationid)
     			});
+     			
         	}
-        	
         	return td;
         },
         parseButtonGroup: function(obj){
