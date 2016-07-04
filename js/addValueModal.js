@@ -122,7 +122,7 @@ Component.entryPoint = function(NS){
            		} else {
            			arr[5] = true;
            		}
-           		nameDoc = value.match(/\w+[._]/g)[0]; 
+           		nameDoc = value.match(/\w+[._]?/g)[0]; 
            		
            		arr[4] = nameDoc.slice(0, -1);
         	}
