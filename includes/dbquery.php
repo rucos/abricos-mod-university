@@ -121,18 +121,6 @@ class UniversityQuery {
 		$db->query_write($sql);
 	}
 	
-	public static function AttributeItem(Ab_Database $db, $attrid){
-		$sql = "
-				SELECT
-					insertrow as ins
-				FROM ".$db->prefix."un_attribute
-				WHERE attributeid=".bkint($attrid)."
-				LIMIT 1
-		";
-		$result = $db->query_first($sql); 
-		return $result['ins'];
-	}
-	
 	public static function RemoveAttribute(Ab_Database $db, $d){
 		$where = "attributeid=".bkint($d->compositid);
 		
@@ -202,30 +190,87 @@ class UniversityQuery {
 	}
 	
 	public static function EditValueAttribute(Ab_Database $db, $d){
-		$sql = "
-			UPDATE ".$db->prefix."un_value
-			SET
-				attributeid=".bkint($d->atrid).",
-				value='".bkstr($d->value)."',
-				nameurl='".bkstr($d->nameurl)."'
-			WHERE valueid=".bkint($d->id)."
-			LIMIT 1
-		";
-	
-		return $db->query_write($sql);
+		$valueid = bkint($d->id);
+		
+		$act = UniversityQuery::VerificationValue($db, $valueid);
+		
+		if($act){
+			$sql = "
+				UPDATE ".$db->prefix."un_value
+				SET
+					attributeid=".bkint($d->atrid).",
+					value='".bkstr($d->value)."',
+					nameurl='".bkstr($d->nameurl)."'
+				WHERE valueid=".bkint($d->id)."
+				LIMIT 1
+			";
+			$db->query_write($sql);
+		}
 	}
 	
 	public static function RemoveValueAttribute(Ab_Database $db, $d){
+		$valueid = bkint($d->valueid);
+		
+		$act = UniversityQuery::VerificationValue($db, $valueid);
+		
+		if($act){
+			$sql = "
+				SELECT
+						a.complexid
+				FROM ".$db->prefix."un_attribute a
+				INNER JOIN ".$db->prefix."un_value v ON v.attributeid=a.attributeid
+				WHERE v.valueid=".$valueid."
+				LIMIT 1
+			";
+			$complexid = $db->query_first($sql);
+			
+			$insertrow = UniversityQuery::AttributeInsertItem($db, $complexid['complexid']);
+			
+			if($insertrow == 1){
+				$set = "value=0";
+			} else {
+				$set = "remove=".bkint($d->remove);
+			}
+			
+			$sql = "
+				UPDATE ".$db->prefix."un_value
+				SET
+					".$set."
+				WHERE valueid=".$valueid."
+				LIMIT 1
+			";
+			$db->query_write($sql);
+		}
+	}
 	
+	public static function AttributeInsertItem(Ab_Database $db, $complexattrid){
 		$sql = "
-			UPDATE ".$db->prefix."un_value
-			SET
-				remove=".bkint($d->remove)."
-			WHERE valueid=".bkint($d->valueid)."
-			LIMIT 1
+				SELECT
+					insertrow as ins
+				FROM ".$db->prefix."un_attribute
+				WHERE attributeid=".bkint($complexattrid)."
+				LIMIT 1
 		";
-	
-		return $db->query_write($sql);
+		$result = $db->query_first($sql);
+		return $result['ins'];
+	}
+	/*
+	 * Проверка значения
+	 * 
+	 * если у атрибута есть связь с другой таблицей, то значение доступно только для чтения
+	 * 
+	 * */
+	private static function VerificationValue(Ab_Database $db, $valueid){
+		
+		$sql = "
+				SELECT
+						a.attributeid
+				FROM ".$db->prefix."un_attribute a
+				INNER JOIN ".$db->prefix."un_value v ON v.attributeid=a.attributeid
+				WHERE v.valueid=".$valueid." AND a.fieldname='' AND v.relationid=0
+				LIMIT 1
+			";
+		return $db->query_first($sql);
 	}
 	
 	public static function AppendProgram(Ab_Database $db, $d){

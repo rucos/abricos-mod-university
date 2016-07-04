@@ -180,58 +180,57 @@ class University extends AbricosApplication {
     public function ValueComplexList($attrid){
     	$attrid = intval($attrid);
     	
-    	$insert = UniversityQuery::AttributeItem($this->db, $attrid);
     	
-    			$attrListid = UniversityQuery::ComplexAttrListAll($this->db, $attrid);
-    			 
-    			$arrAttrid = array();
-    			$strid = "";
-    			
-    			while ($d = $this->db->fetch_array($attrListid)){
-    				$arrAttrid[$d['id']] = array();
-    			
-    				$strid .= $d['id']. ",";
-    			}
-    			$strid = substr($strid, 0, -1);
-    			
-    			$allValue = UniversityQuery::ComplexValueAttributeList($this->db, $strid);
-    			
-    			if(!$allValue){
-    				return false;
-    			}
-    			
-    			$arrayValue = array();
-    			 
-    			while ($value = $this->db->fetch_array($allValue)){
-    				$arrayValue[] = $value;
-    			}
-    			
-    			$maxNumRow = UniversityQuery::MaxNumRowValue($this->db, $strid);
+    	$attrListid = UniversityQuery::ComplexAttrListAll($this->db, $attrid);
+    		 
+    	$arrAttrid = array();
+    	$strid = "";
     		
-    			if(isset($maxNumRow['max'])){
-    				$dataValue = array();
-    				for($i = 1; $i <= $maxNumRow['max']; $i++){
-    					$dataValue[$i] = $arrAttrid;
-    				}
-    			} else {
-    				return false;
-    			}
+    	while ($d = $this->db->fetch_array($attrListid)){
+    			$arrAttrid[$d['id']] = array();
+    		
+    			$strid .= $d['id']. ",";
+    	}
+    	$strid = substr($strid, 0, -1);
     			
-    			foreach ($arrayValue as $val){
-    				if($val['remove'] == 1){
-    					continue;
-    				}
-    				
-    				$num = $val['numrow'];
-    				$atrid = $val['attributeid'];
-    				$fieldname = $val['fieldname'];
-    				
-    				if($fieldname !== ''){
-    					$val['value'] = UniversityQuery::ValueOfLinkTable($this->db, $val['tablename'], $fieldname, $val['relationid'], $val['value']);
-    				}
-			    	
-					array_push($dataValue[$num][$atrid], $val);
+    	$allValue = UniversityQuery::ComplexValueAttributeList($this->db, $strid);
+    			
+    	if(!$allValue){
+    		return false;
+    	}
+    			
+    	$arrayValue = array();
+    			 
+    	while ($value = $this->db->fetch_array($allValue)){
+    			$arrayValue[] = $value;
+    	}
+    			
+    	$maxNumRow = UniversityQuery::MaxNumRowValue($this->db, $strid);
+    		
+    	if(isset($maxNumRow['max'])){
+    		$dataValue = array();
+    			for($i = 1; $i <= $maxNumRow['max']; $i++){
+    					$dataValue[$i] = $arrAttrid;
     			}
+    	} else {
+    		return false;
+    	}
+    			
+    	foreach ($arrayValue as $val){
+    		if($val['remove'] == 1){
+    					continue;
+    		}
+    			
+    		$num = $val['numrow'];
+    		$atrid = $val['attributeid'];
+    		$fieldname = $val['fieldname'];
+    				
+    		if($fieldname !== ''){
+    				$val['value'] = UniversityQuery::ValueOfLinkTable($this->db, $val['tablename'], $fieldname, $val['relationid'], $val['value']);
+    		}
+			
+			array_push($dataValue[$num][$atrid], $val);
+    	}
     			return $dataValue;
     }
     
