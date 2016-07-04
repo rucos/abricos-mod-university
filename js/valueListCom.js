@@ -119,10 +119,6 @@ Component.entryPoint = function(NS){
         		numrow = arguments[3],
         		mainid = arguments[4];
         	
-        	if(numrow == 0){
-        		numrow = tp.gel('table.tBody').rows.length + 1;
-        	}
-        	
         	this.addValueModal.set('numrow', numrow);
         	this.addValueModal.set('mainid', mainid);
         	

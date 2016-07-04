@@ -174,14 +174,26 @@ class UniversityQuery {
 	}
 	
 	public static function AppendValueAttribute(Ab_Database $db, $d){
+		$atrid = bkint($d->atrid);
+		$numrow = bkint($d->numrow);
+		
+		$atribute = UniversityQuery::AttributeItem($db, $atrid);
+		
+		if($atribute['type'] != 'simple'){
+			if($numrow == 0){
+				$maxnumrow = UniversityQuery::MaxNumRowValue($db, $atrid);
+				$numrow = $maxnumrow['max'] + 1;
+			}
+		}
+		
 		$sql = "
 			INSERT INTO ".$db->prefix."un_value(attributeid, value, nameurl, view, numrow, mainid)
 			VALUES (
-					".bkint($d->atrid).",
+					".$atrid.",
 					'".bkstr($d->value)."',
 					'".bkstr($d->nameurl)."',
 					'".bkstr($d->view)."',
-					".bkint($d->numrow).",
+					".$numrow.",
 					".bkint($d->mainid)."
 			)
 		";
@@ -224,9 +236,9 @@ class UniversityQuery {
 			";
 			$complexid = $db->query_first($sql);
 			
-			$insertrow = UniversityQuery::AttributeInsertItem($db, $complexid['complexid']);
+			$insertrow = UniversityQuery::AttributeItem($db, $complexid['complexid'], true);
 			
-			if($insertrow == 1){
+			if($insertrow['ins'] == 1){
 				$set = "value=0";
 			} else {
 				$set = "remove=".bkint($d->remove);
@@ -243,16 +255,31 @@ class UniversityQuery {
 		}
 	}
 	
-	public static function AttributeInsertItem(Ab_Database $db, $complexattrid){
+	
+	/**
+	 * 
+	 * 1) Определение для сложного атрибута способа добавления строк в таблицу ($ifComplex = true)
+	 * 
+	 * 2) Определение типа атрибута ($ifComplex = false)
+	 * 
+	 * */
+	public static function AttributeItem(Ab_Database $db, $attributeid, $ifComplex = false){
+		
+		if($ifComplex){
+			$select = "insertrow as ins";
+		} else {
+			$select = "typeattribute as type";			
+		}
+		
 		$sql = "
 				SELECT
-					insertrow as ins
+						".$select."
 				FROM ".$db->prefix."un_attribute
-				WHERE attributeid=".bkint($complexattrid)."
+				WHERE attributeid=".bkint($attributeid)."
 				LIMIT 1
 		";
 		$result = $db->query_first($sql);
-		return $result['ins'];
+		return $result;
 	}
 	/*
 	 * Проверка значения
