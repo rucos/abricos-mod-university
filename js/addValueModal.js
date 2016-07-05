@@ -102,29 +102,27 @@ Component.entryPoint = function(NS){
         	var tp = this.template,
         		valueAttributeItem = this.get('valueAttributeItem'),
         		id = valueAttributeItem.get('id'),
-        		value = valueAttributeItem.get('value'),
+        		nameDoc = valueAttributeItem.get('value'),
         		nameurl = valueAttributeItem.get('nameurl'),
-        		arr = [id, atrid, value],
-        		date = "",
-        		nameDoc = "";
+        		view = valueAttributeItem.get('view'),
+        		arr = [id, atrid, nameDoc, nameurl],
+        		date = "";
         	
-        	if(!!nameurl){
-        		arr[3] = nameurl;
-        		
-           		value.replace(/(\d+)\.(\d+)\.(\d+)\.(\w{3,4})/, function(str, day, month, year){
+        	if(view == 'file'){
+        		nameDoc.replace(/_(\d{2})\.(\d{2})\.(\d{4})\.(\w{3,4})/, function(str, day, month, year){//Определяем дату и формат
            			date += str;
            			
            			arr[5] = year + "-" + month + "-" + day;
         		});
            		
            		if(date){
-           			value = value.replace(date, "");
+           			nameDoc = nameDoc.replace(date, "");//если дата есть, то убираем дату и формат из nameDoc
            		} else {
            			arr[5] = true;
+           			nameDoc = nameDoc.replace(/(\.\w{3,4})$/, "");//убираем формат из nameDoc
            		}
-           		nameDoc = value.match(/\w+[._]?/g)[0]; 
            		
-           		arr[4] = nameDoc.slice(0, -1);
+           		arr[4] = nameDoc.replace(/\w+[-/]/ig, "");//убираем путь до файла из nameDoc
         	}
         	this.set('valueItem', this.constrData.apply(this, arr));
         	this.fillForm(true);
