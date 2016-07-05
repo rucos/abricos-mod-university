@@ -8,8 +8,10 @@
 <table id="{i#table}" class="table table-striped table-hover">
     <thead>
 	    <tr>
-	        <th>ФИО</th>
-	        <th></th>
+	        <th>ФИО сотрудника</th>
+	        <th>Должность</th>
+	        <th>Контактный телефон</th>
+	        <th>Электронный адрес</th>
 	        <th></th>
 	    </tr>
     </thead>
@@ -19,6 +21,9 @@
 <!--{row}-->
 <tr {v#danger}>
     <td>{v#fio}</td>
+    <td>{v#post}</td>
+    <td>{v#telephone}</td>
+    <td>{v#email}</td>
     <td>
         <button class="btn btn-default btn-xs" data-id="{v#id}" data-click="edit-show" data-remove="{v#remove}" data-wait="disable">
             Править
@@ -41,7 +46,18 @@
 
 <!--{rowAct}-->
 <tr id="{i#rowAct}-{v#id}">
-    <td><textarea class="form-control" rows="5" value="{v#fio}">{v#fio}</textarea></td>
+    <td>
+    	<textarea class="form-control" rows="5">{v#fio}</textarea>
+    </td>
+    <td>
+    	<textarea class="form-control" rows="5">{v#post}</textarea>
+    </td>
+    <td>
+    	<input type="text" class="form-control" value="{v#telephone}">
+    </td>
+    <td>
+    	<input type="email" class="form-control" value="{v#email}">
+    </td>
     <td>
         <button class="btn btn-default btn-xs" data-click="actEmployees" data-id="{v#id}" data-wait="disable">
             {v#act}

@@ -535,18 +535,24 @@ class UniversityQuery {
 		$sql = "
 			SELECT
 					employeesid as id,
-					FIO,
+					fio,
+					post,
+					telephone,
+					email,
 					remove
 			FROM ".$db->prefix."un_employees
 		";
 		return $db->query_read($sql);
 	}
 	
-	public static function AppendEmployees(Ab_Database $db, $fio){
+	public static function AppendEmployees(Ab_Database $db, $d){
 		$sql = "
-			INSERT INTO ".$db->prefix."un_employees(FIO)
+			INSERT INTO ".$db->prefix."un_employees(fio, post, telephone, email)
 			VALUES (
-					'".bkstr($fio)."'
+					'".bkstr($d->fio)."',
+					'".bkstr($d->post)."',
+					'".bkstr($d->telephone)."',
+					'".bkstr($d->email)."'
 			)
 		";
 		return $db->query_write($sql);
@@ -556,7 +562,10 @@ class UniversityQuery {
 		$sql = "
 			UPDATE ".$db->prefix."un_employees
 			SET
-				FIO='".bkstr($d->fio)."'
+				fio='".bkstr($d->fio)."',
+				post='".bkstr($d->post)."',
+				telephone='".bkstr($d->telephone)."',
+				email='".bkstr($d->email)."'
 			WHERE employeesid=".bkint($d->employeesid)."
 			LIMIT 1
 		";

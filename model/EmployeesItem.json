@@ -6,9 +6,21 @@
     "id": {
       "type": "int"
     },
-    "FIO": {
+    "fio": {
       "type": "string",
       "json": "f"
+    },
+    "post": {
+      "type": "string",
+      "json": "p"
+    },
+    "telephone": {
+      "type": "string",
+      "json": "tel"
+    },
+    "email": {
+      "type": "string",
+      "json": "em"
     },
     "remove": {
       "type": "int",

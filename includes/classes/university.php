@@ -412,11 +412,14 @@ class University extends AbricosApplication {
     	 
     	if(!isset($d->remove)){
     		$d->fio = $utmf->Parser($d->fio);
+    		$d->post = $utmf->Parser($d->post);
+    		$d->telephone = $utmf->Parser($d->telephone);
+    		$d->email = $utmf->Parser($d->email);
     		
     		if($d->employeesid > 0){
     			$rows = UniversityQuery::EditEmployees($this->db, $d);
     		} else {
-    			$rows = UniversityQuery::AppendEmployees($this->db, $d->fio);
+    			$rows = UniversityQuery::AppendEmployees($this->db, $d);
     		}
     	} else {
     		$d->remove = intval($d->remove);

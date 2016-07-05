@@ -13,7 +13,7 @@ $db = Abricos::$db;
 $pfx = $db->prefix;
 
 
-if ($updateManager->isInstall('0.1.5')){
+if ($updateManager->isInstall('0.1.6')){
 	
 	Abricos::GetModule('university')->permission->Install();
 		/*
@@ -128,7 +128,10 @@ if ($updateManager->isInstall('0.1.5')){
 		$db->query_write("
 			CREATE TABLE IF NOT EXISTS ".$pfx."un_employees(
 				employeesid int(10) unsigned NOT NULL auto_increment,
-				FIO varchar(255) default NULL COMMENT 'ФИО сотрудника',
+				fio varchar(255) default NULL COMMENT 'ФИО сотрудника',
+				post varchar(255) default NULL COMMENT 'Должность',
+				telephone varchar(50) default NULL COMMENT 'Контактный телефон',
+				email varchar(254) default NULL COMMENT 'Электронный адрес',
 				remove tinyint(1) unsigned NOT NULL default 0 COMMENT 'Удален?',
 				PRIMARY KEY (employeesid)
 			)".$charset

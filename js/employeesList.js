@@ -31,11 +31,7 @@ Component.entryPoint = function(NS){
         		lst = "";
         	
         	employeesList.each(function(employees){
-        		var id = employees.get('id'),
-        			fio = employees.get('FIO'),
-        			remove = employees.get('remove');
-        		
-        			lst += this.rowReplaceObj(id, fio, remove);
+        			lst += this.rowReplaceObj(employees.toJSON());
         	}, this);
         	
         	tp.setHTML('emploees', tp.replace('table', {
@@ -52,29 +48,29 @@ Component.entryPoint = function(NS){
         	var replaceObj = {
 	    			id: id,
 	        		remove: remove
-        		},
-        		collect = tr.cells[0]; 
+        		};
         	
-        	if(collect){
+        	if(id > 0){
         		replaceObj.act = 'Править';
-        		replaceObj.fio = collect.textContent;
+        		replaceObj.fio = tr.cells[0].textContent;
+        		replaceObj.post = tr.cells[1].textContent;
+        		replaceObj.telephone = tr.cells[2].textContent;
+        		replaceObj.email = tr.cells[3].textContent;
         		replaceObj.eventCancel = 'edit-cancel';
         	} else {
         		replaceObj.act = 'Добавить';
         		replaceObj.fio = "";
+        		replaceObj.post = "";
+        		replaceObj.telephone = "";
+        		replaceObj.email = "";
         		replaceObj.eventCancel = 'add-cancel';
         	}
         	
         	return this.template.replace('rowAct', replaceObj);
         },
-        rowReplaceObj: function(id, fio, remove){
-        	var replaceObj = {
-        			id: id,
-            		fio: fio,
-            		remove: remove
-        		};
-        	
-        	if(remove == 1){
+        rowReplaceObj: function(replaceObj){
+
+        	if(replaceObj.remove == 1){
         		replaceObj.act = 'Восстановить';
         		replaceObj.danger = "class='danger'";
         	} else {
@@ -94,7 +90,10 @@ Component.entryPoint = function(NS){
         		tr = tp.one('rowAct.rowAct-' + id).getDOMNode().cells,
         		data = {
 	        		employeesid: id,
-	        		fio: tr[0].firstChild.value
+	        		fio: tr[0].firstChild.value,
+	        		post: tr[1].firstChild.value,
+	        		telephone: tr[2].firstChild.value,
+	        		email: tr[3].firstChild.value
 	        	};
         	
         	this.reqActEmployees(data);
