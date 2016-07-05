@@ -81,9 +81,16 @@ Component.entryPoint = function(NS){
         	return this.template.replace('row', replaceObj);
         },
         editCancelRow: function(id, tr, remove){
-        	var fio = tr.cells[0].firstChild.getAttribute('value');
+        	var replaceObj = {
+        		id: id,
+        		fio: tr.cells[0].firstChild.getAttribute('value'),
+        		post: tr.cells[1].firstChild.getAttribute('value'),
+        		telephone: tr.cells[2].firstChild.getAttribute('value'),
+        		email: tr.cells[3].firstChild.getAttribute('value'),
+        		remove: remove
+        	};
         	
-        	tr.outerHTML = this.rowReplaceObj(id, fio, remove);
+        	tr.outerHTML = this.rowReplaceObj(replaceObj);
         },
         actEmployees: function(id){
         	var tp = this.template,
