@@ -38,36 +38,6 @@ Component.entryPoint = function(NS){
         		rows: lst
         	}));
         },
-        actEmployeesRowShow: function(id, remove, parent){
-        	var tp = this.template,
-        		tr = parent || tp.gel('table.table').insertRow(1);
-        		
-        		tr.outerHTML = this.rowActReplaceObj(id, remove, tr)
-        },
-        rowActReplaceObj: function(id, remove, tr){
-        	var replaceObj = {
-	    			id: id,
-	        		remove: remove
-        		};
-        	
-        	if(id > 0){
-        		replaceObj.act = 'Править';
-        		replaceObj.fio = tr.cells[0].textContent;
-        		replaceObj.post = tr.cells[1].textContent;
-        		replaceObj.telephone = tr.cells[2].textContent;
-        		replaceObj.email = tr.cells[3].textContent;
-        		replaceObj.eventCancel = 'edit-cancel';
-        	} else {
-        		replaceObj.act = 'Добавить';
-        		replaceObj.fio = "";
-        		replaceObj.post = "";
-        		replaceObj.telephone = "";
-        		replaceObj.email = "";
-        		replaceObj.eventCancel = 'add-cancel';
-        	}
-        	
-        	return this.template.replace('rowAct', replaceObj);
-        },
         rowReplaceObj: function(replaceObj){
 
         	if(replaceObj.remove == 1){
@@ -124,6 +94,18 @@ Component.entryPoint = function(NS){
         },
         removeShow: function(show, id){
         	this.template.toggleView(show, 'row.removegroup-' + id, 'row.remove-' + id);
+        },
+        constructActReplaceObj: function(id, remove){
+        	return this.template.replace('rowAct', {
+	        		id: id || 0,
+	        		remove: remove || 0,
+	        		act: id ? 'Править' : 'Добавить',
+	        		fio: arguments[2] || "",
+	        		post: arguments[3] || "",
+	        		telephone: arguments[4] || "",
+	        		email: arguments[5] || "",
+	        		eventCancel: id ? 'edit-cancel' : 'add-cancel'
+        	});
         }
     }, {
         ATTRS: {
@@ -134,7 +116,9 @@ Component.entryPoint = function(NS){
         CLICKS: {
         	'add-show': {
         		event: function(){
-        			this.actEmployeesRowShow(0, 0);
+                	var tr = this.template.gel('table.table').insertRow(1);
+                	
+                	tr.outerHTML = this.constructActReplaceObj();
         		}
         	},
         	'add-cancel': {
@@ -147,11 +131,17 @@ Component.entryPoint = function(NS){
         	'edit-show': {
         		event: function(e){
         			var targ = e.target,
-        				id = targ.getData('id'),
         				tr = targ.getDOMNode().parentNode.parentNode,
-        				remove = targ.getData('remove');
+        				arr = [
+        				       targ.getData('id'),
+        				       targ.getData('remove'),
+        				       tr.cells[0].textContent,//фио
+        				       tr.cells[1].textContent,//должность
+        				       tr.cells[2].textContent,//тел
+        				       tr.cells[3].textContent//email
+        				];
         			
-        			this.actEmployeesRowShow(id, remove, tr);
+        			tr.outerHTML =  this.constructActReplaceObj.apply(this, arr);
         		}
         	},
         	'edit-cancel': {
