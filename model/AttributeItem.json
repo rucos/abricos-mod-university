@@ -31,7 +31,7 @@
       "json": "tn"
     },
     "insertrow": {
-      "type": "int",
+      "type": "string",
       "json": "ir"
     },
     "locate": {

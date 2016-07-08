@@ -46,7 +46,7 @@ if ($updateManager->isInstall('0.1.6')){
 				applyattribute varchar(255) NOT NULL default '' COMMENT 'Применяемый атрибут',
 				tablename varchar(50) NOT NULL default '' COMMENT 'Связующая таблица',
 				fieldname varchar(255) NOT NULL default '' COMMENT 'Поля связующей таблицы',
-				insertrow tinyint(1) unsigned NOT NULL default 0 COMMENT 'Для сложного атрибута добавление строк в таблицу: 1-авто, 2-вручную',
+				insertrow enum('auto','semiauto','manually','select') NOT NULL COMMENT 'Вариант добавления значения',
 				locate tinyint(1) unsigned NOT NULL default 1 COMMENT 'Показывать?',
 				remove tinyint(1) unsigned NOT NULL default 0 COMMENT 'Удален?',
 				PRIMARY KEY (attributeid)

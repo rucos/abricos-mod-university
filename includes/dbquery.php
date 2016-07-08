@@ -238,7 +238,7 @@ class UniversityQuery {
 			
 			$insertrow = UniversityQuery::AttributeItem($db, $complexid['complexid'], true);
 			
-			if($insertrow['ins'] == 1){
+			if($insertrow['ins'] == 'auto'){
 				$set = "value=0";
 			} else {
 				$set = "remove=".bkint($d->remove);
@@ -320,6 +320,7 @@ class UniversityQuery {
 		    	
 		UniversityQuery::InsertComplexValue($db, "tablename='program' AND fieldname<>''", $numrow['m'], $programid, 0, "programid");
 		UniversityQuery::InsertComplexValue($db, "tablename='vakant'", $numrow['m'], 0, $programid, 0);
+		
 		
 		$formEdu = array(
 				'очная',
@@ -687,8 +688,10 @@ class UniversityQuery {
 		$result = $db->query_first($sql);
 		
 		$respValue = "";
-			foreach($result as $value){
-				$respValue .= $value." ";
+			if($result){
+				foreach($result as $value){
+					$respValue .= $value." ";
+				}
 			}
 		return $respValue;
 	}

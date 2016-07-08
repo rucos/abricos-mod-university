@@ -92,7 +92,7 @@ Component.entryPoint = function(NS){
         	
 	        	return this.template.replace('td', {
 	        		span: span,
-	        		value: insert != 2 || !id ? value : this.referAddReplace(value, id),
+	        		value: insert != 'manually' || !id ? value : this.referAddReplace(value, id),
 	        		add: ''
 	        	});
         },
@@ -134,7 +134,7 @@ Component.entryPoint = function(NS){
 	        			this.set('waiting', false);
 	        			if(!err){
 	        				this.set('valueComplexList', result.valueComplexList);
-	        					if(insert == 1){
+	        					if(insert == 'auto'){
 	        						this.renderAutoValueList();
 	        					} else {
 	        						this.renderValueList();
