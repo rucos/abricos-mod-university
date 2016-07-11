@@ -250,13 +250,14 @@ Component.entryPoint = function(NS){
             	});
         	}
         },
-        removeAct: function(valueid, show){
+        removeAct: function(valueid, attrid, show){
         	var tp = this.template,
         		remove = "";
         	
 	        	if(show){
 	        		remove = tp.replace('remove', {
-	    				id: valueid
+	    				id: valueid,
+	    				attrid: attrid
 	    			})
 	        	}
 	        	
@@ -274,6 +275,20 @@ Component.entryPoint = function(NS){
 	        			if(!err){
 	        				this.reloadListValue();
 	        			}
+	        	}, this);
+        },
+        removeSelectValue: function(valueid){
+        	var data = {
+            		valueid: valueid,
+            		remove: 1
+            	};
+            	
+	    	this.set('waiting', true);
+	        	this.get('appInstance').selectValueAct(data, function(err, result){
+	        		this.set('waiting', false);
+		        		if(!err){
+		        			this.reloadListValue();
+		        		}
 	        	}, this);
         },
         attributeItem: function(attrid, callback){
@@ -320,9 +335,11 @@ Component.entryPoint = function(NS){
         	},
         	'remove-show': {
         		event: function(e){
-        			var id = e.defineTarget.getData('id');
+        			var targ = e.defineTarget, 
+        				id = targ.getData('id'),
+        				attrid = targ.getData('attrid');
         			
-        				this.removeAct(id, true);
+        				this.removeAct(id, attrid, true);
         		}
         	},
         	'remove-hide': {
@@ -334,9 +351,17 @@ Component.entryPoint = function(NS){
         	},
         	removeValue: {
         		event: function(e){
-        			var valueid = e.target.getData('id');
+        			var valueid = e.target.getData('id'),
+        				attrid = e.target.getData('attrid'),
+        				_self = this;
 
-        				this.removeValue(valueid);
+        			this.attributeItem(attrid, function(insert){
+        				if(insert == 'select'){
+        					_self.removeSelectValue(valueid);
+        				} else {
+        					_self.removeValue(valueid);
+        				}
+        			});
         		}
         	},
         	addValue: {

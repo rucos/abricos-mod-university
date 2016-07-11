@@ -290,6 +290,7 @@ class UniversityQuery {
 	 * 
 	 * если у атрибута есть связь с другой таблицей, то значение доступно только для чтения
 	 * 
+	 * 
 	 * */
 	private static function VerificationValue(Ab_Database $db, $valueid){
 		
@@ -727,6 +728,16 @@ class UniversityQuery {
 			UPDATE ".$db->prefix."un_value
 			SET
 				relationid=".bkint($d->relationid)."
+			WHERE valueid=".bkint($d->valueid)."
+			LIMIT 1
+		";
+		return $db->query_write($sql);
+	}
+	
+	public static function RemoveSelectValue(Ab_Database $db, $d){
+		$sql = "
+			DELETE
+			FROM ".$db->prefix."un_value
 			WHERE valueid=".bkint($d->valueid)."
 			LIMIT 1
 		";

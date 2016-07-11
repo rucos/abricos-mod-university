@@ -443,7 +443,7 @@ class University extends AbricosApplication {
     	}
     	return $rows;
     }
-    
+
     public function SelectValueActToJSON($d){
     	$res = $this->SelectValueAct($d);
     	return $this->ResultToJSON('selectValueAct', $res);
@@ -451,15 +451,21 @@ class University extends AbricosApplication {
     
     public function SelectValueAct($d){
     	$d->valueid = intval($d->valueid);
-    	$d->attrid = intval($d->attrid);
-    	$d->relationid = intval($d->relationid);
-    	$d->numrow = intval($d->numrow);
     	
-    	if($d->valueid > 0){
-    		return UniversityQuery::EditSelectValue($this->db, $d);
+    	if(!isset($d->remove)){
+    		$d->attrid = intval($d->attrid);
+    		$d->relationid = intval($d->relationid);
+    		$d->numrow = intval($d->numrow);
+    		
+    		if($d->valueid > 0){
+    			return UniversityQuery::EditSelectValue($this->db, $d);
+    		} else {
+    			return UniversityQuery::AppendSelectValue($this->db, $d);
+    		}
     	} else {
-    		return UniversityQuery::AppendSelectValue($this->db, $d);
+    		return UniversityQuery::RemoveSelectValue($this->db, $d);
     	}
+    	
     }
     
     public function SectionItemUpload($attrid){

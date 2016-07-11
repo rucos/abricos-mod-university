@@ -38,7 +38,7 @@
         <span class="fa fa-pencil"></span>
     </button>
     <button class="btn btn-default btn-xs"
-            data-click="remove-show" data-id="{v#vid}"
+            data-click="remove-show" data-id="{v#vid}" data-attrid="{v#id}"
             title="Удалить">
         <i class="fa fa-trash-o"></i>
     </button>
@@ -53,7 +53,7 @@
 <div class="alert alert-danger">
     Вы действительно хотите удалить текущее значение?
     <div class="text-center">
-        <button data-id="{v#id}" data-click="removeValue" data-wait="disable" class="btn btn-danger btn-xs">
+        <button data-id="{v#id}" data-attrid="{v#attrid}" data-click="removeValue" data-wait="disable" class="btn btn-danger btn-xs">
             Удалить
         </button>
         <button data-id="{v#id}" data-click="remove-hide" data-wait="disable" class="btn btn-default btn-xs">
