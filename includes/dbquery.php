@@ -177,7 +177,7 @@ class UniversityQuery {
 		$atrid = bkint($d->atrid);
 		$numrow = bkint($d->numrow);
 		
-		$atribute = UniversityQuery::AttributeItem($db, $atrid);
+		$atribute = UniversityQuery::AttributeItem($db, $atrid, 'type');
 		
 		if($atribute['type'] != 'simple'){
 			if($numrow == 0){
@@ -236,7 +236,7 @@ class UniversityQuery {
 			";
 			$complexid = $db->query_first($sql);
 			
-			$insertrow = UniversityQuery::AttributeItem($db, $complexid['complexid'], true);
+			$insertrow = UniversityQuery::AttributeItem($db, $complexid['complexid'], 'insert');
 			
 			if($insertrow['ins'] == 'auto'){
 				$set = "value=0";
@@ -258,17 +258,21 @@ class UniversityQuery {
 	
 	/**
 	 * 
-	 * 1) Определение для сложного атрибута способа добавления строк в таблицу ($ifComplex = true)
+	 * 1) Определение для сложного атрибута способа добавления строк в таблицу ($option='insert')
 	 * 
-	 * 2) Определение типа атрибута ($ifComplex = false)
+	 * 2) Определение типа атрибута ($option='type')
 	 * 
+	 *  
 	 * */
-	public static function AttributeItem(Ab_Database $db, $attributeid, $ifComplex = false){
+	public static function AttributeItem(Ab_Database $db, $attributeid, $option){
 		
-		if($ifComplex){
-			$select = "insertrow as ins";
-		} else {
-			$select = "typeattribute as type";			
+		switch($option){
+			case 'insert':
+				$select = "insertrow as ins";
+					break;
+			case 'type':
+				$select = "typeattribute as type";
+					break;
 		}
 		
 		$sql = "
@@ -638,7 +642,7 @@ class UniversityQuery {
 				SELECT
 						MAX(numrow) as max
 				FROM ".$db->prefix."un_value
-				WHERE attributeid IN (".$strid.") 
+				WHERE attributeid IN (".$strid.")
 		";
 		$result = $db->query_first($sql); 
 		
@@ -694,6 +698,39 @@ class UniversityQuery {
 				}
 			}
 		return $respValue;
+	}
+	
+	public static function AppendSelectValue(Ab_Database $db, $d){
+		$attrid = bkint($d->attrid);
+		$numrow = bkint($d->numrow);
+		
+		if($numrow == 0){
+			$maxnumrow = UniversityQuery::MaxNumRowValue($db, $attrid);
+			$numrow = $maxnumrow['max'] + 1;
+		}
+		
+		$sql = "
+			INSERT INTO ".$db->prefix."un_value(attributeid, numrow, relationid, view, value)
+			VALUES (
+					".$attrid.",
+					".$numrow.",
+					".bkint($d->relationid).",
+						1,
+					'employeesid'
+			)
+		";
+		return $db->query_write($sql);
+	}
+	
+	public static function EditSelectValue(Ab_Database $db, $d){
+		$sql = "
+			UPDATE ".$db->prefix."un_value
+			SET
+				relationid=".bkint($d->relationid)."
+			WHERE valueid=".bkint($d->valueid)."
+			LIMIT 1
+		";
+		return $db->query_write($sql);
 	}
 }
 

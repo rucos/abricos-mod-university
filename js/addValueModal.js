@@ -16,8 +16,13 @@ Component.entryPoint = function(NS){
         onInitAppWidget: function(err, appInstance){
         	
         },
-        showModal: function(valueid, atrid, view){
+        showModal: function(valueid, atrid, view, numrow, mainid){
         	this.set('view', view);
+        	
+        	if(numrow){
+				this.set('numrow', numrow);
+				this.set('mainid', mainid);
+        	}
         	
         	if(valueid > 0){
         		this.reqValueAttributeItem(valueid, atrid);

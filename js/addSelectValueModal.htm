@@ -1,0 +1,25 @@
+<!--{widget}-->
+<div id="{i#modal}"></div>
+
+<!--{modalForm}-->
+<div class="modal fade in"  style="display: {v#none};">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-click="addValue-cancel"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title">Выбор значения</h4>
+	      </div>
+	      <div class="modal-body"  data-click="pickRow">
+				<div id="{i#form}"></div>
+		</div>
+		<div class="modal-footer">
+		    <button data-click="selectValue" class="btn btn-default" data-wait="disable">
+				 Выбор
+			</button>
+		    <button data-click="addValue-cancel" class="btn btn-default" data-wait="disable">
+					 Отмена
+			</button>
+      </div>
+      </div>
+   </div>
+</div>

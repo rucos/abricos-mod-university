@@ -35,12 +35,13 @@ class University extends AbricosApplication {
 		if (!$this->manager->IsAdminRole()){
 			return 403;
 		}
-		
 		switch ($d->do){
 			case 'sectionList': 
 				return $this->SectionListToJSON();
 			case 'attributeList':
 				return $this->AttributeListToJSON($d->data);
+			case 'attributeItemInsertRow':
+				return $this->AttributeItemInsertRowToJSON($d->attrid);
 			case 'actAttribute':
 				return $this->ActAttributeToJSON($d->data);
 			case 'removeAttribute':
@@ -67,6 +68,8 @@ class University extends AbricosApplication {
 				return $this->ValueComplexListToJSON($d->attrid);
 			case 'valueSimpleList':
 				return $this->ValueSimpleListToJSON($d->attrid);
+			case 'selectValueAct':
+				return $this->SelectValueActToJSON($d->data);
         }
         return null;
     }
@@ -117,6 +120,19 @@ class University extends AbricosApplication {
 	    		$list->Add($this->models->InstanceClass('AttributeItem', $d));
 	    	}
 	    	return $list;
+    }
+    
+    public function AttributeItemInsertRowToJSON($attrid){
+    	$res = $this->AttributeItemInsertRow($attrid);
+    	 
+    	return 	$this->ResultToJSON('attributeItemInsertRow', $res);
+    }
+    
+    public function AttributeItemInsertRow($attrid){
+    	$attrid = intval($attrid);
+    	
+    	$result = UniversityQuery::AttributeItem($this->db, $attrid, 'insert');
+    	return $result['ins'];
     }
     
     public function ActAttributeToJSON($d){
@@ -426,6 +442,24 @@ class University extends AbricosApplication {
     			$rows = UniversityQuery::RemoveEmployees($this->db, $d);
     	}
     	return $rows;
+    }
+    
+    public function SelectValueActToJSON($d){
+    	$res = $this->SelectValueAct($d);
+    	return $this->ResultToJSON('selectValueAct', $res);
+    }
+    
+    public function SelectValueAct($d){
+    	$d->valueid = intval($d->valueid);
+    	$d->attrid = intval($d->attrid);
+    	$d->relationid = intval($d->relationid);
+    	$d->numrow = intval($d->numrow);
+    	
+    	if($d->valueid > 0){
+    		return UniversityQuery::EditSelectValue($this->db, $d);
+    	} else {
+    		return UniversityQuery::AppendSelectValue($this->db, $d);
+    	}
     }
     
     public function SectionItemUpload($attrid){

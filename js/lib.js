@@ -48,6 +48,10 @@ Component.entryPoint = function(NS){
     			attribute: false,
     			type: 'modelList:AttributeList'
     		},
+    		attributeItemInsertRow: {
+    			args: ['attrid'],
+    			attribute: false
+    		},
     		actAttribute: {
     			args: ['data']
     		},
@@ -99,6 +103,9 @@ Component.entryPoint = function(NS){
     		},
     		valueComplexList: {
     			args: ['attrid']
+    		},
+    		selectValueAct: {
+    			args: ['data']
     		}
         },
         ATTRS: {

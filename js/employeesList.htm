@@ -1,10 +1,9 @@
 <!--{widget}-->
-<button type="button" data-click="add-show" class="btn btn-success">+Добавить сотрудника</button>
-<hr>
 <div id="{i#emploees}"></div>
 
 
 <!--{table}-->
+{v#addButton}
 <table id="{i#table}" class="table table-striped table-hover">
     <thead>
 	    <tr>
@@ -19,31 +18,37 @@
 </table>
 
 <!--{row}-->
-<tr {v#danger}>
+<tr {v#danger} id="{i#empl}-{v#id}">
     <td>{v#fio}</td>
     <td>{v#post}</td>
     <td>{v#telephone}</td>
     <td>{v#email}</td>
-    <td>
-        <button class="btn btn-default btn-xs" data-id="{v#id}" data-click="edit-show" data-remove="{v#remove}" data-wait="disable">
-            Править
-        </button>
-    </td>
-    <td>
-         <button id="{i#remove}-{v#id}" data-id="{v#id}" data-click="remove-show" data-remove="{v#remove}" type="button" class="btn btn-default btn-xs" data-wait="disable">
-            {v#act}
-        </button>
-         <div id="{i#removegroup}-{v#id}"  class="btn-group hide">
-            <button data-id="{v#id}" data-click="removeEmployees" type="button" class="btn btn-danger btn-xs" data-wait="disable">
-                Удалить?
-            </button>
-            <button data-id="{v#id}" type="button" data-click="remove-cancel" class="btn btn-default btn-xs" data-wait="disable">
-                Отмена
-            </button>
-        </div>
-    </td>
+    {v#btnedit}
 </tr>
 
+<!--{addButton}-->
+<button id="{i#addButton}" type="button" data-click="add-show" class="btn btn-success">+Добавить сотрудника</button>
+
+<!--{btnedit}-->
+   <td>
+       <button class="btn btn-default btn-xs" data-id="{v#id}" data-click="edit-show" data-remove="{v#remove}" data-wait="disable">
+           Править
+       </button>
+   </td>
+   <td>
+        <button id="{i#remove}-{v#id}" data-id="{v#id}" data-click="remove-show" data-remove="{v#remove}" type="button" class="btn btn-default btn-xs" data-wait="disable">
+           {v#act}
+       </button>
+        <div id="{i#removegroup}-{v#id}"  class="btn-group hide">
+           <button data-id="{v#id}" data-click="removeEmployees" type="button" class="btn btn-danger btn-xs" data-wait="disable">
+               Удалить?
+           </button>
+           <button data-id="{v#id}" type="button" data-click="remove-cancel" class="btn btn-default btn-xs" data-wait="disable">
+               Отмена
+           </button>
+       </div>
+   </td>
+    
 <!--{rowAct}-->
 <tr id="{i#rowAct}-{v#id}">
     <td>

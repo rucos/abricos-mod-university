@@ -2,7 +2,7 @@ var Component = new Brick.Component();
 Component.requires = {
     mod: [
         {name: 'sys', files: ['editor.js']},
-        {name: '{C#MODNAME}', files: ['lib.js', 'addValueModal.js']}
+        {name: '{C#MODNAME}', files: ['lib.js', 'addValueModal.js', 'addSelectValueModal.js']}
     ]
 };
 Component.entryPoint = function(NS){
@@ -16,9 +16,15 @@ Component.entryPoint = function(NS){
         	this.addValueModal = new NS.AddValueModalWidget({
                 srcNode: this.template.gel('modal')
     		});
+	        	this.addSelectValueModal = new NS.AddSelectValueModalWidget({
+	                srcNode: this.template.gel('modalSelect')
+	    		});
         },
         destroy: function(){
-        	this.template.setHTML('values', "");
+        	var tp = this.template;
+        	
+        	tp.setHTML('values', "");
+        	tp.setHTML('modalSelect', "");
         },
         reloadList: function(){
         	var lib = this.get('appInstance'),
@@ -113,16 +119,6 @@ Component.entryPoint = function(NS){
         	return this.template.replace('tr', {
         		td: td
         	});
-        },
-        actRowShow: function(){
-        	var tp = this.template,
-        		numrow = arguments[3],
-        		mainid = arguments[4];
-        	
-        	this.addValueModal.set('numrow', numrow);
-        	this.addValueModal.set('mainid', mainid);
-        	
-        	this.addValueModal.showModal.apply(this.addValueModal, arguments);
         },
         reloadListValue: function(){
            	var attrid = this.get('currentAttrid');
@@ -231,6 +227,7 @@ Component.entryPoint = function(NS){
         				btnGroup: this.parseButtonGroup(curObj[j])
         			});
         		}
+        		
      			td += tp.replace('td', {
     				span: "",
     				value: item,
@@ -241,14 +238,15 @@ Component.entryPoint = function(NS){
         	return td;
         },
         parseButtonGroup: function(obj){
-        	if(obj.relationid > 0){
+        	if(obj.relationid > 0 && obj.tablename != 'employees'){
         		return "";
         	} else {
             	return this.template.replace('btnGroup', {
             		vid: obj.id,
             		view: obj.view,
             		id: obj.attributeid,
-            		numrow: obj.numrow
+            		numrow: obj.numrow,
+            		relationid: obj.relationid
             	});
         	}
         },
@@ -277,6 +275,15 @@ Component.entryPoint = function(NS){
 	        				this.reloadListValue();
 	        			}
 	        	}, this);
+        },
+        attributeItem: function(attrid, callback){
+        	this.set('waiting', true);
+	        	this.get('appInstance').attributeItemInsertRow(attrid, function(err, result){
+	        		this.set('waiting', false);
+		        		if(!err){
+		        			callback(result.attributeItemInsertRow);
+		        		}
+	        	}, this);
         }
     }, {
         ATTRS: {
@@ -296,11 +303,19 @@ Component.entryPoint = function(NS){
         			var targ = e.defineTarget,
         				valueid = targ.getData('id'),
         				view = targ.getData('view'),
-        				atrid = targ.getData('atrid'),
+        				attrid = targ.getData('attrid'),
         				numrow = targ.getData('numrow'),
-        				mainid = targ.getData('mainid');
+        				mainid = targ.getData('mainid'),
+        				relationid = targ.getData('relationid'),
+        				_self = this;
         			
-        				this.actRowShow(valueid, atrid, view, numrow, mainid);
+        			this.attributeItem(attrid, function(insert){
+        				if(insert == 'select'){
+        					_self.addSelectValueModal.showModal(valueid, attrid, numrow, relationid);
+        				} else {
+        					_self.addValueModal.showModal(valueid, attrid, view, numrow, mainid);
+        				}
+        			});
         		}
         	},
         	'remove-show': {
@@ -329,6 +344,17 @@ Component.entryPoint = function(NS){
         			var _self = this;
         			
 	        			this.addValueModal.actValue(function(respond){
+	        				if(respond){
+	        					_self.reloadListValue();
+	        				}
+	        			});
+        		}
+        	},
+        	selectValue: {
+        		event: function(e){
+        			var _self = this;
+        			
+	        			this.addSelectValueModal.selectValueAct(function(respond){
 	        				if(respond){
 	        					_self.reloadListValue();
 	        				}

@@ -28,17 +28,26 @@ Component.entryPoint = function(NS){
         renderList: function(){
         	var tp = this.template,
         		employeesList = this.get('employeesList'),
-        		lst = "";
+        		lst = "",
+        		select = this.get('select'),
+        		relationid = this.get('relationid');
         	
         	employeesList.each(function(employees){
         			lst += this.rowReplaceObj(employees.toJSON());
         	}, this);
         	
         	tp.setHTML('emploees', tp.replace('table', {
+        		addButton: select ? "" : tp.replace('addButton'),
         		rows: lst
         	}));
+        	
+        	if(relationid > 0){
+        		this.setSuccess(relationid);
+        	}
         },
         rowReplaceObj: function(replaceObj){
+        	var select = this.get('select'),
+        		tp = this.template;
 
         	if(replaceObj.remove == 1){
         		replaceObj.act = 'Восстановить';
@@ -48,7 +57,13 @@ Component.entryPoint = function(NS){
         		replaceObj.danger = "";
         	}
         	
-        	return this.template.replace('row', replaceObj);
+        	if(select){
+        		replaceObj.btnedit = "";
+        	} else {
+        		replaceObj.btnedit = tp.replace('btnedit', replaceObj);
+        	}
+        	
+        	return tp.replace('row', replaceObj);
         },
         editCancelRow: function(id, tr, remove){
         	var replaceObj = {
@@ -93,7 +108,7 @@ Component.entryPoint = function(NS){
 	        	}, this);
         },
         removeShow: function(show, id){
-        	this.template.toggleView(show, 'row.removegroup-' + id, 'row.remove-' + id);
+        	this.template.toggleView(show, 'btnedit.removegroup-' + id, 'btnedit.remove-' + id);
         },
         constructActReplaceObj: function(id, remove){
         	return this.template.replace('rowAct', {
@@ -106,12 +121,19 @@ Component.entryPoint = function(NS){
 	        		email: arguments[5] || "",
 	        		eventCancel: id ? 'edit-cancel' : 'add-cancel'
         	});
+        },
+        setSuccess: function(relationid){
+        	var row = this.template.one('row.empl-' + relationid).getDOMNode();
+        	
+        		row.classList.add('success');
         }
     }, {
         ATTRS: {
         	component: {value: COMPONENT},
-            templateBlockName: {value: 'widget,table,row,rowAct'},
-            employeesList: {value: null}
+            templateBlockName: {value: 'widget,table,row,rowAct,btnedit,addButton'},
+            employeesList: {value: null},
+            select: {value: false},
+            relationid: {value: 0}
         },
         CLICKS: {
         	'add-show': {
