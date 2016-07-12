@@ -175,6 +175,12 @@ class UniversityQuery {
 	
 	public static function AppendValueAttribute(Ab_Database $db, $d){
 		$atrid = bkint($d->atrid);
+		
+		$insert = UniversityQuery::AttributeItem($db, $atrid, 'insert');
+		if($insert['ins'] == "auto"){
+			return;
+		}
+		
 		$numrow = bkint($d->numrow);
 		
 		$atribute = UniversityQuery::AttributeItem($db, $atrid, 'type');
