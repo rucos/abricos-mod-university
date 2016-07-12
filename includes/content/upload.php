@@ -17,6 +17,8 @@ class UploadFile{
 	
 	private $file = null;
 	
+	const NAME_DIR = "data-edu/";
+	
 	public function __construct($modManager){
 		$this->modManager = $modManager;
 		
@@ -90,7 +92,7 @@ class UploadFile{
 		
 		$uploadFile = $this->ParsePathFile($typeDoc[0]);
 		
-		rename($value, $uploadFile);
+		rename($value, UploadFile::NAME_DIR.$uploadFile);
 		
 		$this->data->value = $uploadFile;
 		
@@ -130,7 +132,7 @@ class UploadFile{
 				
 				$uploadfile = $this->ParsePathFile($typeDoc);
 				
-				move_uploaded_file($this->file['tmp_name'], $uploadfile);
+				move_uploaded_file($this->file['tmp_name'], UploadFile::NAME_DIR.$uploadfile);
 				
 				$this->data->value = $uploadfile;
 				
@@ -143,7 +145,7 @@ class UploadFile{
 	private function ParsePathFile($typeDoc){
 		$menu = $this->modManager->GetUniversity()->SectionItemUpload($this->data->atrid);
 		
-		return "data-edu/".$menu."/".$this->namedoc.$this->datedoc.$typeDoc;
+		return $menu."/".$this->namedoc.$this->datedoc.$typeDoc;
 	}
 	
 	private function ValueItem(){

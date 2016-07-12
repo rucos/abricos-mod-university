@@ -8,6 +8,7 @@
  */
 
 class University extends AbricosApplication {
+	const NAME_DIR = "data-edu/";
 	
 	protected function GetClasses(){
 		return array(
@@ -183,6 +184,9 @@ class University extends AbricosApplication {
 		 
 		$rows = UniversityQuery::SimpleValueAttributeList($this->db, $attrid);
 			while (($d = $this->db->fetch_array($rows))){
+				if($d['view'] == "file"){
+					$d['value'] = University::NAME_DIR.$d['value'];
+				}
 				$list->Add($this->models->InstanceClass('ValueAttributeItem', $d));
 			}
     	return $list;
@@ -240,7 +244,11 @@ class University extends AbricosApplication {
     		$num = $val['numrow'];
     		$atrid = $val['attributeid'];
     		$fieldname = $val['fieldname'];
-    				
+    		
+    		if($val['view'] == 'file'){
+    			$val['value'] =  University::NAME_DIR.$val['value'];
+    		}
+    		
     		if($fieldname !== ''){
     				$val['value'] = UniversityQuery::ValueOfLinkTable($this->db, $val['tablename'], $fieldname, $val['relationid'], $val['value']);
     		}
@@ -259,6 +267,9 @@ class University extends AbricosApplication {
     	$valueid = intval($valueid);
     	
     	$item = UniversityQuery::ValueAttributeItem($this->db, $valueid);
+    	if($item['view'] == "file"){
+    		$item['value'] = University::NAME_DIR.$item['value'];
+    	}
     	
     	if($upload){
     		return $item;
