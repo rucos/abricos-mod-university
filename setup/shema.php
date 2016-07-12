@@ -47,6 +47,7 @@ if ($updateManager->isInstall('0.1.6')){
 				tablename varchar(50) NOT NULL default '' COMMENT 'Связующая таблица',
 				fieldname varchar(255) NOT NULL default '' COMMENT 'Поля связующей таблицы',
 				insertrow enum('auto','semiauto','manually','select') NOT NULL COMMENT 'Вариант добавления значения',
+				display enum('showList','hideList') NOT NULL COMMENT 'Вариант отображения значения',
 				locate tinyint(1) unsigned NOT NULL default 1 COMMENT 'Показывать?',
 				remove tinyint(1) unsigned NOT NULL default 0 COMMENT 'Удален?',
 				PRIMARY KEY (attributeid)

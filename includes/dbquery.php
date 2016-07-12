@@ -659,6 +659,7 @@ class UniversityQuery {
 					a.attributeid,
 					a.tablename,
 					a.fieldname,
+					a.display,
 					v.relationid,
 					v.mainid,
 					v.view,

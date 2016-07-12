@@ -211,17 +211,22 @@ Component.entryPoint = function(NS){
         		isRelation, 
         		curObj, 
         		curRelationid = 0,
-        		curLen = 0;
-
+        		curLen = 0,
+        		curDisp;
+        	
         	for(var i in objValue){
         		curObj = objValue[i];
         		isRelation = false;
-        		
+        		curDisp = "";
+        	
         		for(var j = 0, item = ""; j < curObj.length; j++){
+        			curDisp = curObj[j].display;
+        			
         			if(curObj[j].relationid > 0){
         				curRelationid = curObj[j].relationid;
         				isRelation = true;
         			}
+        			
         			item += tp.replace('item', {
         				value: this.addValueModal.parseValue(curObj[j].view, curObj[j].nameurl, curObj[j].value),
         				btnGroup: this.parseButtonGroup(curObj[j])
@@ -230,12 +235,19 @@ Component.entryPoint = function(NS){
         		
      			td += tp.replace('td', {
     				span: "",
-    				value: item,
+    				value: curDisp != 'hideList' ? item : this.parseHideList(item, i, numrow),
     				add: isRelation ? "" : this.referAddReplace("", i, numrow, curRelationid)
     			});
      			
         	}
         	return td;
+        },
+        parseHideList: function(item, attrid, numrow){
+        	return this.template.replace('hideListValue', {
+        		value: item,
+        		attrid: attrid,
+        		numrow: numrow
+        	});
         },
         parseButtonGroup: function(obj){
         	if(obj.relationid > 0 && obj.tablename != 'employees'){
@@ -299,11 +311,22 @@ Component.entryPoint = function(NS){
 		        			callback(result.attributeItemInsertRow);
 		        		}
 	        	}, this);
+        },
+        showModalListValue: function(attrid, numrow){
+        	var div = this.template.one('hideListValue.listValue-' + attrid + numrow).getDOMNode(),
+        		list = div.classList,
+        		show = /hide/.test(list.value); 
+        			
+        	if(show){
+        		list.remove('hide');
+        	} else {
+        		list.add('hide');
+        	}
         }
     }, {
         ATTRS: {
         	component: {value: COMPONENT},
-            templateBlockName: {value: 'widget,table,tr,td,referAdd,item,remove,btnGroup'},
+            templateBlockName: {value: 'widget,table,tr,td,referAdd,item,remove,btnGroup,hideListValue, modalForm'},
             valueComplexList: {value: null},
             currentAttrid: {value: null},
             currentType: {value: null},
@@ -384,6 +407,15 @@ Component.entryPoint = function(NS){
 	        					_self.reloadListValue();
 	        				}
 	        			});
+        		}
+        	},
+        	showListValue: {
+        		event: function(e){
+        			var targ = e.target,
+        				attrid = targ.getData('attrid'),
+        				numrow = targ.getData('numrow');
+        					
+        			this.showModalListValue(attrid, numrow);
         		}
         	}
         }
