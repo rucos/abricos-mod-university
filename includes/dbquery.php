@@ -156,21 +156,24 @@ class UniversityQuery {
 	}
 	
 	public static function ValueAttributeItem(Ab_Database $db, $valueid){
-	
-		$sql = "
-			SELECT
-					valueid as id,
-					relationid,
-					view,
-					value,
-					nameurl,
-					remove
-			FROM ".$db->prefix."un_value
-			WHERE valueid=".bkint($valueid)."
-			LIMIT 1
-		";
-	
-		return $db->query_first($sql);
+		$valueid = bkint($valueid);
+		$act = UniversityQuery::VerificationValue($db, $valueid);
+		
+		if($act){
+			$sql = "
+				SELECT
+						valueid as id,
+						relationid,
+						view,
+						value,
+						nameurl,
+						remove
+				FROM ".$db->prefix."un_value
+				WHERE valueid=".$valueid."
+				LIMIT 1
+			";
+			return $db->query_first($sql);
+		}
 	}
 	
 	public static function AppendValueAttribute(Ab_Database $db, $d){
