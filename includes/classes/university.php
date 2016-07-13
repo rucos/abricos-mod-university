@@ -312,8 +312,14 @@ class University extends AbricosApplication {
     public function RemoveValueAttribute($d){
     	$d->valueid = intval($d->valueid);
     	$d->remove = intval($d->remove);
-    	 
-    	return UniversityQuery::RemoveValueAttribute($this->db, $d);
+    	
+    	$respond = UniversityQuery::RemoveValueAttribute($this->db, $d);
+    	if(isset($respond)){//если удаляем из 'auto','semiauto'
+    		if($respond['view'] == "file"){
+    			unlink(realpath(University::NAME_DIR.$respond['value']));//удаляем файл из директории
+    		}
+    		UniversityQuery::RemoveSelectValue($this->db, $d->valueid);
+    	}
     }
     
     public function ActProgramToJSON($d){
@@ -474,7 +480,7 @@ class University extends AbricosApplication {
     			return UniversityQuery::AppendSelectValue($this->db, $d);
     		}
     	} else {
-    		return UniversityQuery::RemoveSelectValue($this->db, $d);
+    		return UniversityQuery::RemoveSelectValue($this->db, $d->valueid);
     	}
     	
     }

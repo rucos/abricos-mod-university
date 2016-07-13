@@ -228,6 +228,16 @@ class UniversityQuery {
 			$db->query_write($sql);
 		}
 	}
+	/*
+	 * Обновление значения атрибута
+	 * 
+	 * $act - проверка атрибута
+	 * 
+	 * $update - флаг обновления
+	 * 
+	 * $item['complexid'] - id сложного атрибута
+	 * 
+	 * */
 	
 	public static function RemoveValueAttribute(Ab_Database $db, $d){
 		$valueid = bkint($d->valueid);
@@ -237,30 +247,44 @@ class UniversityQuery {
 		if($act){
 			$sql = "
 				SELECT
-						a.complexid
+						a.complexid,
+						v.view,
+						v.value
 				FROM ".$db->prefix."un_attribute a
 				INNER JOIN ".$db->prefix."un_value v ON v.attributeid=a.attributeid
 				WHERE v.valueid=".$valueid."
 				LIMIT 1
 			";
-			$complexid = $db->query_first($sql);
+			$item = $db->query_first($sql);
 			
-			$insertrow = UniversityQuery::AttributeItem($db, $complexid['complexid'], 'insert');
+			$set = "remove=".bkint($d->remove);
+			$update = true;
 			
-			if($insertrow['ins'] == 'auto'){
-				$set = "value=0";
+			if($item['complexid'] > 0){
+				$insertrow = UniversityQuery::AttributeItem($db, $item['complexid'], 'insert');
+				
+				switch($insertrow['ins']){
+					case "auto":
+						$set = "value=0";
+							break;
+					case "semiauto":
+						$update = false;
+							break;
+				}
+			} 
+			
+			if($update){
+				$sql = "
+					UPDATE ".$db->prefix."un_value
+					SET
+						".$set."
+					WHERE valueid=".$valueid."
+					LIMIT 1
+				";
+				$db->query_write($sql);
 			} else {
-				$set = "remove=".bkint($d->remove);
+				return $item;
 			}
-			
-			$sql = "
-				UPDATE ".$db->prefix."un_value
-				SET
-					".$set."
-				WHERE valueid=".$valueid."
-				LIMIT 1
-			";
-			$db->query_write($sql);
 		}
 	}
 	
@@ -744,11 +768,11 @@ class UniversityQuery {
 		return $db->query_write($sql);
 	}
 	
-	public static function RemoveSelectValue(Ab_Database $db, $d){
+	public static function RemoveSelectValue(Ab_Database $db, $valueid){
 		$sql = "
 			DELETE
 			FROM ".$db->prefix."un_value
-			WHERE valueid=".bkint($d->valueid)."
+			WHERE valueid=".bkint($valueid)."
 			LIMIT 1
 		";
 		return $db->query_write($sql);
