@@ -184,9 +184,8 @@ class University extends AbricosApplication {
 		 
 		$rows = UniversityQuery::SimpleValueAttributeList($this->db, $attrid);
 			while (($d = $this->db->fetch_array($rows))){
-				if($d['view'] == "file"){
-					$d['value'] = University::NAME_DIR.$d['value'];
-				}
+				$d['value'] = University::ViewIsFile($d['view'], $d['value']);
+				
 				$list->Add($this->models->InstanceClass('ValueAttributeItem', $d));
 			}
     	return $list;
@@ -245,9 +244,7 @@ class University extends AbricosApplication {
     		$atrid = $val['attributeid'];
     		$fieldname = $val['fieldname'];
     		
-    		if($val['view'] == 'file'){
-    			$val['value'] =  University::NAME_DIR.$val['value'];
-    		}
+    		$val['value'] = University::ViewIsFile($val['view'], $val['value']);
     		
     		if($fieldname !== ''){
     				$val['value'] = UniversityQuery::ValueOfLinkTable($this->db, $val['tablename'], $fieldname, $val['relationid'], $val['value']);
@@ -267,15 +264,18 @@ class University extends AbricosApplication {
     	$valueid = intval($valueid);
     	
     	$item = UniversityQuery::ValueAttributeItem($this->db, $valueid);
-    	if($item['view'] == "file"){
-    		$item['value'] = University::NAME_DIR.$item['value'];
-    	}
+    	
+    	$item['value'] = University::ViewIsFile($item['view'], $item['value']);
     	
     	if($upload){
     		return $item;
     	} else {
     		return $this->models->InstanceClass('ValueAttributeItem', $item);
     	}
+    }
+    
+    private function ViewIsFile($view, $value){
+    	return $view == "file" ? University::NAME_DIR.$value : $value;
     }
     
     public function ActValueAttributeToJSON($d){
