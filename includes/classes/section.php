@@ -348,16 +348,16 @@ class Section {
 	private function FillEmployeesSection($idSection){
 		
 		$rows = "
-			(".$idSection.", 0, 0, 'complex', 'Информация об администрации образовательной организации', '', '', '', 3, 1)
+			(".$idSection.", 0, 0, 'complex', 'Информация об администрации образовательной организации', '', '', '', 1, 1)
 		";
 		
 		$complexid = $this->AppendUnAttr($rows, true);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Ф.И.О. руководителя образовательной организации', 'fio', '', '', 3, 1),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Должность руководителя образовательной организации', 'Post', '', '', 3, 1),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Контактные телефоны руководителя образовательной организации', 'Telephone', '', '', 3, 1),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Адреса электронной почты руководителя образовательной организации', 'e-mail', '', '', 3, 1)
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Ф.И.О. руководителя образовательной организации', 'fio', 'employees', 'fio', 1, 1),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Должность руководителя образовательной организации', 'Post', 'employees', 'post', 1, 1),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Контактные телефоны руководителя образовательной организации', 'Telephone', 'employees', 'telephone', 1, 1),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Адреса электронной почты руководителя образовательной организации', 'e-mail', 'employees', 'email', 1, 1)
 		";
 		
 		$this->AppendUnAttr($rows);

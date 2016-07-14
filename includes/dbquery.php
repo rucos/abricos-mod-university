@@ -594,7 +594,17 @@ class UniversityQuery {
 					'".bkstr($d->email)."'
 			)
 		";
-		return $db->query_write($sql);
+		$db->query_write($sql);
+		$emploeesid = mysql_insert_id();
+		 
+		$sql = "
+			SELECT
+    			MAX(employeesid) as m
+    		FROM ".$db->prefix."un_employees
+    	";
+		$numrow = $db->query_first($sql);
+		
+		UniversityQuery::InsertComplexValue($db, "tablename='employees' AND fieldname<>'' AND insertrow=1", $numrow['m'], $emploeesid, 0, "employeesid");
 	}
 	
 	public static function EditEmployees(Ab_Database $db, $d){
@@ -612,12 +622,16 @@ class UniversityQuery {
 	}
 	
 	public static function RemoveEmployees(Ab_Database $db, $d){
+		$employeesid = bkint($d->employeesid);
+		$remove = bkint($d->remove);
+		
 		$sql = "
-			UPDATE ".$db->prefix."un_employees
+			UPDATE ".$db->prefix."un_employees e, ".$db->prefix."un_value v
+			INNER JOIN ".$db->prefix."un_attribute a ON a.attributeid=v.attributeid
 			SET
-				remove=".bkint($d->remove)."
-			WHERE employeesid=".bkint($d->employeesid)."
-			LIMIT 1
+				e.remove=".$remove.",
+				v.remove=".$remove."
+			WHERE e.employeesid=".$employeesid." AND (a.tablename='employees' AND a.fieldname<>'' AND a.insertrow=1 AND v.relationid=".$employeesid.")
 		";
 		return $db->query_write($sql);
 	}
@@ -693,6 +707,7 @@ class UniversityQuery {
 					a.tablename,
 					a.fieldname,
 					a.display,
+					a.insertRow,
 					v.relationid,
 					v.mainid,
 					v.view,

@@ -250,7 +250,7 @@ Component.entryPoint = function(NS){
         	});
         },
         parseButtonGroup: function(obj){
-        	if(obj.relationid > 0 && obj.tablename != 'employees'){
+        	if(obj.relationid > 0 && obj.insertRow == 'auto'){
         		return "";
         	} else {
             	return this.template.replace('btnGroup', {
