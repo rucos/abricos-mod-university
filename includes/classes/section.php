@@ -161,12 +161,12 @@ class Section {
 		$complexid = $this->AppendUnAttr($rows, true);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Наименование учредителя', 'Name', '', '', 3, 1),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Фамилия, имя, отчество руководителя', 'Fio', '', '', 3, 1),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Юридический адрес', 'AddressStr', '', '', 3, 1),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Контактный телефон', 'tel', '', '', 3, 1),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Адрес сайта', 'url', '', '', 3, 1),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Адрес электронной почты', 'E-mail', '', '', 3, 1)
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Наименование учредителя', 'nameUchred', '', '', 3, 1),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Фамилия, имя, отчество руководителя', 'fullnameUchred', '', '', 3, 1),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Юридический адрес', 'addressUchred', '', '', 3, 1),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Контактный телефон', 'telUchred', '', '', 3, 1),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Адрес сайта', 'websiteUchred', '', '', 3, 1),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Адрес электронной почты', 'mailUchred', '', '', 3, 1)
 		";
 		$this->AppendUnAttr($rows);
 	}
@@ -303,8 +303,8 @@ class Section {
 		$complexid = $this->AppendUnAttr($rows, true);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Наименование специальности/направления подготовки', 'EduCode', 'program', 'code,name', 1, 1),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Форма обучения', 'EduForm', 'program', '', 1, 1)
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Наименование специальности/направления подготовки', 'CodePerevod,SpecialPerevod', 'program', 'code,name', 1, 1),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Форма обучения', 'FullPerevod,DistancePerevod,ParttimePerevod', 'program', '', 1, 1)
 		";
 		$this->AppendUnAttr($rows);
 		
@@ -316,10 +316,10 @@ class Section {
 		$this->UpdateUnAttr($compisteid);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'переведено в другие образовательные организации', '', 'eduform', '', 1, 1),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'переведено из других образовательных организаций', '', 'eduform', '', 1, 1),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'восстановлено', '', 'eduform', '', 1, 1),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'отчислено', '', 'eduform', '', 1, 1)
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'переведено в другие образовательные организации', 'NumberOutPerevod', 'eduform', '', 1, 1),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'переведено из других образовательных организаций', 'NumberToPerevod', 'eduform', '', 1, 1),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'восстановлено', 'NumberResPerevod', 'eduform', '', 1, 1),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'отчислено', 'NumbeExpPerevod', 'eduform', '', 1, 1)
 		";
 		$this->AppendUnAttr($rows);
 		
@@ -529,7 +529,21 @@ class Section {
 	private function FillBudgetSection($idSection){
 		$rows = "
 			(".$idSection.", 0, 0, 'simple', 'Информация об объеме образовательной деятельности, финансовое обеспечение которой осуществляется за счет бюджетных ассигнований федерального бюджета, бюджетов субъектов Российской Федерации, местных бюджетов, по договорам об образовании за счет средств физических и (или) юридических лиц', 'http://obrnadzor.gov.ru/microformats/Volume', '', '', 3, 1),
-			(".$idSection.", 0, 0, 'simple', 'Информация о поступлении и расходовании финансовых и материальных средств', 'http://obrnadzor.gov.ru/microformats/FinRec', '', '', 3, 1)
+			(".$idSection.", 0, 0, 'simple', 'Объем образовательной деятельности, финансовое обеспечение которой осуществляется за счёт бюджетных ассигнований федерального бюджета', 'FinBFVolume', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Объём образовательной деятельности, финансовое обеспечение которой осуществляется за счёт бюджетов субъектов Российской Федерации', 'FinBRVolume', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Объём образовательной деятельности, финансовое обеспечение которой осуществляется за счёт местных бюджетов', 'FinBMVolume', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Объём образовательной деятельности, финансовое обеспечение которой осуществляется по договорам об образовании за счёт средств физических и (или) юридических лиц', 'FinPVolume', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Информация о поступлении и расходовании финансовых и материальных средств', 'http://obrnadzor.gov.ru/microformats/FinRec', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Ссылка на информацию, представленную на официальном сайте государственных (муниципальных) образовательных организаций', 'BusgovFinRec', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Показатели финансово-хозяйственной деятельности', 'IndicatorFinRec', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Год (отчетный период, за который предоставляются сведения)', 'YearFinRec', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'План финансово-хозяйственной деятельности', 'PlanFinRec', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Источники поступления средств', 'SourceIncomeFinRec', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Объем поступивших средств', 'VolumeIncomeFinRec', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Структура доходов', 'StructIncomeFinRec', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Источники расходования средств', 'SourceCostsFinRec', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Объем расходованных средств', 'SourceCostsFinRec', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Структура расходов', 'StructCostsFinRec', '', '', 3, 1)
 		";
 		$this->AppendUnAttr($rows);
 	}
@@ -542,7 +556,7 @@ class Section {
 		$complexid = $this->AppendUnAttr($rows, true);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Наименование образовательной программы, специальности, направления подготовки', '', 'program', 'code,name', 1, 1)
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Наименование образовательной программы, специальности, направления подготовки', 'NameProgVacant,SpecialVacant', 'program', 'code,name', 1, 1)
 		";
 		$this->AppendUnAttr($rows);
 		
@@ -554,10 +568,10 @@ class Section {
 		$this->UpdateUnAttr($compisteid);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет бюджетных ассигнований федерального бюджета', '', 'vakant', '', 1, 1),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет бюджетных ассигнований бюджетов субъекта Российской Федерации', '', 'vakant', '', 1, 1),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет бюджетных ассигнований местных бюджетов', '', 'vakant', '', 1, 1),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет средств физических и (или) юридических лиц', '', 'vakant', '', 1, 1)
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет бюджетных ассигнований федерального бюджета', 'NumberBFVacant', 'vakant', '', 1, 1),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет бюджетных ассигнований бюджетов субъекта Российской Федерации', 'NumberBRVacant', 'vakant', '', 1, 1),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет бюджетных ассигнований местных бюджетов', 'NumberBMVacant', 'vakant', '', 1, 1),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет средств физических и (или) юридических лиц', 'NumberPVacant', 'vakant', '', 1, 1)
 		";
 		$this->AppendUnAttr($rows);
 	}
