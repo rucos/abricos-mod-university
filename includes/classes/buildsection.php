@@ -6,9 +6,26 @@
  * @license http://opensource.org/licenses/mit-license.php MIT License
  * @author Kirill Kosaev <kosaev-kira@mail.ru>
  */
+
+/**
+ * Class BuildSection
+ */
 class BuildSection {
+	/**
+	 * Название раздела
+	 *
+ 	 * @var string
+	 */
 	private $_nameSection;
+	
+	/**
+	 * @var Ab_CoreBrick
+	 */
 	private $_brick;
+	
+	/**
+	 * @var UniversityManager
+	 */
 	private $_manager;
 	
 	public function __construct(Ab_CoreBrick $brick, $nameSection){
@@ -18,10 +35,9 @@ class BuildSection {
 	}
 	
 	private function SimpleAttributeListParse($id, $nameattribute, $applyattribute){
-		$v = &$this->_brick->param->var;
 		$values = $this->SimpleValueParse($id);
 		
-		return Brick::ReplaceVarByData($this->_brick->param->var['simple'], array(
+		return $this->ReplaceVar('simple', array(
 				"nameattribute" => $nameattribute,
 				"applyattribute" => $applyattribute,
 				"values" => $values
@@ -39,68 +55,69 @@ class BuildSection {
 		return $values;
 	}
 	
-	private function ParseValue($d){
-		$v = &$this->_brick->param->var;
-		$value = $d['value'];
-		
-		switch($d['view']){
-			case 'file':
-				$value = University::NAME_DIR.$d['value'];
-			case 'url':
-				$value = $this->ParseUrl($value, $d['nameurl']);
-					break;
-		}
-		return Brick::ReplaceVarByData($v['simpleValue'], array(
-				"value" => $value
-		));
-	}
-	
-	private function ParseUrl($url, $nameUrl){
-		return Brick::ReplaceVarByData($this->_brick->param->var['urlValue'], array(
-				"url" => $url,
-				"nameUrl" => $nameUrl
-		));
-	}
-
 	private function ComplexAttributeListParse($id, $nameComplex, $compositList, $rowspan){
 		$tr = "";
 		$td = "";
-		$trSub = "";
 		$tdSub = "";
 		
 		foreach ($compositList as $comp){
 			$curLen = count($comp[1]);
 			
 			if($curLen > 0){
-				$td .= $this->ReplaceVar('td', array(
-						"span" => "colspan=".$curLen,
-						"value" => $comp[0]
-				));
+				$td .= $this->TdReplace("colspan=".$curLen, $comp[0]);
+				
 					foreach($comp[1] as $subComp){
-						$tdSub .= $this->ReplaceVar('td', array(
-								"span" => "",
-								"value" => $subComp
-						));
+						$tdSub .= $this->TdReplace("", $subComp);
 					}
 			} else {
-				$td .= $this->ReplaceVar('td', array(
-						"span" => $rowspan,
-						"value" => $comp[0]
-				));
+				$td .= $this->TdReplace($rowspan, $comp[0]);
 			}
 		}
-		$trSub .= $this->ReplaceVar('tr', array(
-				"td" => $tdSub
-		));
 		
-		$tr = $this->ReplaceVar('tr', array(
-				"td" => $td
-		));
+		$tr = $this->TrReplace($td);
+		$tr .= $this->TrReplace($tdSub);
 		
 		return $this->ReplaceVar('complex', array(
 				"nameattribute" => $nameComplex,
-				"th" => $tr.$trSub,
+				"th" => $tr,
 				"rows" => ""
+		));
+	}
+	
+	private function TrReplace($td){
+		$replaceArray = array(
+				"td" => $td,
+		);
+		return $this->ReplaceVar('tr', $replaceArray);
+	}
+	
+	private function TdReplace($span, $value){
+		$replaceArray = array(
+			"span" => $span,
+			"value" => $value
+		);
+		return $this->ReplaceVar('td', $replaceArray);
+	}
+	
+	private function ParseValue($d){
+		$value = $d['value'];
+	
+		switch($d['view']){
+			case 'file':
+				$value = University::NAME_DIR.$d['value'];
+			case 'url':
+				$value = $this->ParseUrl($value, $d['nameurl']);
+				break;
+		}
+		return $this->ReplaceVar('simpleValue', array(
+				"value" => $value
+		));
+	}
+	
+	private function ParseUrl($url, $nameUrl){
+		return $this->ReplaceVar('urlValue', array(
+				"url" => $url,
+				"nameUrl" => $nameUrl
 		));
 	}
 	
