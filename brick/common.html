@@ -22,6 +22,30 @@
 	<a href="/{v#url}" target="_blank" rel="noopener">{v#nameUrl}</a>
 [/bkvar]
 
+[bkvar=complex]
+	<fieldset>
+		<legend>{v#nameattribute}</legend>
+			<table class="table table-bordered table-hover">
+			    <thead>
+					{v#th}
+			    </thead>
+			    <tbody>{v#rows}</tbody>
+			</table>
+	</fieldset>
+[/bkvar]
+
+[bkvar=tr]
+	<tr>
+	    {v#td}
+	</tr>
+[/bkvar]
+
+[bkvar=td]
+	<td {v#span}>
+		{v#value}
+	</td>
+[/bkvar]
+
 [bkvar=wrap]
     <div>
         {v#result}

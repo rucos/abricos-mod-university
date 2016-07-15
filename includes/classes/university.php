@@ -495,8 +495,55 @@ class University extends AbricosApplication {
     	return $menu['name'];
     }
     
+    /*
+     * Показать все атрибуты текщего раздела
+     * 
+     * $name - название раздела
+     * 
+     * $listAttribute - список всех атрибутов для текщуего раздела
+     * 
+     * $list[0] - если массив -> сложный, объект -> простой
+     * 
+     * */
     public function BrickSectionListAttribute($name){
-    	return UniversityQuery::SectionListAttribute($this->db, $name);
+    	$listAttribute = UniversityQuery::SectionListAttribute($this->db, $name);
+    	$list = array();
+    	
+    	while ($d = $this->db->fetch_array($listAttribute)){
+    		$id = $d['id'];
+    		$name = $d['name'];
+    		$apply = $d['apply'];
+    		$complexid = $d['complexid'];
+    		$compositeid = $d['compositeid'];
+    	
+    		switch($d['type']){
+    			case 'simple':
+    				$simple = new stdClass();
+	    				$simple->name = $name;
+	    				$simple->apply = $apply;
+	    				
+	    			$list[$id] = $simple;
+    					break;
+    			case 'complex':
+    				$list[$id] = array(
+	    				$name,
+	    				array(),
+	    				""
+    				);
+    					break;
+    			case 'composite':
+    				$list[$complexid][1][$id] = array(
+	    				$name,
+	    				array()
+    				);
+    					break;
+    			case 'subcomposite':
+    				$list[$complexid][1][$compositeid][1][] = $name;
+    				$list[$complexid][2] = "rowspan=2";
+    					break;
+    		}
+    	}
+    	return $list;
     }
     
 }

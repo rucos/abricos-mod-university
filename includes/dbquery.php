@@ -801,6 +801,8 @@ class UniversityQuery {
 			SELECT
 					a.attributeid as id,
 					a.nameattribute as name,
+					a.complexid,
+					a.compositeid,  
 					a.applyattribute as apply,
 					a.typeattribute as type
 			FROM ".$db->prefix."un_attribute a

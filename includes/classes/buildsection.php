@@ -29,7 +29,6 @@ class BuildSection {
 	}
 	
 	private function SimpleValueParse($id){
-		$v = &$this->_brick->param->var;
 		$valueList = $this->_manager->ValueSimpleList($id, true);
 		$values = "";
 	
@@ -41,6 +40,7 @@ class BuildSection {
 	}
 	
 	private function ParseValue($d){
+		$v = &$this->_brick->param->var;
 		$value = $d['value'];
 		
 		switch($d['view']){
@@ -50,7 +50,7 @@ class BuildSection {
 				$value = $this->ParseUrl($value, $d['nameurl']);
 					break;
 		}
-		return Brick::ReplaceVarByData($this->_brick->param->var['simpleValue'], array(
+		return Brick::ReplaceVarByData($v['simpleValue'], array(
 				"value" => $value
 		));
 	}
@@ -61,17 +61,61 @@ class BuildSection {
 				"nameUrl" => $nameUrl
 		));
 	}
+
+	private function ComplexAttributeListParse($id, $nameComplex, $compositList, $rowspan){
+		$tr = "";
+		$td = "";
+		$trSub = "";
+		$tdSub = "";
+		
+		foreach ($compositList as $comp){
+			$curLen = count($comp[1]);
+			
+			if($curLen > 0){
+				$td .= Brick::ReplaceVarByData($this->_brick->param->var['td'], array(
+						"span" => "colspan=".$curLen,
+						"value" => $comp[0]
+				));
+					foreach($comp[1] as $subComp){
+						$tdSub .= Brick::ReplaceVarByData($this->_brick->param->var['td'], array(
+								"span" => "",
+								"value" => $subComp
+						));
+					}
+			} else {
+				$td .= Brick::ReplaceVarByData($this->_brick->param->var['td'], array(
+						"span" => $rowspan,
+						"value" => $comp[0]
+				));
+			}
+		}
+		$trSub .= Brick::ReplaceVarByData($this->_brick->param->var['tr'], array(
+				"td" => $tdSub
+		));
+		
+		$tr = Brick::ReplaceVarByData($this->_brick->param->var['tr'], array(
+				"td" => $td
+		));
+		
+		return Brick::ReplaceVarByData($this->_brick->param->var['complex'], array(
+				"nameattribute" => $nameComplex,
+				"th" => $tr.$trSub,
+				"rows" => ""
+		));
+	}
 	
 	public function Build(){
 		$listAttribute = $this->_manager->BrickSectionListAttribute($this->_nameSection);
 		$result = "";
-		
-	    while ($d = $this->_manager->db->fetch_array($listAttribute)){
-	    	if($d['type'] == "simple"){
-	    		$result .= $this->SimpleAttributeListParse($d['id'], $d['name'], $d['apply']);
-	    	}
-    	}
-		
+
+		foreach ($listAttribute as $id => $value){
+			if(is_object($value)){
+				$result .= $this->SimpleAttributeListParse($id, $value->name, $value->apply);
+			} else {
+				$result .= $this->ComplexAttributeListParse($id, $value[0], $value[1], $value[2]);
+			}
+		}
+    	
 		return Brick::ReplaceVarByData($this->_brick->param->var['wrap'], array(
 				"result" => $result
 		));
