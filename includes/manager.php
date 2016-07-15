@@ -25,6 +25,11 @@ class UniversityManager extends Ab_ModuleManager {
     	return $this->IsRoleEnable(UniversityAction::ADMIN);
     }
     
+    public function GetBuildSection($brick, $nameSection){
+    	require_once 'classes/buildsection.php';
+    	return new BuildSection($brick, $nameSection);
+    }
+    
     /**
      * @return University
      */

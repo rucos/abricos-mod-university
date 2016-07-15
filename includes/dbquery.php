@@ -138,8 +138,11 @@ class UniversityQuery {
 		return $db->query_write($sql);
 	}
 	
-	public static function SimpleValueAttributeList(Ab_Database $db, $attridd){
-		
+	public static function SimpleValueAttributeList(Ab_Database $db, $attridd, $build){
+		$where = "attributeid=".bkint($attridd);
+		if($build){
+			$where .= " AND remove=0";
+		}
 		$sql = "
 			SELECT
 					valueid as id,
@@ -149,7 +152,7 @@ class UniversityQuery {
 					nameurl,
 					remove
 			FROM ".$db->prefix."un_value
-			WHERE attributeid=".bkint($attridd)."
+			WHERE ".$where."
 		";
 		
 		return $db->query_read($sql);
@@ -791,6 +794,21 @@ class UniversityQuery {
 			LIMIT 1
 		";
 		return $db->query_write($sql);
+	}
+	
+	public static function SectionListAttribute(Ab_Database $db, $name){
+		$sql = "
+			SELECT
+					a.attributeid as id,
+					a.nameattribute as name,
+					a.applyattribute as apply,
+					a.typeattribute as type
+			FROM ".$db->prefix."un_attribute a
+			INNER JOIN ".$db->prefix."un_section s
+			INNER JOIN ".$db->prefix."sys_menu m ON m.menuid=s.menuid AND m.name='".$name."'
+			WHERE a.sectionid=s.sectionid
+		";
+		return $db->query_read($sql);
 	}
 }
 

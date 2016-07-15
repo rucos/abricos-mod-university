@@ -177,18 +177,23 @@ class University extends AbricosApplication {
     	return $this->ResultToJSON('valueSimpleList', $res);
     }
     
-    public function ValueSimpleList($attrid){
+    public function ValueSimpleList($attrid, $build = false){
     	$attrid = intval($attrid);
     	
-		$list = $this->models->InstanceClass('ValueAttributeList');
-		 
-		$rows = UniversityQuery::SimpleValueAttributeList($this->db, $attrid);
-			while (($d = $this->db->fetch_array($rows))){
-				$d['value'] = University::ViewIsFile($d['view'], $d['value']);
+		$rows = UniversityQuery::SimpleValueAttributeList($this->db, $attrid, $build);
+		
+		if($build){
+			return $rows;
+		} else {
+			$list = $this->models->InstanceClass('ValueAttributeList');
+			
+				while (($d = $this->db->fetch_array($rows))){
+					$d['value'] = University::ViewIsFile($d['view'], $d['value']);
 				
-				$list->Add($this->models->InstanceClass('ValueAttributeItem', $d));
-			}
-    	return $list;
+					$list->Add($this->models->InstanceClass('ValueAttributeItem', $d));
+				}
+			return $list;
+		}
     }
     
     public function ValueComplexListToJSON($attrid){
@@ -274,7 +279,7 @@ class University extends AbricosApplication {
     	}
     }
     
-    private function ViewIsFile($view, $value){
+    public function ViewIsFile($view, $value){
     	return $view == "file" ? University::NAME_DIR.$value : $value;
     }
     
@@ -490,6 +495,9 @@ class University extends AbricosApplication {
     	return $menu['name'];
     }
     
+    public function BrickSectionListAttribute($name){
+    	return UniversityQuery::SectionListAttribute($this->db, $name);
+    }
     
 }
 
