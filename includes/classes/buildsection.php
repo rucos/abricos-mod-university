@@ -72,36 +72,41 @@ class BuildSection {
 			$curLen = count($comp[1]);
 			
 			if($curLen > 0){
-				$td .= Brick::ReplaceVarByData($this->_brick->param->var['td'], array(
+				$td .= $this->ReplaceVar('td', array(
 						"span" => "colspan=".$curLen,
 						"value" => $comp[0]
 				));
 					foreach($comp[1] as $subComp){
-						$tdSub .= Brick::ReplaceVarByData($this->_brick->param->var['td'], array(
+						$tdSub .= $this->ReplaceVar('td', array(
 								"span" => "",
 								"value" => $subComp
 						));
 					}
 			} else {
-				$td .= Brick::ReplaceVarByData($this->_brick->param->var['td'], array(
+				$td .= $this->ReplaceVar('td', array(
 						"span" => $rowspan,
 						"value" => $comp[0]
 				));
 			}
 		}
-		$trSub .= Brick::ReplaceVarByData($this->_brick->param->var['tr'], array(
+		$trSub .= $this->ReplaceVar('tr', array(
 				"td" => $tdSub
 		));
 		
-		$tr = Brick::ReplaceVarByData($this->_brick->param->var['tr'], array(
+		$tr = $this->ReplaceVar('tr', array(
 				"td" => $td
 		));
 		
-		return Brick::ReplaceVarByData($this->_brick->param->var['complex'], array(
+		return $this->ReplaceVar('complex', array(
 				"nameattribute" => $nameComplex,
 				"th" => $tr.$trSub,
 				"rows" => ""
 		));
+	}
+	
+	private function ReplaceVar($bkvar, $replaceArray){
+		$v = &$this->_brick->param->var;
+		return Brick::ReplaceVarByData($v[$bkvar], $replaceArray);
 	}
 	
 	public function Build(){
