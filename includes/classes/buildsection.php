@@ -100,7 +100,41 @@ class BuildSection {
 	}
 	
 	private function AutoComplexValueParse($valueList){
-		return "";
+		$tr = "";
+		foreach ($valueList as $valueItem){
+			$cntRowSpan = $this->DetermineRowSpan($valueItem);
+			$rowSpan = "rowspan=".$cntRowSpan;
+			$span = true;
+			
+				for ($i = 0; $i < $cntRowSpan; $i++){
+					$td = "";
+					foreach ($valueItem as $values){
+						if(isset($values[$i])){
+							$p = $this->ParseValue($values[$i]);
+							
+							$td .= $this->TdReplace($rowSpan, $p);
+							
+							if($span){
+								$rowSpan = "";
+								$span = false;
+							}
+						}
+					}
+					$tr .= $this->TrReplace($td);
+				}
+		}
+		return $tr;
+	}
+	
+	private function DetermineRowSpan($valueItem){
+		$cnt = 0;
+		foreach ($valueItem as $values){
+			if($cnt === 1){
+				return count($values);
+			} else {
+				$cnt++;
+			}
+		}
 	}
 	
 	private function ManuallyComplexValueParse($valueList){
@@ -128,7 +162,7 @@ class BuildSection {
 	
 	private function TdReplace($span, $value){
 		$replaceArray = array(
-			"span" => $span,
+			"span" => "",
 			"value" => $value
 		);
 		return $this->ReplaceVar('td', $replaceArray);

@@ -147,7 +147,6 @@ Component.entryPoint = function(NS){
     			isSpan = "",
     			rowspan = "";
     		
-       
         	for(var i in valueComplexList){
         		rowspan = "rowspan=" + this.determineSpan(valueComplexList[i]);
         		
