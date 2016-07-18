@@ -49,6 +49,7 @@ class BuildSection {
 		$values = "";
 	
 		while($d = $this->_manager->db->fetch_array($valueList)){
+			$d['value'] = $this->_manager->ViewIsFile($d['view'], $d['value']);
 				$values .= $this->ParseValue($d);
 		}
 	
@@ -189,14 +190,14 @@ class BuildSection {
 	
 	private function ParseValue($d){
 		$value = $d['value'];
-	
 		switch($d['view']){
 			case 'file':
-				$value = University::NAME_DIR.$d['value'];
+				$value = "/".$value;
 			case 'url':
 				$value = $this->ParseUrl($value, $d['nameurl']);
-				break;
+					break;
 		}
+		
 		return $this->ReplaceVar('simpleValue', array(
 				"applyattribute" => isset($d['applyattribute']) ? "itemprop=".$d['applyattribute'] : "",
 				"value" => $value
