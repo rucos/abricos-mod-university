@@ -8,9 +8,10 @@
  */
 
 $man = Abricos::GetModule('university')->GetManager();
+$nameSection = Abricos::GetModule('university')->GetContentName();
 $brick = Brick::$builder->brick;
 
-$builder = $man->GetBuildSection($brick, 'common');
+$builder = $man->GetBuildSection($brick, $nameSection);
 $brick->content = $builder->Build();
 
 ?>

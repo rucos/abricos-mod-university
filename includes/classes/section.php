@@ -43,9 +43,9 @@ class Section {
 		
 		$sveden = 'Сведения об образовательной организации';
 		$this->sectionid = $this->AppendSysMenu('sveden', $sveden);
-		$contentId = $this->AppendContent($sveden);
+		$contentId = $this->AppendContent($sveden, true);
 		
-		$this->AppendSysPage($this->sectionid, $contentId);
+		$this->AppendSysPage($this->sectionid, $contentId, true);
 		$this->FillSection();
 	}
 	
@@ -74,14 +74,26 @@ class Section {
 		return $this->db->insert_id();
 	}
 
-	private function AppendContent($head){
-		return Ab_CoreQuery::ContentAppend($this->db, "<h2>".$head."</h2>", 'sitemap');
+	private function AppendContent($head, $isSveden = false){
+		if($isSveden){
+			$mods = '';
+		} else {
+			$mods = '[mod]university:edusection[/mod]';
+		}
+		
+		return Ab_CoreQuery::ContentAppend($this->db, "<h2>".$head."</h2>".$mods, 'sitemap');
 	}
 
-	private function AppendSysPage($sectionid, $contentId){
+	private function AppendSysPage($sectionid, $contentId, $isSveden = false){
+		if($isSveden){
+			$mods = '';
+		} else {
+			$mods = '{"university":{"edusection":""}}';
+		}
+		
 		$this->db->query_write("
 			INSERT INTO ".$this->pfx."sys_page (menuid, contentid, pagename, title, language, metakeys, metadesc, usecomment, dateline, deldate, mods) VALUES
-			(".$sectionid.", ".$contentId.", 'index', '', '".Abricos::$LNG."', '', '', 0, ".TIMENOW.", 0, '')
+			(".$sectionid.", ".$contentId.", 'index', '', '".Abricos::$LNG."', '', '', 0, ".TIMENOW.", 0, '".$mods."')
 		");
 	}
 

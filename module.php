@@ -17,7 +17,7 @@ class UniversityModule extends Ab_Module {
 
     public function UniversityModule(){
         UniversityModule::$instance = $this;
-        $this->version = "0.1.6";
+        $this->version = "0.1.7";
         $this->name = "university";
         $this->takelink = "university";
         $this->permission = new UniversityPermission($this);
@@ -35,8 +35,18 @@ class UniversityModule extends Ab_Module {
     	$dir = Abricos::$adress->dir;
     	if (isset($dir[1])){
     		switch ($dir[1]){
-    			case 'upload':
-    				return $dir[1];
+				case 'common':
+				case 'struct':
+				case 'document':
+				case 'education': 
+				case 'edustandarts':
+				case 'employees':
+				case 'objects':
+				case 'grants':
+				case 'paid_edu':
+				case 'budget':
+				case 'vacant':
+					return $dir[1];
     		}
     	}
     	return '';
