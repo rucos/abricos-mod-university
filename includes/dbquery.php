@@ -688,12 +688,18 @@ class UniversityQuery {
 		return $respond;
 	}
 	
-	public static function MaxNumRowValue($db, $strid){
+	public static function MaxNumRowValue($db, $strid, $isComplexAll = false){
+		$where = "attributeid IN (".$strid.")";
+		
+		if($isComplexAll){
+			$where .= " AND remove=0";
+		}
+		
 		$sql = "
 				SELECT
 						MAX(numrow) as max
 				FROM ".$db->prefix."un_value
-				WHERE attributeid IN (".$strid.")
+				WHERE ".$where."
 		";
 		$result = $db->query_first($sql); 
 		

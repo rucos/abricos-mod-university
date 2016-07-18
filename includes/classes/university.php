@@ -229,7 +229,7 @@ class University extends AbricosApplication {
     			$arrayValue[] = $value;
     	}
     			
-    	$maxNumRow = UniversityQuery::MaxNumRowValue($this->db, $strid);
+    	$maxNumRow = UniversityQuery::MaxNumRowValue($this->db, $strid, true);
     		
     	if(isset($maxNumRow['max'])){
     		$dataValue = array();

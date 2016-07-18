@@ -77,11 +77,46 @@ class BuildSection {
 		$tr = $this->TrReplace($td);
 		$tr .= $this->TrReplace($tdSub);
 		
+		$rows = $this->ComplexValueList($id);
+		
 		return $this->ReplaceVar('complex', array(
 				"nameattribute" => $nameComplex,
 				"th" => $tr,
-				"rows" => ""
+				"rows" => $rows
 		));
+	}
+	
+	private function ComplexValueList($id){
+		$insRow = $this->_manager->AttributeItemInsertRow($id);
+	
+		$valueList = $this->_manager->ValueComplexList($id);
+		
+		if($insRow == "auto"){
+			$tr = $this->AutoComplexValueParse($valueList);
+		} else {
+			$tr = $this->ManuallyComplexValueParse($valueList);
+		}
+		return $tr;
+	}
+	
+	private function AutoComplexValueParse($valueList){
+		return "";
+	}
+	
+	private function ManuallyComplexValueParse($valueList){
+		$tr = "";
+		foreach ($valueList as $valueItem){
+			$td = "";
+			foreach ($valueItem as $values){
+				$p = "";
+					foreach ($values as $val){
+						$p .= $this->ParseValue($val);
+					}
+				$td .= $this->TdReplace("", $p);
+			}
+				$tr .= $this->TrReplace($td);
+		}
+		return $tr;
 	}
 	
 	private function TrReplace($td){
