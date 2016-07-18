@@ -644,12 +644,7 @@ class UniversityQuery {
 				SELECT
 					attributeid as id
 				FROM ".$db->prefix."un_attribute
-				WHERE complexid=".bkint($attrid)." AND compositeid=0
-				UNION ALL
-					SELECT
-						attributeid as id
-					FROM ".$db->prefix."un_attribute
-					WHERE complexid=".bkint($attrid)." AND typeattribute=4
+				WHERE complexid=".bkint($attrid)." AND (compositeid=0 OR typeattribute=4)
 		";
 		return $db->query_read($sql);
 	}
