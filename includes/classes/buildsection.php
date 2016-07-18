@@ -55,7 +55,7 @@ class BuildSection {
 		return $values;
 	}
 	
-	private function ComplexAttributeListParse($id, $nameComplex, $compositList, $rowspan){
+	private function ComplexAttributeListParse($id, $nameComplex, $compositList, $rowspan, $applyattribute){
 		$tr = "";
 		$td = "";
 		$tdSub = "";
@@ -64,13 +64,13 @@ class BuildSection {
 			$curLen = count($comp[1]);
 			
 			if($curLen > 0){
-				$td .= $this->TdReplace("colspan=".$curLen, $comp[0]);
+				$td .= $this->TdReplace("colspan=".$curLen, $comp[0], true);
 				
 					foreach($comp[1] as $subComp){
-						$tdSub .= $this->TdReplace("", $subComp);
+						$tdSub .= $this->TdReplace("", $subComp, true);
 					}
 			} else {
-				$td .= $this->TdReplace($rowspan, $comp[0]);
+				$td .= $this->TdReplace($rowspan, $comp[0], true);
 			}
 		}
 		
@@ -79,9 +79,19 @@ class BuildSection {
 		
 		$rows = $this->ComplexValueList($id);
 		
+		if($applyattribute){
+			$itemScope = strripos($applyattribute, "http");
+			if($itemScope !== false){
+				$applyattribute = 'itemscope itemtype='.$applyattribute;
+			} else {
+				$applyattribute = 'itemprop='.$applyattribute;
+			}
+		}
+		
 		return $this->ReplaceVar('complex', array(
 				"nameattribute" => $nameComplex,
 				"th" => $tr,
+				"applyattribute" => $applyattribute,
 				"rows" => $rows
 		));
 	}
@@ -163,15 +173,16 @@ class BuildSection {
 	
 	private function TrReplace($td){
 		$replaceArray = array(
-				"td" => $td,
+				"td" => $td
 		);
 		return $this->ReplaceVar('tr', $replaceArray);
 	}
 	
-	private function TdReplace($span, $value){
+	private function TdReplace($span, $value, $isHead = false){
 		$replaceArray = array(
 			"span" => $span,
-			"value" => $value
+			"value" => $value,
+			"tag" => $isHead ? 'th' : 'td'
 		);
 		return $this->ReplaceVar('td', $replaceArray);
 	}
@@ -187,6 +198,7 @@ class BuildSection {
 				break;
 		}
 		return $this->ReplaceVar('simpleValue', array(
+				"applyattribute" => isset($d['applyattribute']) ? "itemprop=".$d['applyattribute'] : "",
 				"value" => $value
 		));
 	}
@@ -211,7 +223,7 @@ class BuildSection {
 			if(is_object($value)){
 				$result .= $this->SimpleAttributeListParse($id, $value->name, $value->apply);
 			} else {
-				$result .= $this->ComplexAttributeListParse($id, $value[0], $value[1], $value[2]);
+				$result .= $this->ComplexAttributeListParse($id, $value[0], $value[1], $value[2], $value[3]);
 			}
 		}
     	

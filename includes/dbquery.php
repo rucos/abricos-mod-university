@@ -712,6 +712,7 @@ class UniversityQuery {
 					a.fieldname,
 					a.display,
 					a.insertRow,
+					a.applyattribute,
 					v.relationid,
 					v.mainid,
 					v.view,

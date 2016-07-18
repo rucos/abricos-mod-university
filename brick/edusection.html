@@ -13,7 +13,7 @@
 [/bkvar]
 
 [bkvar=simpleValue]
-	<p>
+	<p {v#applyattribute}>
 		{v#value}
 	</p>
 [/bkvar]
@@ -25,12 +25,14 @@
 [bkvar=complex]
 	<fieldset>
 		<legend>{v#nameattribute}</legend>
-			<table class="table table-bordered table-hover">
-			    <thead>
-					{v#th}
-			    </thead>
-			    <tbody>{v#rows}</tbody>
-			</table>
+			<div {v#applyattribute}>
+				<table class="table table-bordered table-hover">
+				    <thead>
+						{v#th}
+				    </thead>
+				    <tbody>{v#rows}</tbody>
+				</table>
+			</div>
 	</fieldset>
 [/bkvar]
 
@@ -41,9 +43,9 @@
 [/bkvar]
 
 [bkvar=td]
-	<td {v#span}>
+	<{v#tag} {v#span}>
 		{v#value}
-	</td>
+	</{v#tag}>
 [/bkvar]
 
 [bkvar=wrap]

@@ -528,7 +528,8 @@ class University extends AbricosApplication {
     				$list[$id] = array(
 	    				$name,
 	    				array(),
-	    				""
+	    				"",
+	    				$apply
     				);
     					break;
     			case 'composite':
