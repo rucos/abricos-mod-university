@@ -35,6 +35,7 @@ class UniversityModule extends Ab_Module {
     	$dir = Abricos::$adress->dir;
     	if (isset($dir[1])){
     		switch ($dir[1]){
+    			case 'upload':
 				case 'common':
 				case 'struct':
 				case 'document':
