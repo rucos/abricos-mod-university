@@ -80,15 +80,18 @@ class University extends AbricosApplication {
     		return $this->ResultToJSON('sectionList', $res);
     }
     
-    public function SectionList(){
-    	
-    	$list = $this->models->InstanceClass('SectionList');
+    public function SectionList($isBrick = false){
     	$rows = UniversityQuery::SectionList($this->db);
-    	 
-    	while (($d = $this->db->fetch_array($rows))){
-    		$list->Add($this->models->InstanceClass('SectionItem', $d));
+    	
+    	if($isBrick){
+    		return $rows;
+    	} else {
+    		$list = $this->models->InstanceClass('SectionList');
+	    		while (($d = $this->db->fetch_array($rows))){
+	    			$list->Add($this->models->InstanceClass('SectionItem', $d));
+	    		}
+	    		return $list;
     	}
-    	return $list;
     }
     
     public function SectionItem($sectionid){

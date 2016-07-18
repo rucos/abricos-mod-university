@@ -76,7 +76,7 @@ class Section {
 
 	private function AppendContent($head, $isSveden = false){
 		if($isSveden){
-			$mods = '';
+			$mods = '[mod]university:svedensection[/mod]';
 		} else {
 			$mods = '[mod]university:edusection[/mod]';
 		}
@@ -86,14 +86,14 @@ class Section {
 
 	private function AppendSysPage($sectionid, $contentId, $isSveden = false){
 		if($isSveden){
-			$mods = '';
+			$mods = '{"university":{"svedensection":""}}';
 		} else {
 			$mods = '{"university":{"edusection":""}}';
 		}
 		
 		$this->db->query_write("
-			INSERT INTO ".$this->pfx."sys_page (menuid, contentid, pagename, title, language, metakeys, metadesc, usecomment, dateline, deldate, mods) VALUES
-			(".$sectionid.", ".$contentId.", 'index', '', '".Abricos::$LNG."', '', '', 0, ".TIMENOW.", 0, '".$mods."')
+			INSERT INTO ".$this->pfx."sys_page (menuid, contentid, pagename, title, language, metakeys, metadesc, usecomment, dateline, deldate, mods, template) VALUES
+			(".$sectionid.", ".$contentId.", 'index', '', '".Abricos::$LNG."', '', '', 0, ".TIMENOW.", 0, '".$mods."', 'edu:sveden')
 		");
 	}
 
