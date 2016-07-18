@@ -144,14 +144,19 @@ class BuildSection {
 		$tr = "";
 		foreach ($valueList as $valueItem){
 			$td = "";
-			foreach ($valueItem as $values){
-				$p = "";
-					foreach ($values as $val){
-						$p .= $this->ParseValue($val);
-					}
-				$td .= $this->TdReplace("", $p);
-			}
-				$tr .= $this->TrReplace($td);
+			$append = false;
+			
+				foreach ($valueItem as $values){
+					$p = "";
+						foreach ($values as $val){
+							$append = true;
+							$p .= $this->ParseValue($val);
+						}
+					$td .= $this->TdReplace("", $p);
+				}
+				if($append){
+					$tr .= $this->TrReplace($td);
+				}
 		}
 		return $tr;
 	}
