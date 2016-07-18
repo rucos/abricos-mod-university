@@ -90,11 +90,14 @@ class BuildSection {
 		$insRow = $this->_manager->AttributeItemInsertRow($id);
 	
 		$valueList = $this->_manager->ValueComplexList($id);
+		$tr = "";
 		
-		if($insRow == "auto"){
-			$tr = $this->AutoComplexValueParse($valueList);
-		} else {
-			$tr = $this->ManuallyComplexValueParse($valueList);
+		if($valueList){
+			if($insRow == "auto"){
+				$tr = $this->AutoComplexValueParse($valueList);
+			} else {
+				$tr = $this->ManuallyComplexValueParse($valueList);
+			}
 		}
 		return $tr;
 	}
@@ -162,7 +165,7 @@ class BuildSection {
 	
 	private function TdReplace($span, $value){
 		$replaceArray = array(
-			"span" => "",
+			"span" => $span,
 			"value" => $value
 		);
 		return $this->ReplaceVar('td', $replaceArray);
