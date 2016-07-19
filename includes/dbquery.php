@@ -88,7 +88,7 @@ class UniversityQuery {
 	
 	public static function AppendAttribute(Ab_Database $db, $d){
 		$sql = "
-			INSERT INTO ".$db->prefix."un_attribute(sectionid, complexid, typeattribute, nameattribute, applyattribute, tablename, locate)
+			INSERT INTO ".$db->prefix."un_attribute(sectionid, complexid, typeattribute, nameattribute, applyattribute, tablename, locate, insertrow)
 			VALUES (
 					".bkint($d->sectionid).",
 					".bkint($d->complexid).",
@@ -96,7 +96,8 @@ class UniversityQuery {
 					'".bkstr($d->nameattribute)."',	
 					'".bkstr($d->applyattribute)."',
 					'".bkstr($d->tablename)."',
-					".bkint($d->locate)."
+					".bkint($d->locate).",
+							'manually'
 			)
 		";
 		
