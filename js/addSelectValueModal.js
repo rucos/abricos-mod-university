@@ -91,7 +91,7 @@ Component.entryPoint = function(NS){
         			this.unSetSuccess(tr);
         			tr.classList.add('success');
         			
-        			this.set('relationid', tr.id.match(/-(\d)+/)[1]);
+        			this.set('relationid', tr.id.match(/-(\d+)/)[1]);
         		}
         	}
         }
