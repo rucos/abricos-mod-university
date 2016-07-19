@@ -81,7 +81,7 @@ class Section {
 			$mods = '[mod]university:edusection[/mod]';
 		}
 		
-		return Ab_CoreQuery::ContentAppend($this->db, "<h2>".$head."</h2>".$mods, 'sitemap');
+		return Ab_CoreQuery::ContentAppend($this->db, "<h3>".$head."</h3>".$mods, 'sitemap');
 	}
 
 	private function AppendSysPage($sectionid, $contentId, $isSveden = false){

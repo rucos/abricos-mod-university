@@ -28,6 +28,8 @@ class BuildSection {
 	 */
 	private $_manager;
 	
+	private $_modal = false;
+	
 	public function __construct(Ab_CoreBrick $brick, $nameSection){
 		$this->_nameSection = $nameSection;
 		$this->_brick = $brick;
@@ -107,7 +109,7 @@ class BuildSection {
 			if($insRow == "auto"){
 				$tr = $this->AutoComplexValueParse($valueList);
 			} else {
-				$tr = $this->ManuallyComplexValueParse($valueList);
+				$tr = $this->ManuallyComplexValueParse($valueList, $id);
 			}
 		}
 		return $tr;
@@ -153,17 +155,27 @@ class BuildSection {
 	
 	private function ManuallyComplexValueParse($valueList){
 		$tr = "";
+		
 		foreach ($valueList as $valueItem){
 			$td = "";
 			$append = false;
-			
 				foreach ($valueItem as $values){
 					$p = "";
+					$hidelist = false;
 						foreach ($values as $val){
 							$append = true;
-							$p .= $this->ParseValue($val);
+							
+							if($val['display'] == 'hideList'){
+								$apply = $val['applyattribute'];
+								$hidelist = true;
+							}
+							$p .= $this->ParseValue($val, $hidelist);
 						}
-					$td .= $this->TdReplace("", $p);
+						if($hidelist){
+							$p = $this->FilelistReplace($p, $apply);
+						} 
+
+						$td .= $this->TdReplace("", $p);
 				}
 				if($append){
 					$tr .= $this->TrReplace($td);
@@ -188,7 +200,17 @@ class BuildSection {
 		return $this->ReplaceVar('td', $replaceArray);
 	}
 	
-	private function ParseValue($d){
+	private function FilelistReplace($list, $apply){
+		$this->_modal = true;
+		
+		$replaceArray = array(
+				"list" => $list,
+				"applyattribute" => $apply
+		);
+		return $this->ReplaceVar('filelist', $replaceArray);
+	}
+	
+	private function ParseValue($d, $hidelist = false){
 		$value = $d['value'];
 		switch($d['view']){
 			case 'file':
@@ -198,10 +220,16 @@ class BuildSection {
 					break;
 		}
 		
-		return $this->ReplaceVar('simpleValue', array(
+		if($hidelist){
+			return $this->ReplaceVar('fileitem', array(
+				"value" => $value
+			));
+		} else {
+			return $this->ReplaceVar('simpleValue', array(
 				"applyattribute" => isset($d['applyattribute']) ? "itemprop=".$d['applyattribute'] : "",
 				"value" => $value
-		));
+			));
+		}
 	}
 	
 	private function ParseUrl($url, $nameUrl){
@@ -227,9 +255,15 @@ class BuildSection {
 				$result .= $this->ComplexAttributeListParse($id, $value[0], $value[1], $value[2], $value[3]);
 			}
 		}
-    	
+		$modal = "";
+		
+		if($this->_modal){
+			$modal = $this->ReplaceVar('modal', array());
+		}
+			
 		return Brick::ReplaceVarByData($this->_brick->param->var['wrap'], array(
-				"result" => $result
+				"result" => $result,
+				"modal" => $modal
 		));
 	}
 	

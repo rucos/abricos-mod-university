@@ -48,9 +48,60 @@
 	</{v#tag}>
 [/bkvar]
 
+[bkvar=filelist]
+	<div class="hide" itemprop="{v#applyattribute}">
+		{v#list}
+	</div>
+	<button class="btn btn-default" data-wait="disable" onClick="showModal(this)">Показать</button>
+[/bkvar]
+
+[bkvar=fileitem]
+		<div>{v#value}</div>
+[/bkvar]
+
+[bkvar=modal]
+	<div id="modal" class="modal fade in"  aria-hidden="true" style="display: none;">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" onClick="showModal()"><span aria-hidden="true">&times;</span></button>
+		        <h4 class="modal-title">Список файлов</h4>
+		      </div>
+		      <div class="modal-body">
+		      		<div contentEditable="false" style="width:auto; height:200px; overflow:auto; position: relative">
+		  				<div id="filelist"></div>
+		  			</div>
+			</div>
+			<div class="modal-footer">
+			    <button class="btn btn-default" data-wait="disable" onClick="showModal()">
+						 Скрыть
+				</button>
+	      </div>
+	      </div>
+	   </div>
+	</div>
+[/bkvar]
+
 [bkvar=wrap]
     <div>
         {v#result}
     </div>
+    {v#modal}
+    <script language='JavaScript' type='text/javascript' charset='utf-8'>
+		function showModal(btn){
+			var modal = document.getElementById('modal'),
+				bodyModal = document.getElementById('filelist'),
+				text = "",
+				display = "none";
+			
+			if(btn){
+				text = btn.previousElementSibling.innerHTML;
+				display = "block"
+			}
+			bodyModal.innerHTML = text;
+			modal.style.display = display;
+		}
+		
+	</script>
 [/bkvar]
 [*]-->
