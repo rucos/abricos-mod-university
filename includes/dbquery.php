@@ -232,7 +232,7 @@ class UniversityQuery {
 			return $db->query_write($sql);
 		}
 	}
-	/*
+	/**
 	 * Обновление значения атрибута
 	 * 
 	 * $act - проверка атрибута
@@ -322,7 +322,7 @@ class UniversityQuery {
 		$result = $db->query_first($sql);
 		return $result;
 	}
-	/*
+	/**
 	 * Проверка значения
 	 * 
 	 * если у атрибута есть связь с другой таблицей, то значение доступно только для чтения
@@ -378,7 +378,7 @@ class UniversityQuery {
    		UniversityQuery::AppendEduForm($db, $d->eduLevel, $programid, $numrow['m']);
 	}
 	
-	/*
+	/**
 	 * Добавление авто значений в таблицу un_value 
 	 * 
 	 */
@@ -417,7 +417,7 @@ class UniversityQuery {
 		return $db->query_read($sql);
 	}
 	
-	/*
+	/**
 	 * Удаление учебной программы
 	 * 
 	 * Обновление значений в таблице un_value по текущему programid 
@@ -486,7 +486,7 @@ class UniversityQuery {
 		return $db->query_read($sql);
 	}
 	
-	/*
+	/**
 	 * Редактирование учебной программы
 	 *
 	 * Обновление значений в таблице un_value по текущему programid, edulevelid
@@ -538,7 +538,7 @@ class UniversityQuery {
 		}
 	}
 	
-	/*
+	/**
 	 * Добавление форм обучения
 	 *
 	 * Обновление значений в таблице un_value по текущему programid, edulevelid

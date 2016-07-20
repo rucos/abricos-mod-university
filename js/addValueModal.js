@@ -206,6 +206,9 @@ Component.entryPoint = function(NS){
 				case '$13': 
 					alert('Укажите дату утверждения');
 						break;
+				case '$14': 
+					alert('Не верное название документа! Пример: Pril1_akkred_2014');
+						break;
 			}
 			
 			return false;

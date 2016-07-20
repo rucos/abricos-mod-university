@@ -513,7 +513,7 @@ class University extends AbricosApplication {
     	return $menu['name'];
     }
     
-    /*
+    /**
      * Показать все атрибуты текщего раздела
      * 
      * $name - название раздела
