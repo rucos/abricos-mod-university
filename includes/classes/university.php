@@ -287,21 +287,36 @@ class University extends AbricosApplication {
     }
     
     public function ActValueAttributeToJSON($d){
-    	$utmf = Abricos::TextParser(true);
+    	$res = $this->CheckValueAttribute($d->value, $d->nameurl, $d->view);
+		
+    	if($res){
+    		$utmf = Abricos::TextParser(true);
+    		$d->id = intval($d->id);
+    		$d->atrid = intval($d->atrid);
+    		$d->value = $utmf->Parser($d->value);
+    		$d->nameurl = $utmf->Parser($d->nameurl);
+    		$d->view = $utmf->Parser($d->view);
+    		$d->namedoc = "";
+    		$d->datedoc = "";
+    		$d->file = "";
+    		$d->numrow = intval($d->numrow);
+    		$d->mainid = intval($d->mainid);
+    		 
+    		$res = $this->ActValueAttribute($d);
+    	}
     	
-    	$d->id = intval($d->id);
-    	$d->atrid = intval($d->atrid);
-    	$d->value = $utmf->Parser($d->value);
-    	$d->nameurl = $utmf->Parser($d->nameurl);
-    	$d->view = $utmf->Parser($d->view);
-    	$d->namedoc = "";
-    	$d->datedoc = "";
-    	$d->file = "";
-    	$d->numrow = intval($d->numrow);
-    	$d->mainid = intval($d->mainid);
-    	
-    	$res = $this->ActValueAttribute($d);
     	return $this->ResultToJSON('actValueAttribute', $res);
+    }
+    
+    private function CheckValueAttribute($value, $nameurl, $view){
+    	$pattern = '/[a-zА-Я0-9]/i';
+    	
+    	$check = preg_match($pattern, $value);
+    	
+    	if($view == 'url' && $check === 1){
+    		$check = preg_match($pattern, $nameurl);
+    	} 
+    	return $check === 1 ? true : false;
     }
     
     public function ActValueAttribute($d){

@@ -28,6 +28,11 @@ class BuildSection {
 	 */
 	private $_manager;
 	
+	/**
+	 * Флаг добавления к странице modal
+	 * 
+	 * @var bool
+	 */
 	private $_modal = false;
 	
 	public function __construct(Ab_CoreBrick $brick, $nameSection){
@@ -210,6 +215,12 @@ class BuildSection {
 		return $this->ReplaceVar('filelist', $replaceArray);
 	}
 	
+	/**
+	 * Парсинг значений
+	 * 
+	 * $hidelist=true - тип значения display='hideList'
+	 *
+	 */
 	private function ParseValue($d, $hidelist = false){
 		$value = $d['value'];
 		switch($d['view']){

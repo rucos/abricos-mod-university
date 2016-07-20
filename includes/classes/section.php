@@ -14,12 +14,43 @@
  * */
 class Section {
 
+	/**
+	 * Список разделов
+	 *
+ 	 * @var object
+	 */
 	private $menu = null;
 	
+	/**
+	 * Директория сайта
+	 *
+ 	 * @var string
+	 */
 	public static $docroot;
 	
+	/**
+	 * База данных 
+	 * 
+	 * Abricos::$db
+	 *
+	 * @var string
+	 */
 	private $db = null;
+	
+	/**
+	 * Префикс базы
+	 *
+	 * Abricos::$db->prefix
+	 *
+	 * @var string
+	 */
 	private $pfx = null;
+	
+	/**
+	 * id основного раздела
+	 *
+	 * @var int
+	 */
 	private $sectionid = null; 
 	
 	public function __construct(){
@@ -587,6 +618,11 @@ class Section {
 		";
 		$this->AppendUnAttr($rows);
 	}
+	
+	/*
+	 * Добавление в базу атрибута
+	 * 
+	 * */
 	
 	private function AppendUnAttr($rows, $ret = false){
 		$this->db->query_write("

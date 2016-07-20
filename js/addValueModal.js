@@ -156,9 +156,12 @@ Component.entryPoint = function(NS){
         	this.set('waiting', true);
 	        	this.get('appInstance').actValueAttribute(data, function(err, result){
 	        		this.set('waiting', false);
-		        		if(!err){
+
+		        		if(!err && result.actValueAttribute){
 		        			this.template.setHTML('modal', '');
 		        				respondCallback(true);
+		        		} else {
+		        			alert('Заполните все поля!');
 		        		}
 	        	}, this);
         },

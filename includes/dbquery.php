@@ -229,7 +229,7 @@ class UniversityQuery {
 				WHERE valueid=".bkint($d->id)."
 				LIMIT 1
 			";
-			$db->query_write($sql);
+			return $db->query_write($sql);
 		}
 	}
 	/*
