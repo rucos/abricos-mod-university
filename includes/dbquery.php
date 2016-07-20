@@ -272,6 +272,7 @@ class UniversityQuery {
 						$set = "value=0";
 							break;
 					case "semiauto":
+					case "manually":
 						$update = false;
 							break;
 				}
