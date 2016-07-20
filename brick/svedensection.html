@@ -4,14 +4,16 @@
 [p=noWrap][/p]
 
 [bkvar=section]
-	  <a href="/sveden/{v#name}" class="list-group-item">
-	    <h4 class="list-group-item-heading">{v#title}</h4>
-	  </a>
+	<li class="active sveden">	  
+		<a href="/sveden/{v#name}">
+	    	<h3>{v#title}</h3>
+	  	</a>
+	</li>
 [/bkvar]
 
 [bkvar=wrap]
-    <div class="list-group">
-        {v#result}
-    </div>
+    <ul class="nav nav-pills nav-stacked">
+	    {v#result}
+	</ul>
 [/bkvar]
 [*]-->
