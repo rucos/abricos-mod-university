@@ -17,8 +17,9 @@
         </div>
 	</div>
 	<div class="panel-body">
-		 	<div id="{i#attributeList}"></div>
-		 	<div id="{i#valueList}"></div>
+		 	<div class="panel-group" role="tablist" aria-multiselectable="true" data-click="pickAttr">
+		 		<div id="{i#attributeList}"></div>
+			</div>
 	</div>
 </div>
 
@@ -26,12 +27,21 @@
 <h3 class="panel-title">{v#sectionName}</h3>
 
 <!--{attributeList}-->
-<div class="panel panel-default attribute-list">
-  <div class="panel-heading">Атрибуты</div>
-	<ul id="{i#attributeList}" class="list-group" data-click="pickAttr">
-		{v#li}
-	</ul>
+<div class="panel panel-default">
+  <div class="panel-heading" role="tab">
+    <h4 class="panel-title">
+      <a class="collapsed" data-id="{v#id}" data-type="{v#typeattribute}" data-insert="{v#insertrow}" 
+      		role="button" data-toggle="collapse" data-parent="#accordion" href="" aria-expanded="false" aria-controls="collapseOne">
+        {v#n}. {v#nameattribute}
+      </a>
+    </h4>
+  </div>
+  <div id="{i#collapse}-{v#id}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+    <div class="panel-body">
+     	<div id="{i#valueList}-{v#id}"></div>
+    </div>
+  </div>
 </div>
 
 <!--{attributeItem}-->
-<li class="list-group-item" data-id="{v#id}" data-type="{v#typeattribute}" data-insert="{v#insertrow}">{v#n}. {v#nameattribute}</li>
+<li class="list-group-item" ></li>

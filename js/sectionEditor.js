@@ -16,11 +16,6 @@ Component.entryPoint = function(NS){
            	var tp = this.template;
            	
 		    	this.reloadList();
-		    	
-		    	this.valueList = new NS.ValueListWidget({
-	                srcNode: tp.gel('valueList'),
-	                sectionid: this.get('sectionid')
-	            });
         },
         destructor: function(){
             if (this.valueList){
@@ -38,7 +33,6 @@ Component.entryPoint = function(NS){
 	        			if(!err){
 	        				this.set('attributeList', result.attributeList);
 	        				this.set('title', result.sectionItem.get('title'))
-	        				this.valueList.set('nameSection', result.sectionItem.get('name'));
 	        					this.renderList();
 	        			}
 	        	}, this);
@@ -51,29 +45,38 @@ Component.entryPoint = function(NS){
         	
         	
         	attributeList.each(function(attr){
-        			lst += tp.replace('attributeItem', [{
+        			lst += tp.replace('attributeList', [{
         				n: ++n
         			},attr.toJSON()]);
         	});
         	
-        	tp.setHTML('attributeList', tp.replace('attributeList', {
-        		li: lst
-        	}));
+        	tp.setHTML('attributeList', lst);
         	
         	tp.setHTML('panelHead', tp.replace('panelHead', {
         		sectionName: this.get('title')
         	}))
         },
-        setActive: function(targ){
-        	targ.classList.add('active');
+        setActive: function(id){
+        	var tp = this.template,
+        		div = tp.one('attributeList.collapse-' + id).getDOMNode(),
+        		valueList = tp.one('attributeList.valueList-' + id) || "";
+        	
+        		div.classList.add('in');
+        		
+        		if(valueList){
+        	    	this.valueList = new NS.ValueListWidget({
+    	                srcNode: valueList.getDOMNode(),
+    	                sectionid: this.get('sectionid')
+    	            });
+        		}
         },
         unSetActive: function(){
         	var tp = this.template,
-        		colect = tp.gel('attributeList.attributeList').children;
+        		collect = tp.gel('attributeList').querySelectorAll('.panel-collapse');
         	
-        	for(var i = 0; i < colect.length; i++){
-        		colect[i].classList.remove('active');
-        	}
+	        	collect.forEach(function(item){
+	        		item.classList.remove('in');
+	        	});
         }
     }, {
         ATTRS: {
@@ -92,12 +95,18 @@ Component.entryPoint = function(NS){
         	pickAttr: {
         		event: function(e){
         			var targ = e.target,
+        				a = targ.getDOMNode(),
         				attrid = targ.getData('id'),
         				type = targ.getData('type'),
         				insert = targ.getData('insert');
         			
+        			if(!a.href){
+        				return;
+        			}
+        			
         			this.unSetActive();
-        			this.setActive(targ.getDOMNode());
+        			this.setActive(attrid);
+        			
         			
         			this.valueList.set('currentAttrid', attrid);
         			this.valueList.set('currentType', type);

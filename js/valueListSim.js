@@ -85,8 +85,7 @@ Component.entryPoint = function(NS){
             templateBlockName: {value: 'widget,table,row,refer'},
             valueSimpleList: {value: null},
             currentAttrid: {value: null},
-            currentType: {value: null},
-            nameSection: {value: ''}
+            currentType: {value: null}
         },
         CLICKS: {
         	"modal-show": {
