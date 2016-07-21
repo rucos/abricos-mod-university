@@ -105,10 +105,6 @@ Component.entryPoint = function(NS){
         				type = targ.getData('type'),
         				insert = targ.getData('insert');
         			
-        			if(!a.href){
-        				return;
-        			}
-        			
         			this.unSetActive();
         			this.setActive(attrid);
         			
