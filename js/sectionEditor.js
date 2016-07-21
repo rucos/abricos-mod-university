@@ -75,11 +75,12 @@ Component.entryPoint = function(NS){
         },
         unSetActive: function(){
         	var tp = this.template,
-        		collect = tp.gel('attributeList').querySelectorAll('.panel-collapse');
+        		collect = tp.gel('attributeList').querySelectorAll('.panel-collapse'),
+        		len = collect.length;
         	
-	        	collect.forEach(function(item){
-	        		item.classList.remove('in');
-	        	});
+        		for(var i = 0; i < len; i++){
+        			collect[i].classList.remove('in');
+        		}
         }
     }, {
         ATTRS: {
