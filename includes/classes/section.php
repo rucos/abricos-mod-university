@@ -222,12 +222,12 @@ class Section {
 		$complexid = $this->AppendUnAttr($rows, true);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Наименования структурных подразделений (органов управления)', 'Name', '', '', 3, 1),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о руководителях структурных подразделений', 'Fio', 'employees', 'fio,post,telephone,email', 4, 1),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о местах нахождения структурных подразделений', 'AddressStr', '', '', 3, 1),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация об адресах официальных сайтов в сети Интернет структурных подразделений', 'Site', '', '', 3, 1),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация об адресах электронной почты структурных подразделений', 'E-mail', '', '', 3, 1),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Сведения о наличии положений о структурных подразделениях (об органах управления) с приложением копий указанных положений', 'DivisionClause_DocLink', '', '', 3, 1)
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Наименования структурных подразделений', 'Name', '', '', 3, 1),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Руководитель структурного подразделения', 'Fio', 'employees', 'fio,post,telephone,email', 4, 1),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Местонахождение структурного подразделения', 'AddressStr', '', '', 3, 1),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Адрес официального сайта', 'Site', '', '', 3, 1),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Адрес электронной почты', 'E-mail', '', '', 3, 1),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Сведения о наличии положений', 'DivisionClause_DocLink', '', '', 3, 1)
 		";
 		$this->AppendUnAttr($rows);
 	}
@@ -298,11 +298,11 @@ class Section {
 		$rows = "
 			(".$idSection.", ".$complexid.", 0, 'composite', 'Образовательная программа', 'EduCode', 'program', 'code,name', 1, 1),
 			(".$idSection.", ".$complexid.", 0, 'composite', 'Описание образовательной программы', 'OOP_main', 'educode', '', 3, 1),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация об учебном плане', 'education_plan', 'educode', '', 3, 1),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация об аннотации к рабочим программам дисциплин (по каждой дисциплине в составе образовательной программы)', 'education_annotation', 'educode', '', 3, 2),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о календарном учебном графике', 'education_shedule', 'educode', '', 3, 1),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о методических и об иных документах, разработанных образовательной организацией для обеспечения образовательного процесса', 'methodology', 'educode', '', 3, 2),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Информация о практиках, предусмотренных соответствующей образовательной программой', 'EduPr', 'educode', '', 3, 2)
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Учебный план', 'education_plan', 'educode', '', 3, 1),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Аннотации к рабочим программам дисциплин', 'education_annotation', 'educode', '', 3, 2),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Календарный учебный график', 'education_shedule', 'educode', '', 3, 1),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Методические и иные документы', 'methodology', 'educode', '', 3, 2),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Практики', 'EduPr', 'educode', '', 3, 2)
 		";
 		
 		$this->AppendUnAttr($rows);
@@ -397,10 +397,10 @@ class Section {
 		$complexid = $this->AppendUnAttr($rows, true);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Ф.И.О. руководителя образовательной организации', 'fio', 'employees', 'fio', 1, 1),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Должность руководителя образовательной организации', 'Post', 'employees', 'post', 1, 1),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Контактные телефоны руководителя образовательной организации', 'Telephone', 'employees', 'telephone', 1, 1),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Адреса электронной почты руководителя образовательной организации', 'e-mail', 'employees', 'email', 1, 1)
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Фамилия, Имя, Отчество', 'fio', 'employees', 'fio', 1, 1),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Должность', 'Post', 'employees', 'post', 1, 1),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Контактный телефоный', 'Telephone', 'employees', 'telephone', 1, 1),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Адрес электронной почты', 'e-mail', 'employees', 'email', 1, 1)
 		";
 		
 		$this->AppendUnAttr($rows);
@@ -412,15 +412,15 @@ class Section {
 		$complexid = $this->AppendUnAttr($rows, true);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Ф.И.О. педагогического работника образовательной организации', 'fio', '', '', 3, 1),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Занимаемая должность (должности) педагогического работника', 'Post', '', '', 3, 1),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Преподаваемые педагогическим работником дисциплины', 'TeachingDiscipline', '', '', 3, 1),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Ученая степень педагогического работника', 'Degree', '', '', 3, 1),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Ученое звание педагогического работника', 'AcademStat', '', '', 3, 1),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Наименование направления подготовки и (или) специальности педагогического работника', 'EmployeeQualification', '', '', 3, 1),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Данные о повышении квалификации и (или) профессиональной переподготовке педагогического работника', 'ProfDevelopment', '', '', 3, 1),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Общий стаж работы педагогического работника', 'GenExperience', '', '', 3, 1),
-			(".$idSection.", ".$complexid.", 0, 'composite', 'Стаж работы педагогического работника по специальности', 'SpecExperience', '', '', 3, 1)
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Фамилия, Имя, Отчество педагогического работника', 'fio', '', '', 3, 1),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Занимаемая должность (должности)', 'Post', '', '', 3, 1),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Преподаваемые дисциплины', 'TeachingDiscipline', '', '', 3, 1),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Ученая степень', 'Degree', '', '', 3, 1),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Ученое звание', 'AcademStat', '', '', 3, 1),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Наименование направления подготовки и (или) специальности', 'EmployeeQualification', '', '', 3, 1),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Данные о повышении квалификации и (или) профессиональной переподготовке', 'ProfDevelopment', '', '', 3, 1),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Общий стаж работы', 'GenExperience', '', '', 3, 1),
+			(".$idSection.", ".$complexid.", 0, 'composite', 'Стаж работы по специальности', 'SpecExperience', '', '', 3, 1)
 		";
 		
 		$this->AppendUnAttr($rows);
