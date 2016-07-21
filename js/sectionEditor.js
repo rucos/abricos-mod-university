@@ -32,7 +32,9 @@ Component.entryPoint = function(NS){
 	        		this.set('waiting', false);
 	        			if(!err){
 	        				this.set('attributeList', result.attributeList);
+	        				
 	        				this.set('title', result.sectionItem.get('title'))
+	        				this.set('name', result.sectionItem.get('name'))
 	        					this.renderList();
 	        			}
 	        	}, this);
@@ -53,7 +55,8 @@ Component.entryPoint = function(NS){
         	tp.setHTML('attributeList', lst);
         	
         	tp.setHTML('panelHead', tp.replace('panelHead', {
-        		sectionName: this.get('title')
+        		title: this.get('title'),
+        		name: this.get('name')
         	}))
         },
         setActive: function(id){
@@ -84,7 +87,8 @@ Component.entryPoint = function(NS){
             templateBlockName: {value: 'widget,panelHead,attributeList,attributeItem'},
             sectionid: {value: 0},
             attributeList: {value: null},
-            title: {value: ''}
+            title: {value: ''},
+            name: {value: ''}
         },
         CLICKS: {
         	close: {
