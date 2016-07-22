@@ -41,11 +41,12 @@ Component.entryPoint = function(NS){
         	}
         },
         unSetSuccess: function(tr){
-        	var collect = tr.parentNode.childNodes;
+        	var collect = tr.parentNode.childNodes,
+        		len = collect.length;
         	
-        	collect.forEach(function(item){
-        		item.classList.remove('success');
-        	});
+        		for(var i = 0; i < len; i++){
+        			collect[i].classList.remove('success');
+        		}
         },
         selectValueAct: function(callback){
         	var data = {
