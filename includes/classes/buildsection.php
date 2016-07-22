@@ -238,7 +238,7 @@ class BuildSection {
 		} else {
 			return $this->ReplaceVar('simpleValue', array(
 				"applyattribute" => isset($d['applyattribute']) ? "itemprop=".$d['applyattribute'] : "",
-				"value" => $value
+				"value" => $value != "0" ? $value : ""
 			));
 		}
 	}
