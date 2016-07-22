@@ -1,6 +1,0 @@
-#complexValue .show-td-buttons .btn-group {
-  display: none;
-}
-#complexValue .show-td-buttons:HOVER .btn-group {
-  display: inline-block;
-}

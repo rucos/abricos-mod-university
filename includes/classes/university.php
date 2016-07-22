@@ -291,9 +291,10 @@ class University extends AbricosApplication {
 		
     	if($res){
     		$utmf = Abricos::TextParser(true);
+    		$utm = Abricos::TextParser();
+    		
     		$d->id = intval($d->id);
     		$d->atrid = intval($d->atrid);
-    		$d->value = $utmf->Parser($d->value);
     		$d->nameurl = $utmf->Parser($d->nameurl);
     		$d->view = $utmf->Parser($d->view);
     		$d->namedoc = "";
@@ -301,7 +302,15 @@ class University extends AbricosApplication {
     		$d->file = "";
     		$d->numrow = intval($d->numrow);
     		$d->mainid = intval($d->mainid);
-    		 
+    		
+    		$attrIns = $this->AttributeItemInsertRow($d->atrid);
+    		
+    		if($attrIns == 'auto' || $d->view == "url"){
+    			$d->value = $utmf->Parser($d->value);
+    		} else {
+    			$d->value = $utm->Parser($d->value);
+    		}
+    		
     		$res = $this->ActValueAttribute($d);
     	}
     	
@@ -309,8 +318,10 @@ class University extends AbricosApplication {
     }
     
     private function CheckValueAttribute($value, $nameurl, $view){
-    	$pattern = '/[a-zА-Я0-9]/i';
+    	$utmf = Abricos::TextParser(true);
+    	$value = $utmf->Parser($value);
     	
+    	$pattern = '/[a-zА-Я0-9]/iu';
     	$check = preg_match($pattern, $value);
     	
     	if($view == 'url' && $check === 1){

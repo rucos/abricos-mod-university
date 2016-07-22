@@ -751,7 +751,7 @@ class UniversityQuery {
 		$respValue = "";
 			if($result){
 				foreach($result as $value){
-					$respValue .= $value." ";
+					$respValue .= $value."<br>";
 				}
 			}
 		return $respValue;

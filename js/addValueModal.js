@@ -16,6 +16,11 @@ Component.entryPoint = function(NS){
         onInitAppWidget: function(err, appInstance){
         	
         },
+        destructor: function(){
+            if (this._Editor){
+                this._Editor.destroy();
+            }
+        },
         showModal: function(valueid, atrid, view, numrow, mainid){
         	this.set('view', view);
         	
@@ -34,7 +39,8 @@ Component.entryPoint = function(NS){
         fillForm: function(isEdit, click){
         	var tp = this.template,
         		replace = this.replaceForm(),
-        		arr = [];
+        		arr = [],
+        		view = this.get('view');
         	
         	if(isEdit){
         		arr[0] = "class='hide'";
@@ -45,9 +51,18 @@ Component.entryPoint = function(NS){
         		tp.setHTML('modal', tp.replace('modalFormAdd', this.constrReplace.apply(null, arr)));
         	}
 	        	tp.setHTML('modalFormAdd.form', replace);
+	        	
+	        	if(view == 'value'){
+	                this._Editor = new SYS.Editor({
+	                    appInstance: this.get('appInstance'),
+	                    content: this.get('valueItem').value,
+	                    srcNode: tp.gel('value.editor')
+	                });
+	        	}
         },
         replaceForm: function(){
-        	var valueItem = this.get('valueItem'),
+        	var tp = this.template,
+        		valueItem = this.get('valueItem'),
         		view = this.get('view'),
         		date = valueItem.datedoc;
         	
@@ -59,8 +74,7 @@ Component.entryPoint = function(NS){
            		valueItem.disabled = '';
         		valueItem.active = '';
         	}
-        	
-        	return this.template.replace(view, valueItem);
+        	return tp.replace(view, valueItem);
         },
         actValue: function(respondCallback){
         	var valueItem = this.get('valueItem'),
@@ -89,7 +103,7 @@ Component.entryPoint = function(NS){
             		valueItem.value = tp.gel('url.value').value;
         				return this.reqActValue(valueItem, respondCallback);
         		case 'value':
-            		valueItem.value = tp.gel('value.value').value;
+            		valueItem.value = this._Editor.get('content');
             			return this.reqActValue(valueItem, respondCallback);
         	}
         },
