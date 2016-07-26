@@ -27,7 +27,8 @@ class UniversityQuery {
 			SELECT
 					s.sectionid as id,
 					m.name,
-					m.title
+					m.title,
+					m.parentmenuid
 			FROM ".$db->prefix."sys_menu m
 			INNER JOIN ".$db->prefix."un_section s ON m.menuid=s.menuid
 			WHERE s.sectionid=".bkint($sectionid)."

@@ -33,8 +33,9 @@ Component.entryPoint = function(NS){
 	        			if(!err){
 	        				this.set('attributeList', result.attributeList);
 	        				
-	        				this.set('title', result.sectionItem.get('title'))
-	        				this.set('name', result.sectionItem.get('name'))
+	        				this.set('title', result.sectionItem.get('title'));
+	        				this.set('name', result.sectionItem.get('name'));
+	        				this.set('parentmenuid', result.sectionItem.get('parentmenuid'));
 	        					this.renderList();
 	        			}
 	        	}, this);
@@ -43,7 +44,8 @@ Component.entryPoint = function(NS){
         	var attributeList = this.get('attributeList'),
         		tp = this.template,
         		lst = "",
-        		n = 0;
+        		n = 0,
+        		nameHref = this.get('parentmenuid') > 0 ? "sveden/": "";
         	
         	
         	attributeList.each(function(attr){
@@ -54,9 +56,10 @@ Component.entryPoint = function(NS){
         	
         	tp.setHTML('attributeList', lst);
         	
+        	
         	tp.setHTML('panelHead', tp.replace('panelHead', {
         		title: this.get('title'),
-        		name: this.get('name')
+        		name: nameHref + this.get('name')
         	}))
         },
         setActive: function(id){
@@ -89,7 +92,8 @@ Component.entryPoint = function(NS){
             sectionid: {value: 0},
             attributeList: {value: null},
             title: {value: ''},
-            name: {value: ''}
+            name: {value: ''},
+            parentmenuid: {value: 0}
         },
         CLICKS: {
         	close: {

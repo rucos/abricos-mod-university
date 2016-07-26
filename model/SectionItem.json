@@ -13,6 +13,10 @@
     "title": {
       "type": "string",
       "json": "ttl"
+    },
+    "parentmenuid": {
+      "type": "int",
+      "json": "pid"
     }
   }
 }
