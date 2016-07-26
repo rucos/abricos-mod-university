@@ -81,7 +81,7 @@ class University extends AbricosApplication {
     }
     
     public function SectionList($isBrick = false){
-    	$rows = UniversityQuery::SectionList($this->db);
+    	$rows = UniversityQuery::SectionList($this->db, $isBrick);
     	
     	if($isBrick){
     		return $rows;

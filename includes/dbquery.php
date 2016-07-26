@@ -9,14 +9,19 @@
 
 class UniversityQuery {
 	
-	public static function SectionList(Ab_Database $db){
+	public static function SectionList(Ab_Database $db, $isBrick){
+		$condition = "s.menuid = m.menuid";
+		
+		if($isBrick){
+			$condition .= " AND m.parentmenuid<>0";
+		}
 		$sql = "
 			SELECT
 					s.sectionid as id,
 					m.name,
 					m.title
 			FROM ".$db->prefix."un_section s
-			INNER JOIN ".$db->prefix."sys_menu m ON s.menuid = m.menuid
+			INNER JOIN ".$db->prefix."sys_menu m ON ".$condition."
 		";
 		return $db->query_read($sql);
 	}
