@@ -33,6 +33,14 @@ class UniversityModule extends Ab_Module {
     
     public function GetContentName(){
     	$dir = Abricos::$adress->dir;
+    	
+    	if(isset($dir[0])){
+    		switch ($dir[0]){
+    			case 'abitur':
+    				return $dir[0];
+    		}
+    	}
+    	
     	if (isset($dir[1])){
     		switch ($dir[1]){
     			case 'upload':

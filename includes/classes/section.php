@@ -19,7 +19,7 @@ class Section {
 	 *
  	 * @var object
 	 */
-	private $menu = null;
+	private $_menu = null;
 	
 	/**
 	 * Директория сайта
@@ -35,7 +35,7 @@ class Section {
 	 *
 	 * @var string
 	 */
-	private $db = null;
+	private $_db = null;
 	
 	/**
 	 * Префикс базы
@@ -44,43 +44,50 @@ class Section {
 	 *
 	 * @var string
 	 */
-	private $pfx = null;
+	private $_pfx = null;
 	
 	/**
 	 * id основного раздела
 	 *
 	 * @var int
 	 */
-	private $sectionid = null; 
+	private $_sectionid = null; 
 	
 	public function __construct(){
 		$this->docroot = $_SERVER['DOCUMENT_ROOT'];
 		
-		$this->menu = new stdClass();
-		$this->menu->common = 'Основные сведения';
-		$this->menu->struct = 'Структура и органы управления';
-		$this->menu->document = 'Документы';
-		$this->menu->education = 'Образование';
-		$this->menu->edustandarts = 'Образовательные стандарты';
-		$this->menu->employees = 'Руководство. Педагогический (научно-педагогический) состав';
-		$this->menu->objects = 'Материально-техническое обеспечение и оснащенность образовательного процесса';
-		$this->menu->grants = 'Стипендии и иные виды материальной поддержки';
-		$this->menu->paid_edu = 'Платные образовательне услуги';
-		$this->menu->budget = 'Финансово-хозяйственная деятельность';
-		$this->menu->vacant = 'Вакантные места для приема(перевода)';
+		$this->_menu = new stdClass();
+		$this->_menu->common = 'Основные сведения';
+		$this->_menu->struct = 'Структура и органы управления';
+		$this->_menu->document = 'Документы';
+		$this->_menu->education = 'Образование';
+		$this->_menu->edustandarts = 'Образовательные стандарты';
+		$this->_menu->employees = 'Руководство. Педагогический (научно-педагогический) состав';
+		$this->_menu->objects = 'Материально-техническое обеспечение и оснащенность образовательного процесса';
+		$this->_menu->grants = 'Стипендии и иные виды материальной поддержки';
+		$this->_menu->paid_edu = 'Платные образовательне услуги';
+		$this->_menu->budget = 'Финансово-хозяйственная деятельность';
+		$this->_menu->vacant = 'Вакантные места для приема(перевода)';
 
-		$this->db = Abricos::$db;
-		$this->pfx = Abricos::$db->prefix;
+		$this->_db = Abricos::$db;
+		$this->_pfx = Abricos::$db->prefix;
 		
 		$sveden = 'Сведения об образовательной организации';
-		$this->sectionid = $this->AppendSysMenu('sveden', $sveden);
+		$this->_sectionid = $this->AppendSysMenu('sveden', $sveden);
 		$contentId = $this->AppendContent($sveden, true);
 		
-		$this->AppendSysPage($this->sectionid, $contentId, true);
+		$this->AppendSysPage($this->_sectionid, $contentId, true);
 		$this->FillSection();
+		
+		$abitur = 'Абитуриенту';
+		$abiturid = $this->AppendSysMenu('abitur', $abitur);
+		$contentId = $this->AppendContent($abitur, false);
+		
+		$this->AppendSysPage($abiturid, $contentId, false);
+		$this->FillAbitur($abiturid);
 	}
 	
-	/*
+	/**
 	 * 
 	 * Добавление директории data-edu
 	 * 
@@ -89,20 +96,20 @@ class Section {
 		mkdir($this->docroot."/data-edu", 0700);
 		
 		$i = 0;
-		foreach($this->menu as $menu => $name){
+		foreach($this->_menu as $menu => $name){
 			mkdir($this->docroot."/data-edu/".$menu, 0700);
-			$this->AppendSectionMenu($this->sectionid, $menu, $name, ++$i);
+			$this->AppendSectionMenu($this->_sectionid, $menu, $name, ++$i);
 		}
 	}
 	
 	private function AppendSysMenu($menu, $name, $parentmenuid = 0, $i = 0){
 
-		$this->db->query_write("
-			INSERT INTO ".$this->pfx."sys_menu
+		$this->_db->query_write("
+			INSERT INTO ".$this->_pfx."sys_menu
 			(parentmenuid, menutype, name, title, descript, link, language, menuorder, level, off, dateline, deldate) VALUES
 			(".$parentmenuid.", 0, '".$menu."', '".$name."', '', '', '".Abricos::$LNG."', ".$i.", 0, 0, 0, 0)
 		");
-		return $this->db->insert_id();
+		return $this->_db->insert_id();
 	}
 
 	private function AppendContent($head, $isSveden = false){
@@ -112,7 +119,7 @@ class Section {
 			$mods = '[mod]university:edusection[/mod]';
 		}
 		
-		return Ab_CoreQuery::ContentAppend($this->db, "<h2>".$head."</h2>".$mods, 'sitemap');
+		return Ab_CoreQuery::ContentAppend($this->_db, "<h2>".$head."</h2>".$mods, 'sitemap');
 	}
 
 	private function AppendSysPage($sectionid, $contentId, $isSveden = false){
@@ -122,10 +129,49 @@ class Section {
 			$mods = '{"university":{"edusection":""}}';
 		}
 		
-		$this->db->query_write("
-			INSERT INTO ".$this->pfx."sys_page (menuid, contentid, pagename, title, language, metakeys, metadesc, usecomment, dateline, deldate, mods, template) VALUES
+		$this->_db->query_write("
+			INSERT INTO ".$this->_pfx."sys_page (menuid, contentid, pagename, title, language, metakeys, metadesc, usecomment, dateline, deldate, mods, template) VALUES
 			(".$sectionid.", ".$contentId.", 'index', '', '".Abricos::$LNG."', '', '', 0, ".TIMENOW.", 0, '".$mods."', 'edu:sveden')
 		");
+	}
+	
+	/**
+	 *
+	 * Добавление спец раздела "Абитуренту"
+	 *
+	 * */
+	private function FillAbitur($abiturid){
+		mkdir($this->docroot."/data-edu/abitur", 0700);
+		
+		$idSection = Section::AppendUniverSection($abiturid);
+		
+		$rows = "
+			(".$idSection.", 0, 0, 'simple', 'Правила приема', 'Priem_DocLink', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Перечень специальностей и направлений подготовки, по которым организация объявляет прием', 'Priem_Speс', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Перечень вступительных испытаний', 'Priem_Exam', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Информация о возможности сдачи вступительных испытаний, на языке республики Российской Федерации', 'Priem_Lang', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Информация о предоставляемых поступающим особых правах и преимуществах', 'Priem_Prava', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Информация о порядке учета индивидуальных достижений поступающих', 'Priem_Individ', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Информация о возможности подачи документов для поступления на обучение в электронной форме', 'Priem_Individ', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Информация об особенностях проведения вступительных испытаний для лиц с ограниченными возможностями здоровья, инвалидов', 'Priem_OVZ', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Информация о проведении вступительных испытаний с использованием дистанционных технологий', 'Priem_Distan', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Правила подачи и рассмотрения апелляций по результатам вступительных испытаний, проводимых организацией самостоятельно', 'Priem_Appeal', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Информация о необходимости (отсутствии необходимости) прохождения поступающими обязательного предварительного медицинского осмотра (обследования)', 'Priem_Medic', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Программы вступительных испытаний, проводимых организацией самостоятельно', 'Priem_Prog', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Количество мест для приема на обучение по каждой совокупности условий поступления', 'Priem_Kol_Mest', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Образец договора об оказании платных образовательных услуг', 'PaidEdu_DocLink', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Информация о местах приема документов, необходимых для поступления', 'Priem_Doc', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Информация о почтовых адресах для направления документов, необходимых для поступления', 'Priem_Post', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Информация об электронных адресах для направления документов, необходимых для поступления в электронной форме', 'Priem_Email', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Информация о наличии общежития(ий)', 'HostelInfo', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Информация о сроках проведения приема', 'Priem_Time', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Информация о предоставляемых поступающим особых правах и преимуществах, обусловленных уровнями олимпиад школьников', 'Priem_Olimp', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Количество мест для целевого приема по каждой совокупности условий поступления', 'Priem_Kol_target', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Информация о количестве мест в общежитиях для иногородних поступающих', 'HostelNum', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Расписание вступительных испытаний', 'Priem_Schedule', '', '', 3, 1),
+			(".$idSection.", 0, 0, 'simple', 'Списки поступающих', 'Priem_Spicok_post', '', '', 3, 1)
+		";
+		$this->AppendUnAttr($rows);
 	}
 
 	private function AppendSectionMenu($parentmenuid, $menu, $name, $i){
@@ -179,11 +225,11 @@ class Section {
 	}
 
 	private function AppendUniverSection($menuid){
-		$this->db->query_write("
-			INSERT INTO ".$this->pfx."un_section (menuid)
+		$this->_db->query_write("
+			INSERT INTO ".$this->_pfx."un_section (menuid)
 			VALUES (".$menuid.")
 		");
-		return $this->db->insert_id();
+		return $this->_db->insert_id();
 	}
 	
 	private function FillCommonSection($idSection){
@@ -625,19 +671,19 @@ class Section {
 	 * */
 	
 	private function AppendUnAttr($rows, $ret = false){
-		$this->db->query_write("
-			INSERT INTO ".$this->pfx."un_attribute(sectionid, complexid, compositeid, typeattribute, nameattribute, applyattribute, tablename, fieldname, insertrow, display)
+		$this->_db->query_write("
+			INSERT INTO ".$this->_pfx."un_attribute(sectionid, complexid, compositeid, typeattribute, nameattribute, applyattribute, tablename, fieldname, insertrow, display)
 			VALUES ".$rows."
 		");
 		
 		if($ret){
-			return $this->db->insert_id();
+			return $this->_db->insert_id();
 		}
 	}
 	
 	private function UpdateUnAttr($idAttr){
-		$this->db->query_write("
-			UPDATE ".$this->pfx."un_attribute
+		$this->_db->query_write("
+			UPDATE ".$this->_pfx."un_attribute
 			SET 
 				compositeid=".$idAttr."
 			WHERE attributeid=".$idAttr."

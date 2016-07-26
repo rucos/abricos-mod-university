@@ -258,7 +258,7 @@ class BuildSection {
 	public function Build(){
 		$listAttribute = $this->_manager->BrickSectionListAttribute($this->_nameSection);
 		$result = "";
-
+		
 		foreach ($listAttribute as $id => $value){
 			if(is_object($value)){
 				$result .= $this->SimpleAttributeListParse($id, $value->name, $value->apply);
