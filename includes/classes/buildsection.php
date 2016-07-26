@@ -107,7 +107,7 @@ class BuildSection {
 	private function ComplexValueList($id){
 		$insRow = $this->_manager->AttributeItemInsertRow($id);
 	
-		$valueList = $this->_manager->ValueComplexList($id);
+		$valueList = $this->_manager->ValueComplexList($id, true);
 		$tr = "";
 		
 		if($valueList){

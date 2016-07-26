@@ -300,6 +300,7 @@ class UniversityQuery {
 	 * 
 	 * 2) Определение типа атрибута ($option='type')
 	 * 
+	 * 3) Определение варианта отображения значения
 	 *  
 	 * */
 	public static function AttributeItem(Ab_Database $db, $attributeid, $option){
@@ -311,6 +312,8 @@ class UniversityQuery {
 			case 'type':
 				$select = "typeattribute as type";
 					break;
+			case 'display':
+				$select = "display as disp";
 		}
 		
 		$sql = "
@@ -815,6 +818,33 @@ class UniversityQuery {
 			WHERE a.sectionid=s.sectionid
 		";
 		return $db->query_read($sql);
+	}
+	
+	/**
+	 * Вывод строки ИТОГО в таблице
+	 * 
+	 * $arrAttrid - список id текущего complex
+	 * 
+	 * */
+	public static function CalcResultRow(Ab_Database $db, $arrAttrid){
+		foreach ($arrAttrid as $id => $listValue){
+			$sql = "
+				SELECT
+						SUM(v.value) as value,
+						v.view
+				FROM ".$db->prefix."un_value v
+				INNER JOIN ".$db->prefix."un_attribute a ON a.attributeid=v.attributeid
+				WHERE a.attributeid=".bkint($id)." AND a.display='result' AND v.remove=0
+			";
+			$sum = $db->query_first($sql);
+			
+			if(!isset($sum['value'])){
+				$sum['value'] = "ИТОГО:";
+				$sum['view'] = "value";
+			} 
+			$arrAttrid[$id][] = $sum;
+		}
+		return $arrAttrid;
 	}
 }
 

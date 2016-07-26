@@ -204,7 +204,7 @@ class University extends AbricosApplication {
     	return $this->ResultToJSON('valueComplexList', $res);
     }
     
-    public function ValueComplexList($attrid){
+    public function ValueComplexList($attrid, $build = false){
     	$attrid = intval($attrid);
     	
     	
@@ -259,6 +259,15 @@ class University extends AbricosApplication {
     		}
 			
 			array_push($dataValue[$num][$atrid], $val);
+    	}
+    	
+    	$display = UniversityQuery::AttributeItem($this->db, $attrid, 'display');
+    	
+    	
+    	if($build && $display['disp'] == 'result'){
+    		$indResult = $maxNumRow['max'];
+    		
+    		$dataValue[$indResult + 1] = UniversityQuery::CalcResultRow($this->db, $arrAttrid);
     	}
     			return $dataValue;
     }

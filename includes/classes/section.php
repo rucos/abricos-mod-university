@@ -593,7 +593,7 @@ class Section {
 	
 	private function FillVacantSection($idSection){
 		$rows = "
-			(".$idSection.", 0, 0, 'complex', 'Информация о количестве вакантных мест для приема (перевода) по каждой образовательной программе, специальности, направлению подготовки', 'http://obrnadzor.gov.ru/microformats/Vacant', '', '', 1, 1)
+			(".$idSection.", 0, 0, 'complex', 'Информация о количестве вакантных мест для приема (перевода) по каждой образовательной программе, специальности, направлению подготовки', 'http://obrnadzor.gov.ru/microformats/Vacant', '', '', 1, 3)
 		";
 		
 		$complexid = $this->AppendUnAttr($rows, true);
@@ -611,10 +611,10 @@ class Section {
 		$this->UpdateUnAttr($compisteid);
 		
 		$rows = "
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет бюджетных ассигнований федерального бюджета', 'NumberBFVacant', 'vakant', '', 1, 1),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет бюджетных ассигнований бюджетов субъекта Российской Федерации', 'NumberBRVacant', 'vakant', '', 1, 1),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет бюджетных ассигнований местных бюджетов', 'NumberBMVacant', 'vakant', '', 1, 1),
-			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет средств физических и (или) юридических лиц', 'NumberPVacant', 'vakant', '', 1, 1)
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет бюджетных ассигнований федерального бюджета', 'NumberBFVacant', 'vakant', '', 1, 3),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет бюджетных ассигнований бюджетов субъекта Российской Федерации', 'NumberBRVacant', 'vakant', '', 1, 3),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет бюджетных ассигнований местных бюджетов', 'NumberBMVacant', 'vakant', '', 1, 3),
+			(".$idSection.", ".$complexid.", ".$compisteid.", 'subcomposite', 'За счет средств физических и (или) юридических лиц', 'NumberPVacant', 'vakant', '', 1, 3)
 		";
 		$this->AppendUnAttr($rows);
 	}
