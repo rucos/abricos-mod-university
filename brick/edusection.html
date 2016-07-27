@@ -13,13 +13,15 @@
 [/bkvar]
 
 [bkvar=simpleValue]
-	<p {v#applyattribute}>
+	<span {v#applyattribute}>
 		{v#value}
-	</p>
+	</span>
 [/bkvar]
 
 [bkvar=urlValue]
-	<a href="{v#url}" target="_blank" rel="noopener">{v#nameUrl}</a>
+	<p>
+		<a href="{v#url}" target="_blank" rel="noopener">{v#nameUrl}</a>
+	</p>
 [/bkvar]
 
 [bkvar=complex]
