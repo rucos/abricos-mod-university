@@ -44,14 +44,15 @@ Component.entryPoint = function(NS){
     					var id = attribute.get('id'),
     						cid = attribute.get('compositeid'),
     						name = attribute.get('nameattribute'),
-    						type = attribute.get('typeattribute');
-    						
+    						type = attribute.get('typeattribute'),
+    						locate = attribute.get('locate');
+    					
     						switch(type){
     							case 'composite':
-    								compositObj[id] = [name, []];
+    								compositObj[id] = [name, [], locate];
     									break;
     							case 'subcomposite':
-    								compositObj[cid][1].push([id, name]);
+    								compositObj[cid][1].push([id, name, locate]);
     								this.set('rowSpan', 2);
     									break;
     						}
@@ -78,13 +79,13 @@ Component.entryPoint = function(NS){
         		
         		if(len > 0){
         			for(var j = 0; j < len; j++){
-            			tdSubComp += this.tdReplace(currArr[j][1], '', currArr[j][0]);
+            			tdSubComp += this.tdReplace(currArr[j][1], currArr[j][2], '', currArr[j][0]);
         			}
         			col = 'colspan=' + len;
         			
-        			tdComp += this.tdReplace(compositeObj[i][0], col);
+        			tdComp += this.tdReplace(compositeObj[i][0], compositeObj[i][2], col);
         		} else {
-        			tdComp += this.tdReplace(compositeObj[i][0], col, i);
+        			tdComp += this.tdReplace(compositeObj[i][0], compositeObj[i][2], col, i);
         		}
         	}
         	
@@ -93,10 +94,11 @@ Component.entryPoint = function(NS){
         	}))
         		this.reloadListValue();
         },
-        tdReplace: function(value, span, id){
+        tdReplace: function(value, locate, span, id){
         	var insert = this.get('insert');
         	
 	        	return this.template.replace('td', {
+	        		danger: locate == 0 ? "class='danger'" : "",
 	        		span: span,
 	        		value: insert != 'manually' || !id ? value : this.referAddReplace(value, id),
 	        		add: ''
@@ -146,7 +148,7 @@ Component.entryPoint = function(NS){
     			td,
     			isSpan = "",
     			rowspan = "";
-    		
+        	
         	for(var i in valueComplexList){
         		rowspan = "rowspan=" + this.determineSpan(valueComplexList[i]);
         		
@@ -158,6 +160,7 @@ Component.entryPoint = function(NS){
 	            			curArray = valueComplexList[i][j];
 		            			if(curArray[z]){
 		            				td += tp.replace('td', {
+		            					danger: curArray[z].locate == 0 ? "class='danger'" : "",
 		            					span: isSpan ? rowspan : "",
 		            					value: curArray[z].value,
 		            					add: this.parseButtonGroup(curArray[z])
@@ -211,15 +214,18 @@ Component.entryPoint = function(NS){
         		curObj, 
         		curRelationid = 0,
         		curLen = 0,
-        		curDisp;
+        		curDisp,
+        		locate;
         	
         	for(var i in objValue){
         		curObj = objValue[i];
         		isRelation = false;
         		curDisp = "";
-        	
+        		locate = 1;
+        		
         		for(var j = 0, item = ""; j < curObj.length; j++){
         			curDisp = curObj[j].display;
+        			locate = curObj[j].locate;
         			
         			if(curObj[j].relationid > 0){
         				curRelationid = curObj[j].relationid;
@@ -233,6 +239,7 @@ Component.entryPoint = function(NS){
         		}
         		
      			td += tp.replace('td', {
+     				danger: locate == 0 ? "class='danger'" : "",
     				span: "",
     				value: curDisp != 'hideList' ? item : this.parseHideList(item, i, numrow),
     				add: isRelation ? "" : this.referAddReplace("", i, numrow, curRelationid)

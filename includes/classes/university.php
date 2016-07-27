@@ -208,7 +208,7 @@ class University extends AbricosApplication {
     	$attrid = intval($attrid);
     	
     	
-    	$attrListid = UniversityQuery::ComplexAttrListAll($this->db, $attrid);
+    	$attrListid = UniversityQuery::ComplexAttrListAll($this->db, $attrid, $build);
     		 
     	$arrAttrid = array();
     	$strid = "";

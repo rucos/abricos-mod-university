@@ -650,12 +650,17 @@ class UniversityQuery {
 		return $db->query_write($sql);
 	}
 	
-	public static function ComplexAttrListAll(Ab_Database $db, $attrid){
+	public static function ComplexAttrListAll(Ab_Database $db, $attrid, $build){
+		$where = "complexid=".bkint($attrid)." AND (compositeid=0 OR typeattribute=4)";
+		
+		if($build){
+			$where .= " AND locate=1 AND remove=0";
+		}
 		$sql = "
 				SELECT
 					attributeid as id
 				FROM ".$db->prefix."un_attribute
-				WHERE complexid=".bkint($attrid)." AND (compositeid=0 OR typeattribute=4)
+				WHERE ".$where."
 		";
 		return $db->query_read($sql);
 	}
@@ -724,6 +729,7 @@ class UniversityQuery {
 					a.display,
 					a.insertRow,
 					a.applyattribute,
+					a.locate,
 					v.relationid,
 					v.mainid,
 					v.view,
@@ -821,7 +827,7 @@ class UniversityQuery {
 			FROM ".$db->prefix."un_attribute a
 			INNER JOIN ".$db->prefix."un_section s
 			INNER JOIN ".$db->prefix."sys_menu m ON m.menuid=s.menuid AND m.name='".$name."'
-			WHERE a.sectionid=s.sectionid
+			WHERE a.sectionid=s.sectionid AND a.locate=1 AND a.remove=0
 		";
 		return $db->query_read($sql);
 	}
