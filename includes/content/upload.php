@@ -7,20 +7,72 @@
 
 class UploadFile{
 	
-	private $resp = '200';
-	private $modManager = null;
+	/**
+	 * Ответ сервера
+	 *
+	 *
+ 	 * @var string
+ 	 * 
+ 	 * @return
+ 	 * $1: 'Размер файла превышает допустимое значение UPLOAD_MAX_FILE_SIZE'
+	 * $2: 'Размер файла превышает допустимое значение MAX_FILE_SIZE'
+	 * $3: 'Не удалось загрузить часть файла'
+	 * $4: 'Файл не был загружен'
+	 * $6: 'Отсутствует временная папка'
+	 * $7: 'Не удалось записать файл на диск'
+	 * $8: 'PHP-расширение остановило загрузку файла'
+	 * $9: 'Не верный тип файла'
+	 * $10: 'Укажите документ для загрузки'
+	 * $11: 'Укажите название ссылки на документ'
+	 * $12: 'Укажите название документа'
+	 * $13: 'Укажите дату утверждения'
+	 * $14: 'Не верное название документа! Пример: Pril1_akkred_2014'
+	 * $15: 'Файл с таким именем уже существует!'
+	 */
+	private $_resp = '200';
 	
-	private $data = null;
+	/**
+	 * @var UniversityManager
+	 */
+	private $_modManager = null;
 	
-	private $namedoc = null;
-	private $datedoc = null;
+	/**
+	 * Объект данных от клиента
+	 *
+	 * @var object
+	 */
+	private $_data = null;
 	
+	/**
+	 * Название документа
+	 *
+	 * @var string
+	 */
+	private $_namedoc = null;
+	
+	/**
+	 * Дата документа
+	 *
+	 * @var string
+	 */
+	private $_datedoc = null;
+	
+	/**
+	 * Принимаемый файл
+	 *
+	 * @var object
+	 */
 	private $file = null;
 	
+	/**
+	 * Название директории
+	 *
+	 * @var const
+	 */
 	const NAME_DIR = "data-edu/";
 	
 	public function __construct($modManager){
-		$this->modManager = $modManager;
+		$this->_modManager = $modManager;
 		
 			$id = intval($_POST['id']);
 			$fill = $this->FillDate($id);
@@ -30,7 +82,7 @@ class UploadFile{
 					if(isset($_POST['file'])){
 						switch($_POST['file']){
 							case 'undefined':
-								$this->resp = "10";
+								$this->_resp = "10";
 								break;
 							case '':
 								$this->RenameFile();
@@ -48,30 +100,30 @@ class UploadFile{
 	private function FillDate($id){
 		$utmf = Abricos::TextParser(true);
 		
-		$this->data = new stdClass();
-		$this->data->id = $id;
-		$this->data->atrid = intval($_POST['atrid']);
-		$this->data->numrow = intval($_POST['numrow']);
-		$this->data->mainid = intval($_POST['mainid']);
+		$this->_data = new stdClass();
+		$this->_data->id = $id;
+		$this->_data->atrid = intval($_POST['atrid']);
+		$this->_data->numrow = intval($_POST['numrow']);
+		$this->_data->mainid = intval($_POST['mainid']);
 			
 		$nameurl = $utmf->Parser($_POST['nameurl']);
 		if($nameurl === ''){
-			$this->resp = '11';
+			$this->_resp = '11';
 				return false;
 		}
-		$this->data->nameurl = $nameurl;
-		$this->data->view = $utmf->Parser($_POST['view']);
+		$this->_data->nameurl = $nameurl;
+		$this->_data->view = $utmf->Parser($_POST['view']);
 			
 		$namedoc = $utmf->Parser($_POST['namedoc']);
 		
 		if(!preg_match("/[a-z0-9_]+/i", $namedoc)){
-			$this->resp = '12';
+			$this->_resp = '12';
 			return false;
 		} else if(preg_match("/[^a-z0-9_]/i", $namedoc) === 1){
-			$this->resp = '14';
+			$this->_resp = '14';
 			return false;
 		}
-		$this->namedoc = $namedoc;
+		$this->_namedoc = $namedoc;
 			
 		$datedoc = $utmf->Parser($_POST['datedoc']);
 		
@@ -79,11 +131,11 @@ class UploadFile{
 			$this->datedoc = "";
 		} else {
 			if(!preg_match("/[1-2]\d{3}-[01]\d-[0-3]\d/", $datedoc)){
-				$this->resp = '13';
+				$this->_resp = '13';
 				return false;
 			}
 			$arrDateDoc = explode('-', $datedoc);
-			$this->datedoc = "_".$arrDateDoc[2].".".$arrDateDoc[1].".".$arrDateDoc[0];
+			$this->_datedoc = "_".$arrDateDoc[2].".".$arrDateDoc[1].".".$arrDateDoc[0];
 		}
 
 		return true;
@@ -98,7 +150,7 @@ class UploadFile{
 		
 		rename($value, UploadFile::NAME_DIR.$uploadFile);
 		
-		$this->data->value = $uploadFile;
+		$this->_data->value = $uploadFile;
 		
 		$this->ActValue();
 	}
@@ -109,12 +161,12 @@ class UploadFile{
 				$error = $this->file['error'];
 				
 				if($error > 0){
-					$this->resp = $error;
+					$this->_resp = $error;
 				} else {
 					$this->AppendFile($remove);
 				}
 			} else {
-				$this->resp = "10";
+				$this->_resp = "10";
 			}
 	}
 	
@@ -129,37 +181,40 @@ class UploadFile{
 		$typeDoc = $this->CheckTypeFile($name);
 	
 			if($typeDoc !== ''){
-				
 				if($remove){
 					$this->RemoveFile();
 				}
-				
-				$uploadfile = $this->ParsePathFile($typeDoc);
-				
-				move_uploaded_file($this->file['tmp_name'], UploadFile::NAME_DIR.$uploadfile);
-				
-				$this->data->value = $uploadfile;
-				
-				$this->ActValue();
+					$uploadfile = $this->ParsePathFile($typeDoc);
+					$file = UploadFile::NAME_DIR.$uploadfile;
+					
+						if(file_exists($file)){
+							$this->_resp = '15';
+						} else {
+							move_uploaded_file($this->file['tmp_name'], $file);
+								
+							$this->_data->value = $uploadfile;
+								
+							$this->ActValue();
+						}
 			} else {
-				$this->resp = '9';
+				$this->_resp = '9';
 			}
 	}
 	
 	private function ParsePathFile($typeDoc){
-		$menu = $this->modManager->GetUniversity()->SectionItemUpload($this->data->atrid);
+		$menu = $this->_modManager->GetUniversity()->SectionItemUpload($this->_data->atrid);
 		
-		return $menu."/".$this->namedoc.$this->datedoc.$typeDoc;
+		return $menu."/".$this->_namedoc.$this->_datedoc.$typeDoc;
 	}
 	
 	private function ValueItem(){
-		$value = $this->modManager->GetUniversity()->ValueAttributeItem($this->data->id, true);
+		$value = $this->_modManager->GetUniversity()->ValueAttributeItem($this->_data->id, true);
 		return $value['value'];
 	}
 	
 	
 	private function ActValue(){
-		$this->modManager->GetUniversity()->ActValueAttribute($this->data);
+		$this->_modManager->GetUniversity()->ActValueAttribute($this->_data);
 	}
 	
 	private function CheckTypeFile($name){
@@ -175,9 +230,12 @@ class UploadFile{
 		return $typeDoc;
 	}
 	
+	/*
+
+	 * */
 	public function ReplaceVarByData(){
 		Brick::$builder->brick->content = Brick::ReplaceVarByData(Brick::$builder->brick->content, array(
-				'respon' => $this->resp
+				'respon' => $this->_resp
 		));
 	}
 }
