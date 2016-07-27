@@ -57,7 +57,8 @@ class BuildSection {
 	
 		while($d = $this->_manager->db->fetch_array($valueList)){
 			$d['value'] = $this->_manager->ViewIsFile($d['view'], $d['value']);
-				$values .= $this->ParseValue($d);
+				$curVal = $this->ParseValue($d);
+				$values .= $this->SimpleReplaceValue($curVal);
 		}
 	
 		return $values;
@@ -131,7 +132,9 @@ class BuildSection {
 					$td = "";
 					foreach ($valueItem as $values){
 						if(isset($values[$i])){
-							$p = $this->ParseValue($values[$i]);
+							$curVal = $this->ParseValue($values[$i]);
+							
+							$p = $this->ComplexReplaceValue($curVal, $values[$i]['applyattribute']);
 							
 							$td .= $this->TdReplace($rowSpan, $p);
 							
@@ -169,12 +172,15 @@ class BuildSection {
 					$hidelist = false;
 						foreach ($values as $val){
 							$append = true;
+							$apply = $val['applyattribute'];
+							$curVal = $this->ParseValue($val, $hidelist);
 							
 							if($val['display'] == 'hideList'){
-								$apply = $val['applyattribute'];
 								$hidelist = true;
+								$p .= $this->SimpleReplaceValue($curVal);
+							} else {
+								$p .= $this->ComplexReplaceValue($curVal, $apply);
 							}
-							$p .= $this->ParseValue($val, $hidelist);
 						}
 						if($hidelist){
 							$p = $this->FilelistReplace($p, $apply);
@@ -236,11 +242,21 @@ class BuildSection {
 				"value" => $value
 			));
 		} else {
-			return $this->ReplaceVar('simpleValue', array(
-				"applyattribute" => isset($d['applyattribute']) ? "itemprop=".$d['applyattribute'] : "",
-				"value" => $value != "0" ? $value : ""
-			));
+			return $value;
 		}
+	}
+	
+	private function SimpleReplaceValue($value){
+		return $this->ReplaceVar('simpleValue', array(
+			"value" => $value
+		)); 
+	}
+	
+	private function ComplexReplaceValue($value, $applyattribute = false){
+		return $this->ReplaceVar('complexValue', array(
+				"applyattribute" => $applyattribute ? "itemprop=".$applyattribute : "",
+				"value" => $value != "0" ? $value : ""
+		));
 	}
 	
 	private function ParseUrl($url, $nameUrl){

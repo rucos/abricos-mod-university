@@ -837,7 +837,8 @@ class UniversityQuery {
 			$sql = "
 				SELECT
 						SUM(v.value) as value,
-						v.view
+						v.view,
+						a.applyattribute
 				FROM ".$db->prefix."un_value v
 				INNER JOIN ".$db->prefix."un_attribute a ON a.attributeid=v.attributeid
 				WHERE a.attributeid=".bkint($id)." AND a.display='result' AND v.remove=0
