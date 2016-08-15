@@ -128,8 +128,12 @@ Component.entryPoint = function(NS){
         		date = "";
         	
         	if(view == 'file'){
-        		nameDoc.replace(/_(\d{2})\.(\d{2})\.(\d{4})\.(\w{3,4})/, function(str, day, month, year){//Определяем дату и формат
+        		nameDoc.replace(/_(\d{2})\.(\d{2})\.(\d{2,4})\.(\w{3,4})/, function(str, day, month, year){//Определяем дату и формат
            			date += str;
+           			
+           			if(year.length == 2){
+           				year = "20" + year;
+           			}
            			
            			arr[5] = year + "-" + month + "-" + day;
         		});
