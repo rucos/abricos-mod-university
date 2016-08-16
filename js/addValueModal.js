@@ -225,7 +225,7 @@ Component.entryPoint = function(NS){
 					alert('Укажите дату утверждения');
 						break;
 				case '$14': 
-					alert('Не верное название документа! Пример: Pril1_akkred_2014');
+					alert('Не верное название документа! Пример: Pril1_380301_akkred_2014');
 						break;
 				case '$15': 
 					alert('Файл с таким именем уже существует!');
