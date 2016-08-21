@@ -62,7 +62,7 @@ class UploadFile{
 	 *
 	 * @var object
 	 */
-	private $file = null;
+	private $_file = null;
 	
 	/**
 	 * Название директории
@@ -70,30 +70,35 @@ class UploadFile{
 	 * @var const
 	 */
 	const NAME_DIR = "data-edu/";
+	const UPLOAD_MAX_FILE_SIZE = 15728640;
 	
 	public function __construct($modManager){
 		$this->_modManager = $modManager;
 		
-			$id = intval($_POST['id']);
-			$fill = $this->FillDate($id);
-			
-			if($fill){
-				if($id > 0){
-					if(isset($_POST['file'])){
-						switch($_POST['file']){
-							case 'undefined':
-								$this->_resp = "10";
-								break;
-							case '':
-								$this->RenameFile();
-								break;
+			if(isset($_POST['id'])){
+				$id = intval($_POST['id']);
+				$fill = $this->FillDate($id);
+				
+				if($fill){
+					if($id > 0){
+						if(isset($_POST['file'])){
+							switch($_POST['file']){
+								case 'undefined':
+									$this->_resp = "10";
+									break;
+								case 'rename':
+									$this->RenameFile();
+									break;
+							}
+						} else {
+							$this->CheckFile(true);
 						}
 					} else {
-						$this->CheckFile(true);
+						$this->CheckFile();
 					}
-				} else {
-					$this->CheckFile();
 				}
+			} else {
+				$this->_resp = '2';
 			}
 	}
 	
@@ -157,11 +162,13 @@ class UploadFile{
 	
 	private function CheckFile($remove = false){
 			if(isset($_FILES['file'])){
-				$this->file = $_FILES['file'];
-				$error = $this->file['error'];
+				$this->_file = $_FILES['file'];
+				$error = $this->_file['error'];
 				
 				if($error > 0){
 					$this->_resp = $error;
+				} else if($this->_file['size'] > UploadFile::UPLOAD_MAX_FILE_SIZE){
+					$this->_resp = "1";
 				} else {
 					$this->AppendFile($remove);
 				}
@@ -177,7 +184,7 @@ class UploadFile{
 	}
 	
 	private function AppendFile($remove){
-		$name = $this->file['name'];
+		$name = $this->_file['name'];
 		$typeDoc = $this->CheckTypeFile($name);
 	
 			if($typeDoc !== ''){
@@ -190,7 +197,7 @@ class UploadFile{
 						if(file_exists($file)){
 							$this->_resp = '15';
 						} else {
-							move_uploaded_file($this->file['tmp_name'], $file);
+							move_uploaded_file($this->_file['tmp_name'], $file);
 								
 							$this->_data->value = $uploadfile;
 								

@@ -10,7 +10,8 @@ Component.entryPoint = function(NS){
 	var Y = Brick.YUI,
         COMPONENT = this,
         SYS = Brick.mod.sys;
-    
+      
+     
  
     NS.AddValueModalWidget = Y.Base.create('addValueModalWidget', SYS.AppWidget, [], {
         onInitAppWidget: function(err, appInstance){
@@ -96,8 +97,9 @@ Component.entryPoint = function(NS){
         			
         			valueItem.nameurl = tp.gel('file.nameurl').value;
             		valueItem.namedoc = tp.gel('file.namedoc').value;
-            		valueItem.file = tp.gel('fileInput.inputFile') ? tp.gel('fileInput.inputFile').files[0] : '';
-            			return this.reqActFiles(valueItem, respondCallback);
+            		valueItem.file = tp.gel('fileInput.inputFile') ? tp.gel('fileInput.inputFile').files[0] : 'rename';
+            		
+            		return this.reqActFiles(valueItem, respondCallback);
         		case 'url':
             		valueItem.nameurl = tp.gel('url.nameurl').value;
             		valueItem.value = tp.gel('url.value').value;
@@ -154,21 +156,80 @@ Component.entryPoint = function(NS){
         	var tp = this.template,
         		form = new FormData(),
         		xhr = new XMLHttpRequest(),
-        		_self = this;
+        		_self = this,
+        		validate = this.validateValueItem(valueItem);
         	
-        	for(var i in valueItem){
-        		form.append(i, valueItem[i]);
+        	if(validate){
+            	for(var i in valueItem){
+            		form.append(i, valueItem[i]);
+            	}
+            	
+    			xhr.open("post", "/university/upload/", true);
+    			xhr.send(form);
+    			
+    			xhr.onload = function(){
+    				var str = "" + xhr.response,
+    					result = str.match(/\$(\d+)/)[1],
+    					respond = _self.parseError(result);
+    				
+    				respondCallback(respond);
+    			};
+        	} else {
+        		respondCallback(false);
         	}
-			xhr.open("post", "/university/upload/", true);
-			xhr.send(form);
-			
-			xhr.onload = function(){
-				var str = "" + xhr.response,
-					result = str.match(/\$\d+/)[0],
-					respond = _self.parseError(result);
-				
-				respondCallback(respond);
-			};
+        },
+        validateValueItem: function(valueItem){
+        	var tp = this.template,
+        		namedoc = valueItem.namedoc,
+        		nameurl = valueItem.nameurl,
+        		datedoc = valueItem.datedoc,
+        		file = valueItem.file;
+        		
+        	if(file){
+        		if(file !== 'rename'){
+            		if(!this.checkTypeFile(file.name)){
+            			return this.parseError('9');
+            		}
+    	        		if(file.size > 15728640){
+    	        			return this.parseError('2');
+    	        		}
+        		}
+        	} else {
+        		return this.parseError('10');
+        	}
+        	
+        	if(datedoc != -1){
+        		datedoc = /[12]\d{3}-[01]\d-[0-2]\d/.test(datedoc);
+        		
+        		if(!datedoc){
+        			return this.parseError('13');
+        		}
+        	}
+        	
+        	if(namedoc){
+        		namedoc = namedoc.match(/[^a-z0-9_]+/i);
+        		if(namedoc){
+        			return this.parseError('16', namedoc[0]);   			
+        		}
+        	} else {
+        		return this.parseError('12');
+        	}
+        	
+        	if(!nameurl){
+        		return this.parseError('11');
+        	}
+        	return true;
+        },
+        checkTypeFile: function(nameDoc){
+        	var arrTypeWhiteList = ['pdf','doc','docx','xls','xlsx','odt','ods'],
+        		curFileType = nameDoc.match(/\.([a-z]{3,4}$)/)[1];
+        		
+    		for(var i = 0; i < 7; i++){
+    			if(arrTypeWhiteList[i] === curFileType){
+    				return true;
+    			}
+    		}
+    		return false;
         },
         reqActValue: function(data, respondCallback){
         	this.set('waiting', true);
@@ -183,52 +244,55 @@ Component.entryPoint = function(NS){
 		        		}
 	        	}, this);
         },
-        parseError: function(result){
+        parseError: function(result, prohChar){
 			switch(result){
-				case '$200':
+				case '200':
 					this.template.setHTML('modal', '');
 						return true;
-				case '$1': 
+				case '1': 
 					alert('Размер файла превышает допустимое значение UPLOAD_MAX_FILE_SIZE');
 						break;
-				case '$2': 
-					alert('Размер файла превышает допустимое значение MAX_FILE_SIZE');
+				case '2': 
+					alert('Размер файла превышает допустимое значение в 15мб');
 						break;
-				case '$3': 
+				case '3': 
 					alert('Не удалось загрузить часть файла');
 						break;
-				case '$4': 
+				case '4': 
 					alert('Файл не был загружен');
 						break;
-				case '$6': 
+				case '6': 
 					alert('Отсутствует временная папка');
 						break;
-				case '$7': 
+				case '7': 
 					alert('Не удалось записать файл на диск');
 						break;
-				case '$8': 
+				case '8': 
 					alert('PHP-расширение остановило загрузку файла');
 						break;
-				case '$9': 
+				case '9': 
 					alert('Не верный тип файла');
 						break;
-				case '$10': 
+				case '10': 
 					alert('Укажите документ для загрузки');
 						break;
-				case '$11': 
+				case '11': 
 					alert('Укажите название ссылки на документ');
 						break;
-				case '$12': 
+				case '12': 
 					alert('Укажите название документа');
 						break;
-				case '$13': 
+				case '13': 
 					alert('Укажите дату утверждения');
 						break;
-				case '$14': 
+				case '14': 
 					alert('Не верное название документа! Пример: Pril1_380301_akkred_2014');
 						break;
-				case '$15': 
+				case '15': 
 					alert('Файл с таким именем уже существует!');
+						break;
+				case '16': 
+					alert('Символ ' + prohChar + ' нельзя использовать в названии');
 						break;
 			}
 			
