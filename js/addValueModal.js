@@ -164,16 +164,29 @@ Component.entryPoint = function(NS){
             		form.append(i, valueItem[i]);
             	}
             	
-    			xhr.open("post", "/university/upload/", true);
-    			xhr.send(form);
+    			xhr.upload.onprogress = function(e){
+    				var prog = (e.loaded * 100) / e.total;
+    				
+	    				tp.setHTML('file.progress', tp.replace('progressBar', {
+	    					prog: parseInt(prog)
+	    				}));
+    			};
     			
     			xhr.onload = function(){
     				var str = "" + xhr.response,
     					result = str.match(/\$(\d+)/)[1],
     					respond = _self.parseError(result);
     				
+    				if(!respond){
+    					tp.setHTML('file.progress', '');
+    				}
     				respondCallback(respond);
     			};
+    			
+    			xhr.open("post", "/university/upload/", true);
+
+    			xhr.send(form);
+    			
         	} else {
         		respondCallback(false);
         	}
@@ -232,7 +245,6 @@ Component.entryPoint = function(NS){
     		return false;
         },
         reqActValue: function(data, respondCallback){
-        	this.set('waiting', true);
 	        	this.get('appInstance').actValueAttribute(data, function(err, result){
 	        		this.set('waiting', false);
 
@@ -295,7 +307,6 @@ Component.entryPoint = function(NS){
 					alert('Символ ' + prohChar + ' нельзя использовать в названии');
 						break;
 			}
-			
 			return false;
         },
         constrData: function(id, atrid){
@@ -355,7 +366,7 @@ Component.entryPoint = function(NS){
     }, {
         ATTRS: {
         	component: {value: COMPONENT},
-            templateBlockName: {value: 'widget,modalFormAdd,value,file,url,fileInput,referfile,refer'},
+            templateBlockName: {value: 'widget,modalFormAdd,value,file,url,fileInput,referfile,refer,progressBar'},
             valueItem: {value: null},
             view: '',
             valueAttributeItem: {value: null},
