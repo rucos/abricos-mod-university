@@ -415,7 +415,12 @@ class UniversityQuery {
 		$db->query_write($sql);
 	}
 	
-	public static function ProgramList(Ab_Database $db){
+	public static function ProgramList(Ab_Database $db, $isBrick){
+		$where = "";
+		if($isBrick){
+			$where .= "WHERE remove=0";
+		}
+		
 		$sql = "
 			SELECT
 				programid as id,
@@ -423,6 +428,7 @@ class UniversityQuery {
 				name,
 				remove
 			FROM ".$db->prefix."un_program
+			".$where."
 		";
 		return $db->query_read($sql);
 	}
@@ -858,6 +864,22 @@ class UniversityQuery {
 			$arrAttrid[$id][] = $sum;
 		}
 		return $arrAttrid;
+	}
+	
+	public static function BrickLevelList(Ab_Database $db){
+		$sql = "
+			SELECT
+					p.programid,
+					l.level,
+					f.och,
+					f.ochzaoch,
+					f.zaoch
+			FROM ".$db->prefix."un_program p
+			INNER JOIN ".$db->prefix."un_edulevel l ON p.programid=l.programid
+			INNER JOIN ".$db->prefix."un_eduform f ON l.edulevelid=f.edulevelid
+			WHERE p.remove=0 AND l.remove=0
+		";
+		return $db->query_read($sql);
 	}
 }
 

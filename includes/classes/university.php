@@ -402,10 +402,21 @@ class University extends AbricosApplication {
     	return $this->ResultToJSON('programList', $res);
     }
     
-    public function ProgramList(){
-    	 
+    
+    /**
+     * Вывод списка направлений
+     * 
+     * @var $isBrick=true - если обращение от кирпича 
+     * 
+     * */
+    public function ProgramList($isBrick = false){
+    	$rows = UniversityQuery::ProgramList($this->db, $isBrick);
+    	
+    	if($isBrick){
+    		return $rows;
+    	}
+    	
     	$list = $this->models->InstanceClass('ProgramList');
-    	$rows = UniversityQuery::ProgramList($this->db);
     
     	while (($d = $this->db->fetch_array($rows))){
     		$list->Add($this->models->InstanceClass('ProgramItem', $d));
@@ -585,6 +596,24 @@ class University extends AbricosApplication {
     	return $list;
     }
     
+    
+    /**
+     * 
+     * Кирпич "Список направлений"
+     * 
+     * @var $arrLvl - массив уровень образования
+     *
+     * */
+    public function BrickLevelList(){
+    	$arrLvl = array();
+    	
+    	$rows = UniversityQuery::BrickLevelList($this->db);
+    
+    	while ($d = $this->db->fetch_array($rows)){
+    		$arrLvl[] = $d;
+    	}
+    	return $arrLvl;
+    }
 }
 
 ?>

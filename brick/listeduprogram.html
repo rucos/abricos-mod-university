@@ -1,0 +1,47 @@
+<!--[*]
+[script]brick/listeduprogram.php[/script]
+
+[p=noWrap][/p]
+
+[bkvar=td]
+	<td {v#span}>
+		{v#value}
+	</td>
+[/bkvar]
+
+[bkvar=tr]
+	<tr>
+		{v#td}
+	</tr>
+[/bkvar]
+
+[bkvar=wrap]
+<table class="table table-bordered">
+	<tr>
+		<th rowspan="2">
+			Образовательная программа
+		</th>
+		<th rowspan="2">
+			Уровень образования
+		</th>
+		<th colspan="3">
+			Нормативный срок обучения
+		</th>
+	</tr>
+	<tr>
+		<th>
+			Очная форма обучения
+		</th>
+		<th>
+			Очно-заочная форма обучения
+		</th>
+		<th>
+			Заочная форма обучения
+		</th>
+	</tr>
+	<tbody>
+		{v#rows}
+	</tbody>
+</table>
+[/bkvar]
+[*]-->
