@@ -16,13 +16,17 @@ Component.entryPoint = function(NS){
         	this.reloadList();
         },
         reloadList: function(){
-        	this.set('waiting', true);
-	        	this.get('appInstance').programList(function(err, result){
-	        		this.set('waiting', false);
-	        		if(!err){
-	        			this.set('programList', result.programList);
-	        				this.renderList();
-	        		}
+          	var lib = this.get('appInstance'),
+	    		tp = this.template,
+	    		div = tp.gel('loading');
+          	
+          	lib.loadingLineShow(div, true);
+        		lib.programList(function(err, result){
+        			lib.loadingLineShow(div, false);
+		        		if(!err){
+		        			this.set('programList', result.programList);
+		        				this.renderList();
+		        		}
 	        	}, this);
         },
         renderList: function(){

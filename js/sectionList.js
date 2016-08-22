@@ -16,9 +16,13 @@ Component.entryPoint = function(NS){
         	this.reloadList();
         },
         reloadList: function(){
-        	this.set('waiting', true);
-	        	this.get('appInstance').sectionList(function(err, result){
-	        		this.set('waiting', false);
+        	var lib = this.get('appInstance'),
+        		tp = this.template,
+        		div = tp.gel('loading');
+        	
+        	lib.loadingLineShow(div, true);
+        		lib.sectionList(function(err, result){
+        			lib.loadingLineShow(div, false);
 	        			this.set('sectionList', result.sectionList);
 	        				this.renderList();
 	        	}, this);

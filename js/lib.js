@@ -32,6 +32,15 @@ Component.entryPoint = function(NS){
         },
         setCancelDate: function(date){
         	return date.split('-').reverse().join('.');
+        },
+        loadingLineShow: function(div, show){
+        	var st = div.style;
+        	
+	        	if(show){
+	        		st.display = "";
+	        	} else {
+	        		st.display = "none";
+	        	}
         }
     }, [], {
         REQS: {
