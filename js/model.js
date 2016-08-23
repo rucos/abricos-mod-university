@@ -57,4 +57,8 @@ Component.entryPoint = function(NS){
     NS.EmployeesList = Y.Base.create('employeesList', SYS.AppModelList, [], {
         appItem: NS.EmployeesItem
     });
+    
+    NS.Config = Y.Base.create('config', SYS.AppModel, [], {
+        structureName: 'Config'
+    });
 };

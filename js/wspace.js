@@ -65,6 +65,10 @@ Component.entryPoint = function(NS){
 	        				this.setActive('employeesLi');
 	        					this.go("employees.view");
 	        						break;
+	        			case "configA":
+	        				this.setActive('configLi');
+	        					this.go("managerConfig.view");	
+	        						break;
 	        		}
         		}
         	}

@@ -115,6 +115,12 @@ Component.entryPoint = function(NS){
     		},
     		selectValueAct: {
     			args: ['data']
+    		},
+    		configSave: {
+    			args: ['data']
+    		},
+    		config: {
+    			type: 'model:Config'
     		}
         },
         ATTRS: {
@@ -127,7 +133,8 @@ Component.entryPoint = function(NS){
         	ProgramList: {value: NS.ProgramList},
         	ProgramItem: {value: NS.ProgramItem},
         	ProgramLevelList: {value: NS.ProgramLevelList},
-        	EmployeesList: {value: NS.EmployeesList}
+        	EmployeesList: {value: NS.EmployeesList},
+        	Config: {value: NS.Config}
         },
         URLS: {
         	ws: "#app={C#MODNAMEURI}/wspace/ws/",
@@ -155,6 +162,11 @@ Component.entryPoint = function(NS){
         	employees: {
         		view: function(){
         			return this.getURL('ws') + 'managerEmployees/ManagerEmployeesWidget';
+        		}
+        	},
+        	managerConfig: {
+        		view: function(){
+        			return this.getURL('ws') + 'managerConfig/ManagerWidgetConfig';
         		}
         	}
         }

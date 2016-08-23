@@ -23,13 +23,14 @@ class University extends AbricosApplication {
 				'ProgramLevelList' => 'ProgramLevelList',
 				'ProgramLevelItem' => 'ProgramLevelItem',
 				'EmployeesList' => 'EmployeesList',
+				'Config' => 'Config',
 				'EmployeesItem' => 'EmployeesItem'
 		);
 	}
 	
 	
 	protected function GetStructures(){
-		return 'SectionItem, AttributeItem, ValueItem, ProgramItem, ProgramLevelItem, EmployeesItem';
+		return 'SectionItem, AttributeItem, ValueItem, ProgramItem, ProgramLevelItem, EmployeesItem, Config';
 	}
 
 	public function ResponseToJSON($d){
@@ -71,6 +72,10 @@ class University extends AbricosApplication {
 				return $this->ValueSimpleListToJSON($d->attrid);
 			case 'selectValueAct':
 				return $this->SelectValueActToJSON($d->data);
+			case "configSave":
+				return $this->ConfigSaveToJSON($d->data);
+			case "config":
+				return $this->ConfigToJSON();
         }
         return null;
     }
@@ -613,6 +618,42 @@ class University extends AbricosApplication {
     		$arrLvl[] = $d;
     	}
     	return $arrLvl;
+    }
+    
+    public function ConfigSaveToJSON($d){
+    	$res = $this->ConfigSave($d);
+    	return $this->ResultToJSON('configSave', $res);
+    }
+    
+    public function ConfigSave($d){
+    	$utmf = Abricos::TextParser(true);
+    	$d->fullname = $utmf->Parser($d->fullname);
+    	$d->shortname = $utmf->Parser($d->shortname);
+    	$d->manager = $utmf->Parser($d->manager);
+    	 
+    	$phs = UniversityModule::$instance->GetPhrases();
+    	$phs->Set("fullname", $d->fullname);
+    	$phs->Set("shortname", $d->shortname);
+    	$phs->Set("manager", $d->manager);
+    	 
+    	Abricos::$phrases->Save();
+    }
+    
+    public function ConfigToJSON(){
+    	$res = $this->Config();
+    	return $this->ResultToJSON('config', $res);
+    }
+    
+    public function Config(){
+    	$phrases = UniversityModule::$instance->GetPhrases();
+    	
+    	$d = array();
+    	for ($i = 0; $i < $phrases->Count(); $i++){
+    		$ph = $phrases->GetByIndex($i);
+    		$d[$ph->id] = $ph->value;
+    	}
+    	 
+    	return $this->models->InstanceClass('Config', $d);
     }
 }
 

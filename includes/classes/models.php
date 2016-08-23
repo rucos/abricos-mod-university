@@ -63,4 +63,9 @@ class EmployeesItem extends AbricosModel {
 class EmployeesList extends AbricosModelList {
 
 }
+
+class Config extends AbricosModel {
+	protected $_structModule = 'university';
+	protected $_structName = 'Config';
+}
 ?>
