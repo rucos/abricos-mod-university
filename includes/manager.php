@@ -62,6 +62,21 @@ class UniversityManager extends Ab_ModuleManager {
     			)
     	);
     }
+    
+    public function Bos_SummaryData(){
+    	if (!$this->IsAdminRole()){
+    		return;
+    	}
+    
+    	$i18n = $this->module->I18n();
+    	return array(
+    			array(
+    					"module" => "university",
+    					"component" => "summary",
+    					"widget" => "SummaryWidget"
+    			)
+    	);
+    }
 
 }
 
