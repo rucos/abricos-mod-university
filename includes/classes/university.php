@@ -630,11 +630,21 @@ class University extends AbricosApplication {
     	$d->fullname = $utmf->Parser($d->fullname);
     	$d->shortname = $utmf->Parser($d->shortname);
     	$d->manager = $utmf->Parser($d->manager);
+    	$d->telephone = $utmf->Parser($d->telephone);
+    	$d->fax = $utmf->Parser($d->fax);
+    	$d->email = $utmf->Parser($d->email);
+    	$d->address = $utmf->Parser($d->address);
+    	$d->pktelephone = $utmf->Parser($d->pktelephone);
     	 
     	$phs = UniversityModule::$instance->GetPhrases();
     	$phs->Set("fullname", $d->fullname);
     	$phs->Set("shortname", $d->shortname);
     	$phs->Set("manager", $d->manager);
+    	$phs->Set("telephone", $d->telephone);
+    	$phs->Set("fax", $d->fax);
+    	$phs->Set("email", $d->email);
+    	$phs->Set("address", $d->address);
+    	$phs->Set("pktelephone", $d->pktelephone);
     	 
     	Abricos::$phrases->Save();
     }

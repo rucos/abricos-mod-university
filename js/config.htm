@@ -1,7 +1,5 @@
 <!--{widget}-->
-<div id="{i#list}">
-	
-</div>
+<div id="{i#list}"></div>
 
 <!--{config}-->
 <div class="form-group">
@@ -10,11 +8,31 @@
 </div>
 <div class="form-group">
 		 <label>Сокращенное название образовательной организации:</label>
-		 <textarea id="{i#shortname}" class="form-control" rows="3">{v#shortname}</textarea>
+		 <input id="{i#shortname}" class="form-control" value="{v#shortname}"></input>
 </div>
 <div class="form-group">
 		 <label>Руководитель образовательной организации:</label>
 		 <input id="{i#manager}" type="text" class="form-control" value="{v#manager}"/>
+</div>
+<div class="form-group">
+		 <label>Телефон:</label>
+		 <input id="{i#telephone}" type="text" class="form-control" value="{v#telephone}"/>
+</div>
+<div class="form-group">
+		 <label>Факс:</label>
+		 <input id="{i#fax}" type="text" class="form-control" value="{v#fax}"/>
+</div>
+<div class="form-group">
+		 <label>Email:</label>
+		 <input id="{i#email}" type="text" class="form-control" value="{v#email}"/>
+</div>
+<div class="form-group">
+		 <label>Юридический адрес:</label>
+		 <input id="{i#address}" type="text" class="form-control" value="{v#address}"/>
+</div>
+<div class="form-group">
+		 <label>Телефон приемной комиссии:</label>
+		 <input id="{i#pktelephone}" type="text" class="form-control" value="{v#pktelephone}"/>
 </div>
  <div class="btn-toolbar pull-right">
           <button data-click="save" type="button" class="btn btn-default" data-wait="disable">

@@ -11,6 +11,21 @@
     },
     "manager": {
       "type": "string"
+    },
+    "telephone": {
+      "type": "string"
+    },
+    "fax": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "pktelephone": {
+      "type": "string"
     }
   }
 }

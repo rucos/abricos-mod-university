@@ -36,8 +36,14 @@ Component.entryPoint = function(NS){
         		data = {
         			fullname: tp.getValue('config.fullname'),
         			shortname: tp.getValue('config.shortname'),
-        			manager: tp.getValue('config.manager')
+        			manager: tp.getValue('config.manager'),
+        			telephone: tp.getValue('config.telephone'),
+        			fax: tp.getValue('config.fax'),
+        			email: tp.getValue('config.email'),
+        			address: tp.getValue('config.address'),
+        			pktelephone: tp.getValue('config.pktelephone')
         		};
+        	
          	this.set('waiting', true);
          		this.get('appInstance').configSave(data, function(err, result){
 	        		this.set('waiting', false);
