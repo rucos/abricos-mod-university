@@ -85,6 +85,10 @@ class Section {
 		
 		$this->AppendSysPage($abiturid, $contentId, false);
 		$this->FillAbitur($abiturid);
+		
+		$this->PhraseAppend();//добавление phrase
+		$this->ContentMainUpdate();//добавление кирпича listeduprogram
+		$this->PageMainUpdate();
 	}
 	
 	/**
@@ -120,6 +124,31 @@ class Section {
 		}
 		
 		return Ab_CoreQuery::ContentAppend($this->_db, "<h2>".$head."</h2>".$mods, 'sitemap');
+	}
+	
+	private function ContentMainUpdate(){
+		$body = Ab_CoreQuery::ContentInfo($this->_db, 1);
+		$mainBody = $body['body'];
+		
+		$mainBody .= "
+					<h3>Перечень направлений:</h3>
+				<p>
+					[mod]university:listeduprogram[/mod]
+				</p>
+		";
+		Ab_CoreQuery::ContentUpdate($this->_db, 1, $mainBody);
+	}
+	
+	private function PageMainUpdate(){
+		$mods = '{"university":{"listeduprogram":""}}';
+		
+		$this->_db->query_write("
+				UPDATE ".$this->_pfx."sys_page
+				SET
+					mods='".$mods."'
+				WHERE contentid=1
+				LIMIT 1
+		");
 	}
 
 	private function AppendSysPage($sectionid, $contentId, $isSveden = false){
@@ -665,7 +694,21 @@ class Section {
 		$this->AppendUnAttr($rows);
 	}
 	
-	/*
+	private function PhraseAppend(){
+		$this->_db->query_write("
+	        INSERT INTO ".$this->_pfx."sys_phrase (module, name, phrase, language) VALUES
+	            ('university', 'fullname', 'Название учебного заведения', 'ru'),
+	            ('university', 'shortname', '', 'ru'),
+	            ('university', 'manager', 'ФИО руководителя', 'ru'),
+				('university', 'telephone', '+1(234)5-67-89', 'ru'),
+				('university', 'fax', '+1(234)5-67-89', 'ru'),
+				('university', 'email', 'edu@abricos.ru', 'ru'),
+				('university', 'address', 'Юридический адрес', 'ru'),
+				('university', 'pktelephone', '+1(234)5-67-89', 'ru')
+	    ");
+	}
+	
+	/**
 	 * Добавление в базу атрибута
 	 * 
 	 * */
@@ -680,6 +723,11 @@ class Section {
 			return $this->_db->insert_id();
 		}
 	}
+	
+	/**
+	 * Обновление в базу атрибута
+	 *
+	 * */
 	
 	private function UpdateUnAttr($idAttr){
 		$this->_db->query_write("
