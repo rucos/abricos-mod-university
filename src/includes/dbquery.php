@@ -353,6 +353,7 @@ class UniversityQuery {
 	}
 	
 	public static function AppendProgram(Ab_Database $db, $d){
+		
 		$sql = "
 			INSERT INTO ".$db->prefix."un_program(code, name)
 			VALUES (
@@ -361,7 +362,7 @@ class UniversityQuery {
 			)
 		";
 		$db->query_write($sql);
-    	$programid = mysql_insert_id();
+    	$programid = $db->insert_id();
     	
     	$sql = "
 			SELECT 
@@ -573,7 +574,7 @@ class UniversityQuery {
 					)
 				";
 				$db->query_write($sql);
-				$edulevelid = mysql_insert_id();
+				$edulevelid = $db->insert_id();
 				
 				UniversityQuery::InsertComplexValue($db, "tablename='edulevel' AND fieldname<>''", $numrow, $edulevelid, $programid, "edulevelid", $remove);
 				
@@ -584,7 +585,7 @@ class UniversityQuery {
 					VALUES (".$edulevelid.",".bkint($value[0]).",".bkint($value[1]).",".bkint($value[2]).")
 				";
 		    	$db->query_write($sql);
-		    	$formid = mysql_insert_id();
+		    	$formid = $db->insert_id();
 		    	
 		    	UniversityQuery::InsertComplexValue($db, "tablename='eduform'  AND fieldname<>''", $numrow, $formid, $edulevelid, "eduformid", $remove);
 		}
@@ -615,7 +616,7 @@ class UniversityQuery {
 			)
 		";
 		$db->query_write($sql);
-		$emploeesid = mysql_insert_id();
+		$emploeesid = $db->insert_id();
 		 
 		$sql = "
 			SELECT
