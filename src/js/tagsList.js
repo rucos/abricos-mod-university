@@ -183,22 +183,25 @@ Component.entryPoint = function(NS){
         	tp.setHTML('formAdd', tp.replace('modalFormAdd', replaceObj));
         },
         appendAttribute: function(complexid, compositid, compositType){
-        	var tp = this.template,
-        		type = compositType || this.getTypeAdd();
+        	var type = compositType || this.getTypeAdd();
         		
         		if(!type){
         			alert( 'Укажите тип атрибута' ); 
         				return;
         		}
         		
-        	var inputs = this.getNode(type, complexid),
-        		nameattribute = inputs.nameattribute.value,
-        		applyattribute = inputs.applyattribute.value,
-        		tablename = inputs.tablename.value,
-        		locate = inputs.locate.checked,
-        		data = this.constructDataAttribute(complexid, compositid, type, nameattribute, applyattribute, tablename, locate);
-        		
-        		this.reqActAttribute(data);
+        	var inputs = this.getNode(type, complexid);
+        	
+        		this.reqActAttribute({
+        			sectionid: this.get('sectionid'),
+        			complexid: complexid || 0,
+        			compositid: compositid,
+        			type: type,
+        			nameattribute: inputs.nameattribute.value,
+        			applyattribute: inputs.applyattribute.value,
+        			tablename: inputs.tablename.value,
+        			locate: inputs.locate.checked
+        		});
         },
         getTypeAdd: function(){
         	var tp = this.template,
@@ -277,15 +280,16 @@ Component.entryPoint = function(NS){
         		applyattribute = inputs.applyattribute,
         		tablename = inputs.tablename,
         		locate = inputs.locate,
-        		replaceObj = this.constructDataAttribute(
-        				complexid, 
-        				compositid, 
-        				type, 
-        				nameattribute.getAttribute('value'), 
-        				applyattribute.getAttribute('value'),
-        				tablename.getAttribute('value'),
-        				locate.getAttribute('checked')
-        		);
+        		replaceObj = {
+	      			sectionid: this.get('sectionid'),
+	    			complexid: complexid,
+	    			compositid: compositid,
+	    			type: type,
+	    			nameattribute: nameattribute.getAttribute('value'),
+	    			applyattribute: applyattribute.getAttribute('value'),
+	    			tablename: tablename.getAttribute('value'),
+	    			locate: locate.getAttribute('checked')
+        		}; 
         	
         	if(edit){
         		replaceObj.nameattribute = nameattribute.value;
@@ -323,18 +327,6 @@ Component.entryPoint = function(NS){
         
         replaceAtributeRow: function(obj){
         	return this.template.replace('composite', obj);
-        },
-        constructDataAttribute: function(){
-        	return {
-    			sectionid: this.get('sectionid'),
-    			complexid: arguments[0] ? arguments[0] : 0,
-    			compositid: arguments[1],
-    			type: arguments[2],
-    			nameattribute: arguments[3],
-    			applyattribute: arguments[4],
-    			tablename: arguments[5],
-    			locate: arguments[6]
-        	};
         },
         removeShow: function(compositid, isComplex, show){
         	var remgr = 'row.removegroup-',
